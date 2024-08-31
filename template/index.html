@@ -1,0 +1,123 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+<main class="main-banner">
+  <div class="overlay d-flex justify-content-center align-items-center">
+    <div class="content-container">
+      <h2 class="header-text">
+        Votre porte d'entrée vers <br>
+        l'exceptionnel
+      </h2>
+
+      <div class="row row-cols-1 row-cols-md-5 g-4 content-row text-dark">
+        <div class="col">
+          <h6>Ou aller vous ?</h6>
+
+        </div>
+        <div class="col">
+          <h6>Date d’arriver</h6>
+
+  
+        </div>
+        <div class="col">
+          <h6>Date d’arriver</h6>
+
+
+        </div>
+        <div class="col">
+          <h6>Nbre de personne</h6>
+
+        </div>
+        <div class="col">
+          <h6>Nbre de personne</h6>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="container custom-margin-1 ">
+  <h1>Les meilleurs hotels</h1>
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/hotel-1.jpg' %}" class="img-fluid rounded-start" alt="Pulman Lubumbashi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Pulman Lubumbashi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Lubumbashi, Haut-Katanga</p>
+        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+      <div class="card-body p-0">
+        <h5 class="card-title">Pulman Kinshasa</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/hotel-3.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kolwezi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Pulman Kolwezi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Kolwezi, Lwalaba</p>
+        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/hotel-4.jpg' %}" class="img-fluid rounded-start" alt="Pulman Mbuji mayi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Pulman Mbuji mayi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Mbuji mayi, Kasai Oriental</p>
+        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container custom-margin-1 custom-margin-2">
+  <h1>Les meilleurs restaurents</h1>
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Lubumbashi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Steakhouse Lubumbashi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Lubumbashi, Haut-Katanga</p>
+        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
+        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+      <div class="card-body p-0">
+        <h5 class="card-title">Steakhouse Kinshasa</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
+        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kolwezi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Steakhouse Kolwezi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Kolwezi, Lwalaba</p>
+        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
+        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      </div>
+    </div>
+    <div class="col d-flex flex-column">
+      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Mbuji mayi">
+      <div class="card-body p-0">
+        <h5 class="card-title">Steakhouse Mbuji mayi</h5>
+        <p class="card-text"><i class="fi fi-rr-marker"></i> Mbuji mayi, Kasai Oriental</p>
+        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
+        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

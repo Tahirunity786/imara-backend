@@ -1,0 +1,200 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Account Settings{% endblock title %}
+{% block content %}
+    <div class="container mt-5 mb-5 pt-4">
+
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="mb-5">
+                    <h1 class="as-xe0 ms-1 mb-3">Traveler Information</h1>
+                    <h3 class="as-xec1 ms-1">Let us know who are you</h3>
+                </div>
+                <div class="mt-4 mb-4">
+                    <form action="#">
+                        <div class="row mb-2">
+                            <div class="col-lg-2 mb-2">
+                                <select class="custom-select p-xee01 rounded-pill w-100"
+                                    aria-label="Default select example">
+                                    <option selected>Mr</option>
+                                    <option value="Mrs">Mrs</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-5 mb-2">
+                                <input type="text" class="w-100 p-xe01" placeholder="First Name">
+                            </div>
+                            <div class="col-lg-5 mb-2">
+                                <input type="text" class="w-100 p-xe01" placeholder="Last name">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+
+                            <div class="col-lg-6 mb-2">
+                                <input type="email" class="w-100 p-xe01" placeholder="Email">
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <input type="tel" class="w-100 p-xe01" placeholder="Phone no">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+
+                            <div class="col-lg-6 mb-2">
+                                <select class="custom-select p-xe01 rounded-pill w-100"
+                                    aria-label="Default select example">
+                                    <option selected>Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <input type="date" class="w-100 p-xe01" placeholder="Date of Birth">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+
+                            <div class="col-lg-6 mb-2">
+                                <input type="email" class="w-100 p-xe01" placeholder="Country">
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <input type="text" class="w-100 p-xe01" placeholder="State">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+
+                            <div class="col-lg-6 mb-2">
+                                <input type="email" class="w-100 p-xe01" placeholder="City">
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <input type="text" class="w-100 p-xe01" placeholder="Address 1">
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <input type="text" class="w-100 p-xe01" placeholder=" Address 2">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mb-4 mt-4">
+                    <h1 class="as-xe0 ms-1 mb-3">Select Payment Method</h1>
+                </div>
+                <div class="mb-4 row">
+                    <div class="col-lg-2">
+                        <button class="p-xeee-btn">Cash</button>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <button class="p-xeee-btn">Credit/Debit Card</button>
+
+                    </div>
+                    <div class="col-lg-4">
+
+                        <button class="p-xeee-btn">Digital Payment</button>
+                    </div>
+
+                    <div class="mb-2 mt-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" name="chk" id="ckh">
+                                <label class="mb-0 ms-2 p-xee-01" for="ckh">By con tinuing, you agree to the Terms and
+                                    Conditions.</label>
+                            </div>
+                            <div>
+                                <button class="p-xeeee-btn">Confirm Booking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="p-x10 p-4 ">
+                    <div class="mb-3">
+                        <h3 class="p-x11 ms-1">Your Booking Details</h3>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="p-x13">
+                            <img src="" alt="">
+                        </div>
+
+                        <div class="p-x14">
+                            <div class="d-flex w-100">
+                                <div class="d-flex justify-content-between align-items-center p-x15">
+                                    <img src="./assets/images/Star 1.svg" alt="">
+                                    <img src="./assets/images/Star 1.svg" alt="">
+                                    <img src="./assets/images/Star 1.svg" alt="">
+                                    <img src="./assets/images/Star 1.svg" alt="">
+                                    <img src="./assets/images/Star 1.svg" alt="">
+                                </div>
+                                <div class="p-x16">
+                                    <p class="mb-0 ms-2">25 reviews</p>
+                                </div>
+                            </div>
+                            <h3 class="p-x17">Lorem Ipsum Lorem Ipsum
+                                Lorem Ipsum</h3>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="bg-p p-3">
+                                    <h6>Check In</h6>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="bg-p p-3">
+                                    <h6>Check Out</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>You Selected</p>
+                        <p><b>Room Type</b>&nbsp;&nbsp;&nbsp;Room Quantity, Persons Quantity</p>
+                    </div>
+                </div>
+                <div class="p-xe-16 p-4 ">
+                    <div class="mb-3">
+                        <h3 class="p-x11 ms-1">Your Pricing Summary</h3>
+                    </div>
+
+                    <div>
+                        <table class="table table-bordered ">
+                            <tbody >
+                                <tr >
+                                    <td colspan="2">Room Type</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Number of Traveler</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td colspan="2">Tax & Fee</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Booking Fee</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td colspan="2">Total</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td colspan="2" style="background-color: #4B75A5; color: white;">Amount</td>
+                                    <td style="background-color: #4B75A5; color: white;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% endblock content %}

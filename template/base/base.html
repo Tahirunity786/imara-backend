@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock title %}</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-utilities.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'css/butterup.min.css' %}">
+
+  <link rel='stylesheet'
+    href='https://cdn-uicons.flaticon.com/2.4.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+</head>
+
+<body>
+  
+  <nav class="navbar container">
+    <div class="logo"><a href="/"><img src="{% static 'images/Group 2.svg' %}" width="150" height="80" alt="logo"></a>
+    </div>
+    <div class="nav-burger pt-4 mt-2" style="cursor: pointer;" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+      </svg>
+    </div>
+    <ul class="nav-links nav-rs">
+      <li class="m-0"><a href="/">Explorer</a></li>
+      <li class="m-0"><a href="/nakiese/hotels">Hébergements</a></li>
+      <li class="m-0"><a href="/nakiese/resturants">Restauration</a></li>
+    </ul>
+    <div class="d-flex justify-content-between align-items-center nav-rs" id="utiles">
+
+      
+    </div>
+  </nav>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header pt-4">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel"><img src="{% static 'images/Group 1.svg' %}" alt="" width="140"
+          height="50"></h5>
+      <button type="button" class="btn-close mt-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0" style="position: relative;">
+      <div class="p-4">
+        <h6 style="font-weight: bold; margin-bottom: 10px;">Menu</h6>
+        <div class="mb-2">
+          <ul>
+            <li class="mt-2">Explorer</li>
+            <div class="line"></div>
+            <li class="mt-2">Hébergements</li>
+            <div class="line"></div>
+            <li class="mt-2">Restauration</li>
+          </ul>
+        </div>
+      </div>
+      <div class="d-flex justify-content-evenly align-items-center bg-res p-2"
+        style="position: absolute; bottom: 0px; height: auto; width: 100%; z-index:100">
+        <div style="position: relative;"><img src="{% static 'images/epinher.svg' %}" alt="circle"></div>
+        <div style="position: relative;"><img src="{% static 'images/epinher.svg' %}" alt="circle"></div>
+        <div style="position: relative;"><img src="{% static 'images/epinher.svg' %}" alt="circle"></div>
+      </div>
+    </div>
+  </div>
+  {% block content %}{% endblock content %}
+  <footer>
+    <div class="container pt-5">
+      <div class="row g-4">
+        <div class="col-12 col-md-12 col-lg-12 d-lg-flex">
+          <!-- First column that will be 100% width on medium devices -->
+          <div class="col-lg-4 mb-4 mb-lg-0 p-0">
+            <img src="{% static 'images/Group 1.svg' %}" width="165" height="60" alt="logo">
+            <p class="mt-4">Ensemble, faisons de l'Afrique une destination encore plus rayonnante. <br>
+
+             <b> "Vivez la joie de l'Afrique. Découvrez les joyaux cachés." </b></p>
+            <div class="d-flex align-items-center mb-2">
+              <img src="{% static 'images/ph.svg' %}" alt="image" style="margin-right: 10px;">
+              <span>+1 234 345678890</span>
+            </div>
+            <div class="d-flex align-items-center mb-5">
+              <img src="{% static 'images/mail.svg' %}" alt="image" style="margin-right: 10px;">
+              <span>example@gmail.com</span>
+            </div>
+
+          </div>
+
+          <!-- Remaining four columns -->
+          <div class="col-lg-7 fts-xe2">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+              <div class="col">
+                <h4 style="font-weight: 700; font-size:24px">Pages</h2>
+                  <div class="mb-2">
+                    <ul>
+                      <li><a href="/nakiese/about-us">About us</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                    </ul>
+                  </div>
+
+              </div>
+              <div class="col">
+                <h4 style="font-weight: 700; font-size:24px">links</h2>
+                  <div class="mb-2">
+                    <ul>
+                      <li><a href="/login">login</a></li>
+                      <li><a href="/register">Sign Up</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                    </ul>
+                  </div>
+              </div>
+              <div class="col">
+                <h4 style="font-weight: 700; font-size:24px">Global Site</h2>
+                  <div class="mb-2">
+                    <ul>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                    </ul>
+                  </div>
+              </div>
+              <div class="col">
+                <h4 style="font-weight: 700; font-size:24px">Booking</h2>
+                  <div class="mb-2">
+                    <ul>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                      <li><a href="#">links</a></li>
+                    </ul>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-2 d-flex justify-content-between aign-items-center flex-wrap">
+        <div>
+          <h4 class="fts-xe4" style="text-align: left;">Follow us on</h4>
+          <div class="d-flex  aign-items-center">
+            <div class="fts-xxe0"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 1.svg' %}" alt="icon"></div>
+            <div class="fts-xxe0"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 2.svg' %}" alt="icon"></div>
+            <div class="fts-xxe0"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 3.svg' %}" alt="icon"></div>
+          </div>
+        </div>
+        <div>
+          <h4 class="fts-xe4">Follow us on</h4>
+          <div class="d-flex  aign-items-center">
+            <div class="fts-xxe1"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 1.svg' %}" alt="icon"></div>
+            <div class="fts-xxe1"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 2.svg' %}" alt="icon"></div>
+            <div class="fts-xxe1"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image 3.svg' %}" alt="icon"></div>
+            <div class="fts-xxe1"><img src="{% static 'images/epinher.svg' %}" alt="circle"><img class="fts-xxxe1"
+                src="{% static 'images/image.svg' %}" alt="icon"></div>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div class="mb-2 d-flex justify-content-between aign-items-center">
+        <div>
+          <span>Copyrights ©2024 Nakiese. Built By Imara Technology</span>
+
+        </div>
+        <div class=" d-flex justify-content-between aign-items-center">
+          <div style="margin-left: 10px;"><a href="#">Terms and condition</a></div>
+          <div style="margin-left: 10px;"><a href="#">Privacy policy</a></div>
+          <div style="margin-left: 10px;"><a href="#">Refund Policy</a></div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </footer>
+  <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/butterup.min.js' %}"></script>
+  <script src="{% static 'js/apps.js' %}"></script>
+</body>
+
+</html>
