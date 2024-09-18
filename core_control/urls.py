@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import Register, UserLogin,ProfileView, EmailChecker, UpdateProfileView
+from .views import AccountDel, Register, UserLogin,ProfileView, EmailChecker, UpdateProfileView, PasswordResetView
 urlpatterns = [
-    path('user/create', Register.as_view(), name='user-create'),  # Add .as_view() here
-    path('user/login', UserLogin.as_view(), name='user-login'),   # Add .as_view() here
-    path('user/email-checker', EmailChecker.as_view(), name='email-checker'),  # Add .as_view() here and fix typo
-    path('user/profile', ProfileView.as_view(), name='email-checker'),  # Add .as_view() here and fix typo
-    path('user/profile/update', UpdateProfileView.as_view(), name='Update'),  # Add .as_view() here and fix typo
+    path('user/create', Register.as_view(), name='user-create'), 
+    path('user/login', UserLogin.as_view(), name='user-login'),   
+    path('user/email-checker', EmailChecker.as_view(), name='email-checker'), 
+    path('user/profile', ProfileView.as_view(), name='email-checker'),  
+    path('user/profile/update', UpdateProfileView.as_view(), name='Update'), 
+    path('user/change-password', PasswordResetView.as_view(), name='chng-pass'), 
+    path('user/del', AccountDel.as_view(), name='delAccount'), 
 ]

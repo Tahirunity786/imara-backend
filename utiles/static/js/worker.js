@@ -1,0 +1,192 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const dragDropArea = document.getElementById('dragDropArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+
+    dragDropArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (event) => {
+        handleFiles(event.target.files);
+    });
+
+    dragDropArea.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dragDropArea.classList.add('drag-over');
+    });
+
+    dragDropArea.addEventListener('dragleave', () => {
+        dragDropArea.classList.remove('drag-over');
+    });
+
+    dragDropArea.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dragDropArea.classList.remove('drag-over');
+        const files = event.dataTransfer.files;
+        handleFiles(files);
+    });
+
+    function handleFiles(files) {
+        for (const file of files) {
+            if (file.type.startsWith('image/')) {
+                showProgress();
+                uploadFile(file);
+            } else {
+                alert('Please upload an image file.');
+            }
+        }
+    }
+
+    function showProgress() {
+        progressBar.style.display = 'block';
+        progress.style.width = '0';
+    }
+
+    function uploadFile(file) {
+        const reader = new FileReader();
+        reader.onloadstart = () => {
+            updateProgress(0);
+        };
+        reader.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const progressValue = Math.round((event.loaded / event.total) * 100);
+                updateProgress(progressValue);
+            }
+        };
+        reader.onloadend = (event) => {
+            updateProgress(100);
+            setTimeout(() => {
+                displayImage(event.target.result);
+                progressBar.style.display = 'none';
+            }, 500); // Small delay to show 100% completion
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function updateProgress(value) {
+        progress.style.width = `${value}%`;
+    }
+
+    function displayImage(src) {
+        const img = document.createElement('img');
+        img.src = src;
+        previewContainer.innerHTML = '';
+        previewContainer.appendChild(img);
+    }
+});
+
+
+
+// JavaScript to filter cities dynamically
+document.getElementById('cityInput').addEventListener('input', function () {
+    let filter = this.value.toLowerCase();
+    let items = document.querySelectorAll('#cityDropdown .dropdown-item');
+
+    items.forEach(function (item) {
+        if (item.textContent.toLowerCase().includes(filter)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const cities = [
+        'Cairo', 'Lagos', 'Nairobi', 'Johannesburg', 'Cape Town', 'Kinshasa', 'Accra', 'Casablanca',
+        'Addis Ababa', 'Algiers', 'Tunis', 'Dar es Salaam', 'Kampala', 'Abidjan', 'Tripoli', 'Dakar', 'Bamako'
+    ];
+
+    const initialDisplayCount = 5;  // How many cities to show initially
+    let expanded = false;
+
+    function populateDropdown() {
+        const cityDropdown = document.getElementById('cityDropdown');
+        cityDropdown.innerHTML = ''; // Clear the dropdown
+
+        let citiesToDisplay = expanded ? cities : cities.slice(0, initialDisplayCount);
+
+        citiesToDisplay.forEach(city => {
+            let cityItem = document.createElement('li');
+            cityItem.classList.add('dropdown-item');
+            cityItem.textContent = city;
+            cityItem.addEventListener('click', function () {
+                document.getElementById('cityInput').value = city;
+                cityDropdown.classList.remove('show'); // Hide dropdown on item selection
+            });
+            cityDropdown.appendChild(cityItem);
+        });
+
+        // Add "See more" option if the list is not fully expanded
+        if (!expanded && cities.length > initialDisplayCount) {
+            let seeMoreItem = document.createElement('li');
+            seeMoreItem.classList.add('dropdown-item', 'text-center', 'text-primary');
+            seeMoreItem.textContent = 'See more cities...';
+            seeMoreItem.style.cursor = 'pointer';
+            seeMoreItem.addEventListener('click', function () {
+                expanded = true;
+                populateDropdown(); // Repopulate to show all cities
+            });
+            cityDropdown.appendChild(seeMoreItem);
+        }
+    }
+
+    // Show the dropdown on input click
+    const cityInput = document.getElementById('cityInput');
+    cityInput.addEventListener('click', function () {
+        let dropdownMenu = new bootstrap.Dropdown(this);
+        dropdownMenu.show();
+        populateDropdown();
+        document.getElementById('cityDropdown').classList.add('show'); // Show dropdown
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        const cityDropdown = document.getElementById('cityDropdown');
+        if (!cityInput.contains(event.target) && !cityDropdown.contains(event.target)) {
+            cityDropdown.classList.remove('show');  // Hide dropdown when clicked outside
+        }
+    });
+
+    // Ensure the dropdown is hidden when an item is selected
+    cityInput.addEventListener('change', function () {
+        document.getElementById('cityDropdown').classList.remove('show');
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize "Date From" picker
+    const dateFrom = flatpickr("#dateInputg", {
+        dateFormat: "d-m-Y",  // Specify the date format as Day-Month-Year
+        minDate: "today",     // Disable past dates
+        enableTime: false,    // Only allow date selection
+        altInput: true,       // Shows a more user-friendly date format in the input field
+        altFormat: "F j, Y",  // Format for the alternative input (e.g., "January 1, 2024")
+        locale: {
+            firstDayOfWeek: 1 // Start the week on Monday
+        },
+        disableMobile: true,  // Ensure the custom UI works on mobile as well
+        onChange: function(selectedDates, dateStr, instance) {
+            // Set the minimum date of the "Date Till" field based on the selected "Date From"
+            dateTill.set("minDate", selectedDates[0]);  // selectedDates[0] is the selected "Date From"
+        }
+    });
+
+    // Initialize "Date Till" picker
+    const dateTill = flatpickr("#dateInputa", {
+        dateFormat: "d-m-Y",  // Specify the date format as Day-Month-Year
+        minDate: "today",     // Disable past dates
+        enableTime: false,    // Only allow date selection
+        altInput: true,       // Shows a more user-friendly date format in the input field
+        altFormat: "F j, Y",  // Format for the alternative input (e.g., "January 1, 2024")
+        locale: {
+            firstDayOfWeek: 1 // Start the week on Monday
+        },
+        disableMobile: true,  // Ensure the custom UI works on mobile as well
+    });
+});
+
+

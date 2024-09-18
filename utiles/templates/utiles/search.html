@@ -1,0 +1,448 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block style %}
+
+/* Hide the spinner arrows in input[type=number] for Chrome, Safari, Edge, and Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide the spinner arrows in Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+{% endblock style %}
+
+{% block content %}
+
+    <section style="margin-bottom: 80px; margin-top: 50px;">
+
+        <div class="container mt-5 ps-5 pe-5">
+
+            <div class="row bg-light mt-4 justify-content-center p-3 pt-4 pb-4 search-bar">
+                <div class="col-lg-10">
+                    <div class="row">
+
+                        <div class="col-lg-3 mt-0 position-relative"
+                            style="border-right: 2px solid rgb(179, 179, 179);">
+                            <h6 class="text-muted">Ou aller vous ?</h6>
+                            <input type="text" id="cityInput" class="search-land" placeholder="Chercher une destination"
+                                autocomplete="off">
+                            <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
+                        </div>
+                        <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                            <h6 class="text-muted">Date d'arriver (From)</h6>
+                            <input type="text" id="dateInputg" class="search-land" placeholder="Ajouter une date">
+                        </div>
+                        <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                            <h6 class="text-muted">Date d'arriver (Till)</h6>
+                            <input type="text" id="dateInputa" class="search-land" placeholder="Ajouter une date">
+                        </div>
+
+                        <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                            <h6 class="text-muted">Nbre de personne</h6>
+                            <input type="text" placeholder="Ajouter" class="search-land">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 d-flex justify-content-center align-items-center"
+                    style="border-right: 2px solid rgb(179, 179, 179);">
+
+                    <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+                        style="width: 40px; height: 40px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-sliders" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z" />
+                        </svg>
+                    </button>
+
+                    <div class="container">
+                        <div class="overlay"></div>
+                        <div class="mega-menu p-3 custom-dropdown">
+                            <div class="mb-3">
+                                <h5>Plage des prix</h5>
+                            </div>
+                            <div class="mb-4">
+                                <h6> Prix total par nuit par nombre des personnes </h6>
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-2" style="position: relative;">
+                                            <div class="custom-label">
+                                                <p class="mb-0">Minimum</p>
+                                                <p class="mb-0">$ 100</p>
+                                            </div>
+                                            <input type="number" class="fm-ctrl">
+                                        </div>
+                                        <div class="col-lg-6 mb-2" style="position: relative;">
+                                            <div class="custom-label">
+                                                <p class="mb-0">Minimum</p>
+                                                <p class="mb-0">$ 100</p>
+                                            </div>
+                                            <input type="number" class="fm-ctrl">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="mb-4">
+                                <h5> Nbre des personnes, chambres et lits</h5>
+                                <div class="mb-3">
+                                    <h6>Personne</h6>
+                                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                                        <button class="btn btn-dark rounded-pill ps-4 pe-4 me-3">1</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">2</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">3</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">4</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">5</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">6</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">7</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">8</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">9</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">10</button>
+
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>Lit</h6>
+                                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                                        <button class="btn btn-dark rounded-pill ps-4 pe-4 me-3">1</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">2</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">3</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">4</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">5</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">6</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">7</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">8</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">9</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">10</button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>Chambre</h6>
+                                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                                        <button class="btn btn-dark rounded-pill ps-4 pe-4 me-3">1</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">2</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">3</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">4</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">5</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">6</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">7</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">8</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">9</button>
+                                        <button class="btn btn-outline-dark rounded-pill ps-4 pe-4 me-3">10</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <h5>Commodités</h5>
+                                <div class="mb-2">
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-5 text-start">
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in2" id="in2">
+                                                <label class="form-check-label" for="in2">Wifi</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in3" id="in3">
+                                                <label class="form-check-label" for="in3">Salle de sport</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in4" id="in4">
+                                                <label class="form-check-label" for="in4">Parking gratuit</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in5" id="in5">
+                                                <label class="form-check-label" for="in5">Bain chaud</label>
+                                            </div>
+                                        </div>
+                                        <div class="me-5 text-start">
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in6" id="in6">
+                                                <label class="form-check-label" for="in6">Piscine</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in7" id="in7">
+                                                <label class="form-check-label" for="in7">TV</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in8" id="in8">
+                                                <label class="form-check-label" for="in8">Netflix</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input class="form-check-input" type="checkbox" name="in9" id="in9">
+                                                <label class="form-check-label" for="in9">Permission de fumer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 text-center">
+                                <button class="btn btn-dark w-25 m-auto">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-1 d-flex justify-content-center align-items-center">
+
+                    <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+                        style="width: 40px; height: 40px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+    <div class="container">
+        <div class="mb-5">
+            <div class="mb-3">
+                <h2>Les meilleurs hotels</h2>
+            </div>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+                <div class="col d-flex flex-column">
+                  <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start mb-2" alt="Pulman Kinshasa">
+                  <div class="card-body p-0">
+                    <h5 class="card-title">Pulman Kinshasa</h5>
+                    <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+                    <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+                    <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+                  </div>
+                </div>
+              </div>
+            <div class="mt-5 mb-3 text-center">
+                <button class="btn btn-outline-dark"> Charger encore plus
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="row row-cols-1 row-cols-md-5 g-4 ">
+            <div class="col d-flex flex-column">
+                <div class="position-relative rounded-4"
+                    style="background-image: url('/static/images/hotel-2.jpg'); background-size: cover; background-position: center; height:200px;">
+
+
+                    <!-- Overlay for the dark background -->
+                    <div class="w-100 h-100 rounded-4" style="background-color: rgba(56, 56, 56, 0.226); z-index: 100;">
+                    </div>
+
+                    <!-- Text content, positioned absolutely within the parent div -->
+                    <div class="position-absolute" style="top: 20px; left: 40px; z-index: 100;">
+                        <p class="text-dark mb-1" style="font-size: smaller;">Establishment</p>
+                        <h4 class="text-dark" style="font-size: large; font-weight: bold;">City Name</h4>
+                    </div>
+
+                    <!-- Button positioned at the bottom -->
+                    <button class="btn btn-light rounded-pill position-absolute"
+                        style="bottom: 20px; left: 40px; z-index: 100;">
+                        Explore
+                    </button>
+                </div>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="position-relative rounded-4"
+                    style="background-image: url('/static/images/hotel-2.jpg'); background-size: cover; background-position: center; height:200px;">
+
+
+                    <!-- Overlay for the dark background -->
+                    <div class="w-100 h-100 rounded-4" style="background-color: rgba(56, 56, 56, 0.226); z-index: 100;">
+                    </div>
+
+                    <!-- Text content, positioned absolutely within the parent div -->
+                    <div class="position-absolute" style="top: 20px; left: 40px; z-index: 100;">
+                        <p class="text-dark mb-1" style="font-size: smaller;">Establishment</p>
+                        <h4 class="text-dark" style="font-size: large; font-weight: bold;">City Name</h4>
+                    </div>
+
+                    <!-- Button positioned at the bottom -->
+                    <button class="btn btn-light rounded-pill position-absolute"
+                        style="bottom: 20px; left: 40px; z-index: 100;">
+                        Explore
+                    </button>
+                </div>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="position-relative rounded-4"
+                    style="background-image: url('/static/images/hotel-2.jpg'); background-size: cover; background-position: center; height:200px;">
+
+
+                    <!-- Overlay for the dark background -->
+                    <div class="w-100 h-100 rounded-4" style="background-color: rgba(56, 56, 56, 0.226); z-index: 100;">
+                    </div>
+
+                    <!-- Text content, positioned absolutely within the parent div -->
+                    <div class="position-absolute" style="top: 20px; left: 40px; z-index: 100;">
+                        <p class="text-dark mb-1" style="font-size: smaller;">Establishment</p>
+                        <h4 class="text-dark" style="font-size: large; font-weight: bold;">City Name</h4>
+                    </div>
+
+                    <!-- Button positioned at the bottom -->
+                    <button class="btn btn-light rounded-pill position-absolute"
+                        style="bottom: 20px; left: 40px; z-index: 100;">
+                        Explore
+                    </button>
+                </div>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="position-relative rounded-4"
+                    style="background-image: url('/static/images/hotel-2.jpg'); background-size: cover; background-position: center; height:200px;">
+
+
+                    <!-- Overlay for the dark background -->
+                    <div class="w-100 h-100 rounded-4" style="background-color: rgba(56, 56, 56, 0.226); z-index: 100;">
+                    </div>
+
+                    <!-- Text content, positioned absolutely within the parent div -->
+                    <div class="position-absolute" style="top: 20px; left: 40px; z-index: 100;">
+                        <p class="text-dark mb-1" style="font-size: smaller;">Establishment</p>
+                        <h4 class="text-dark" style="font-size: large; font-weight: bold;">City Name</h4>
+                    </div>
+
+                    <!-- Button positioned at the bottom -->
+                    <button class="btn btn-light rounded-pill position-absolute"
+                        style="bottom: 20px; left: 40px; z-index: 100;">
+                        Explore
+                    </button>
+                </div>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="position-relative rounded-4"
+                    style="background-image: url('/static/images/hotel-2.jpg'); background-size: cover; background-position: center; height:200px;">
+
+
+                    <!-- Overlay for the dark background -->
+                    <div class="w-100 h-100 rounded-4" style="background-color: rgba(56, 56, 56, 0.226); z-index: 100;">
+                    </div>
+
+                    <!-- Text content, positioned absolutely within the parent div -->
+                    <div class="position-absolute" style="top: 20px; left: 40px; z-index: 100;">
+                        <p class="text-dark mb-1" style="font-size: smaller;">Establishment</p>
+                        <h4 class="text-dark" style="font-size: large; font-weight: bold;">City Name</h4>
+                    </div>
+
+                    <!-- Button positioned at the bottom -->
+                    <button class="btn btn-light rounded-pill position-absolute"
+                        style="bottom: 20px; left: 40px; z-index: 100;">
+                        Explore
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    
+    {% endblock content %}
+    {% block script %}
+
+        document.querySelector('.btn.btn-dark.rounded-pill').addEventListener('click', function () {
+            // Toggle dropdown visibility
+            document.querySelector('.custom-dropdown').classList.toggle('show');
+
+            // Toggle overlay visibility
+            document.querySelector('.overlay').classList.toggle('show');
+        });
+
+        // Optional: Add click event to the overlay to close the dropdown when clicking outside
+        document.querySelector('.overlay').addEventListener('click', function () {
+            document.querySelector('.custom-dropdown').classList.remove('show');
+            document.querySelector('.overlay').classList.remove('show');
+        });
+        {% endblock script %}

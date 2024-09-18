@@ -9,6 +9,9 @@ from rest_framework import status, generics
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
+from .serializers import PasswordResetSerializer
 # Create your views here.
 
 User = get_user_model()
@@ -135,3 +138,41 @@ class UpdateProfileView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetView(generics.UpdateAPIView):
+    """
+    View for authenticated users to reset their password by providing the old password,
+    new password, and confirmation of the new password.
+    """
+    serializer_class = PasswordResetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Check if the old password is correct
+        if not user.check_password(serializer.validated_data['old_password']):
+            raise AuthenticationFailed("The old password is incorrect.")
+        
+        # Set the new password
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
+
+class AccountDel(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user.id
+
+        try:
+            user = User.objects.get(id=user)
+        except User.DoesNotExist:
+            return Response({"error":"User has been deleted"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.delete()
+
+        return Response({"detail":"Account successfully deleted."}, status=status.HTTP_200_OK)

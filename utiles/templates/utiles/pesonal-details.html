@@ -1,14 +1,17 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% block css %}
+<link href="{% static 'css/nek0iese.css' %}" rel="stylesheet">
+{% endblock css %}
 {% block title %}Account Settings{% endblock title %}
 {% block content %}
-    <div class="container mt-5">
+    <div class="container mt-5" id="Personal-d">
         <div class="row">
             {% include "component/link-box.html" %}
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h1 class="as-xe01 ms-1 mb-3">Personal Details</h1>
-                    <h3 class="as-xe001 ms-1">Update your information and find out how it’s used.</h3>
+                    <h5 class="as-xe001 ms-1">Update your information and find out how it’s used.</h5>
                 </div>
                 <div class="line"></div>
                 <div class="mb-5 mt-2">
@@ -23,7 +26,7 @@
                                     <p class="m-0" id="fullname" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseName" role="button" aria-expanded="false" aria-controls="collapseName">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseName" role="button" aria-expanded="false" aria-controls="collapseName" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2 text-start" id="collapseName">
@@ -54,7 +57,7 @@
                                     <p class="m-0" id="email" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseEmail" role="button" aria-expanded="false" aria-controls="collapseEmail">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseEmail" role="button" aria-expanded="false" aria-controls="collapseEmail" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             
@@ -81,7 +84,7 @@
                                     <p class="m-0" id="phno" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapsePhone" role="button" aria-expanded="false" aria-controls="collapsePhone">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapsePhone" role="button" aria-expanded="false" aria-controls="collapsePhone" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2" id="collapsePhone">
@@ -107,7 +110,7 @@
                                     <p class="m-0" id="dob" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseDob" role="button" aria-expanded="false" aria-controls="collapseDob">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseDob" role="button" aria-expanded="false" aria-controls="collapseDob" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2" id="collapseDob">
@@ -133,7 +136,7 @@
                                     <p class="m-0" id="nationality" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseNationality" role="button" aria-expanded="false" aria-controls="collapseNationality">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseNationality" role="button" aria-expanded="false" aria-controls="collapseNationality" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2" id="collapseNationality">
@@ -159,7 +162,7 @@
                                     <p class="m-0" id="gender" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseGender" role="button" aria-expanded="false" aria-controls="collapseGender">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseGender" role="button" aria-expanded="false" aria-controls="collapseGender" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2" id="collapseGender">
@@ -189,7 +192,7 @@
                                     <p class="m-0" id="address" style="font-size: 0.8rem;"></p>
                                 </div>
                                 <div>
-                                    <a data-bs-toggle="collapse" href="#collapseAddress" role="button" aria-expanded="false" aria-controls="collapseAddress">Edit</a>
+                                    <a data-bs-toggle="collapse" href="#collapseAddress" role="button" aria-expanded="false" aria-controls="collapseAddress" style="text-decoration: none;">Edit</a>
                                 </div>
                             </div>
                             <div class="collapse w-100 mt-2" id="collapseAddress">

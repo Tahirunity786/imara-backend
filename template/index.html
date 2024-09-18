@@ -1,123 +1,194 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block title %}Home{% endblock title %}
+
 {% block content %}
-<main class="main-banner">
-  <div class="overlay d-flex justify-content-center align-items-center">
-    <div class="content-container">
-      <h2 class="header-text">
-        Votre porte d'entrée vers <br>
-        l'exceptionnel
-      </h2>
+<main style="margin-bottom: 80px;">
+  <div class="cover d-flex justify-content-center align-items-center">
+    <div class="w-100">
+      <div class="mb-4 text-center"> <!-- Adjusted margin-bottom -->
+        <h1 style="font-size: 3rem; font-weight: bold;" class="text-light">Votre porte d'entrée vers
+          <br>
+          l'exceptionnel
+        </h1>
+      </div>
 
-      <div class="row row-cols-1 row-cols-md-5 g-4 content-row text-dark">
-        <div class="col">
-          <h6>Ou aller vous ?</h6>
+      <!-- Added margin-top to create space between text and row -->
+      <div class="container mt-5 ps-4 pe-4">
 
-        </div>
-        <div class="col">
-          <h6>Date d’arriver</h6>
+        <div class="row bg-light mt-4 justify-content-center p-3 search-bar">
+          <div class="col-lg-11">
+            <div class="row">
 
-  
-        </div>
-        <div class="col">
-          <h6>Date d’arriver</h6>
+              <div class="col-lg-3 mt-0 position-relative" style="border-right: 2px solid rgb(179, 179, 179);">
+                <h6 class="text-muted">Ou aller vous ?</h6>
+                <input type="text" id="cityInput" class="form-control form-control-land"
+                  placeholder="Chercher une destination" autocomplete="off">
+                <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
+              </div>
+              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                <h6 class="text-muted nav-link">Date d'arriver (From)</h6>
+                <input type="text" id="dateInputg" class="form-control form-control-land"
+                  placeholder="Ajouter une date">
+              </div>
+              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                <h6 class="text-muted">Date d'arriver (Till)</h6>
+                <input type="text" id="dateInputa" class="form-control form-control-land"
+                  placeholder="Ajouter une date">
+              </div>
 
+              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                <h6 class="text-muted">Nbre de personne</h6>
+                <input type="text" placeholder="Ajouter" class="form-control form-control-land">
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-1 d-flex justify-content-center align-items-center">
 
-        </div>
-        <div class="col">
-          <h6>Nbre de personne</h6>
+            <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+              style="width: 40px; height: 40px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+              </svg>
 
-        </div>
-        <div class="col">
-          <h6>Nbre de personne</h6>
-
+          </div>
         </div>
       </div>
     </div>
   </div>
-</main>
 
-<div class="container custom-margin-1 ">
-  <h1>Les meilleurs hotels</h1>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/hotel-1.jpg' %}" class="img-fluid rounded-start" alt="Pulman Lubumbashi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Pulman Lubumbashi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Lubumbashi, Haut-Katanga</p>
-        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+
+</main>
+<div class="container">
+  <div class="mb-5">
+    <div class="mb-3">
+      <h2>Les meilleurs hotels</h2>
+    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
+      </div>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
+      </div>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
+      </div>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
       </div>
     </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-      <div class="card-body p-0">
-        <h5 class="card-title">Pulman Kinshasa</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-      </div>
+  </div>
+  <div class="mb-5">
+    <div class="mb-3">
+      <h2> Les meilleurs hotels</h2>
     </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/hotel-3.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kolwezi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Pulman Kolwezi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Kolwezi, Lwalaba</p>
-        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
       </div>
-    </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/hotel-4.jpg' %}" class="img-fluid rounded-start" alt="Pulman Mbuji mayi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Pulman Mbuji mayi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Mbuji mayi, Kasai Oriental</p>
-        <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-        <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
+      </div>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
+      </div>
+      <div class="col d-flex flex-column">
+        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
+        <div class="card-body p-0">
+          <h5 class="card-title">Pulman Kinshasa</h5>
+          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
+          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
+          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<div class="container custom-margin-1 custom-margin-2">
-  <h1>Les meilleurs restaurents</h1>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Lubumbashi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Steakhouse Lubumbashi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Lubumbashi, Haut-Katanga</p>
-        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
-        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+<div class="container mb-5">
+  <div class="wrapper">
+    <i id="left" class="fa-solid fa-angle-left"></i>
+    <div class="carousel">
+      <div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top:20px; left: 40px;">
+          <p class="text-dark">establishment</p>
+          <h4>City Name</h4>
+        </div>
+        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <img src="{% static 'images/hotel-2.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
-    </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-      <div class="card-body p-0">
-        <h5 class="card-title">Steakhouse Kinshasa</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
-        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      <div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top:20px; left: 40px;">
+          <p class="text-dark">establishment</p>
+          <h4>City Name</h4>
+        </div>
+        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <img src="{% static 'images/hotel-1.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
-    </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kolwezi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Steakhouse Kolwezi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Kolwezi, Lwalaba</p>
-        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
-        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      <div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top:20px; left: 40px;">
+          <p class="text-dark">establishment</p>
+          <h4>City Name</h4>
+        </div>
+        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <img src="{% static 'images/hotel-3.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
-    </div>
-    <div class="col d-flex flex-column">
-      <img src="{% static 'images/restaurant-11.jpg' %}" class="img-fluid rounded-start" alt="Pulman Mbuji mayi">
-      <div class="card-body p-0">
-        <h5 class="card-title">Steakhouse Mbuji mayi</h5>
-        <p class="card-text"><i class="fi fi-rr-marker"></i> Mbuji mayi, Kasai Oriental</p>
-        <p class="card-text"><i class="fi fi-rr-terrace"></i> table pour deux</p>
-        <p class="card-text"><strong>$50</strong> /table ★4.9</p>
+      <div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top:20px; left: 40px;">
+          <p class="text-dark">establishment</p>
+          <h4>City Name</h4>
+        </div>
+        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <img src="{% static 'images/hotel-4.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
+
     </div>
+    <i id="right" class="fa-solid fa-angle-right"></i>
   </div>
+
 </div>
 {% endblock content %}

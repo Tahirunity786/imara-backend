@@ -1,6 +1,9 @@
 {% extends "base/base.html" %}
 {% load static %}
-{% block title %}Account Settings{% endblock title %}
+{% block css %}
+<link href="{% static 'css/nek0iese.css' %}" rel="stylesheet">
+{% endblock css %}
+{% block title %}Settings - Payment Details{% endblock title %}
 {% block content %}
     <div class="container mt-5 mb-5">
         <div class="row">
@@ -8,7 +11,7 @@
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h1 class="as-xe01 ms-1 mb-3">Payment Details</h1>
-                    <h3 class="as-xe001 ms-1">Securely add or remove payment methods to make it easier when you book. </h3>
+                    <h5 class="as-xe001 ms-1">Securely add or remove payment methods to make it easier when you book. </h5>
                 </div>
                 <div class="line"></div>
                 <div class="mb-5">
@@ -22,7 +25,7 @@
                                     <p class="m-0" style="font-size: 0.8rem;">Pay with new card</p>
                                 </div>
                                 <div>
-                                    <a href="#">Add Card</a>
+                                    <a style="text-decoration: none;" href="#">Add Card</a>
                                 </div>
                             </div>
                         </div>

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (response.ok) {
                         // Email check was successful, proceed with form submission or next steps
-                        sessionStorage.setItem('tempEmail', email); // Store the email in session storage
+                        sessionStorage.setItem('ntempEmail', email); // Store the email in session storage
                         window.location.href = '/register-process'; // Redirect to the next page
                     } else {
                         // Handle errors returned from the server
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (signupContinueForm) {
         signupContinueForm.addEventListener('submit', async function (event) {
             event.preventDefault(); // Prevent the default form submission
-            const email = sessionStorage.getItem('tempEmail');
+            const email = sessionStorage.getItem('ntempEmail');
             const form = event.target;
             const formData = new FormData(form);
             formData.append('email', email);
@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (response.ok) {
                     const result = await response.json();
-                    // Handle success (e.g., redirect, show a message)
-                    localStorage.setItem('user', result.token)
+                  
+                    localStorage.setItem('nikaese-user', JSON.stringify(result.user))
                     window.location.href = '/';
                 } else {
                     // Handle errors
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = '/';
                     }
 
-                    localStorage.setItem('user', JSON.stringify(result.user));
+                    localStorage.setItem('nikaese-user', JSON.stringify(result.user));
 
                 } else {
                     // Handle errors
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let studentDetails = document.getElementById("student-details");
 
     if (studentDetails) {
-        let user_data = localStorage.getItem('user');
+        let user_data = localStorage.getItem('nikaese-user');
         let user = JSON.parse(user_data);
 
         (async () => {
@@ -257,40 +257,48 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const utiles = document.getElementById('utiles');
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem('nikaese-user');
 
     const languageDropdown = `
-            <div class="dropdown" style="position: relative; padding-right: 20px;">
-                <a class="btn btn-outline-secondary" 
-                   style="border-radius: 50%; width: 35px; height: 35px; padding: 0.385rem 0.55rem;" 
-                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   <i class="fi fi-rr-globe" style="font-size: 16px;"></i>
-                </a>
-                <ul class="dropdown-menu" style="left: -176px;">
-                    <li><a class="dropdown-item" href="#">Language Option</a></li>
-                </ul>
-            </div>`;
+            <button class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
+          style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe"
+            viewBox="0 0 16 16">
+            <path
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z" />
+          </svg>
+        </button>`;
 
     const notificationDropdown = `
-            <div class="dropdown" style="position: relative; padding-right: 20px;">
-                <a class="btn btn-outline-secondary" 
-                   style="border-radius: 50%; width: 35px; height: 35px; padding: 0.385rem 0.55rem;" 
-                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   <i class="fi fi-rr-bell" style="font-size: 16px;"></i>
-                </a>
-                <ul class="dropdown-menu" style="left: -175px;">
-                    <li><a class="dropdown-item" href="#">All notifications</a></li>
-                </ul>
-            </div>`;
+            <div class="dropdown">
+          <button class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"
+            style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
+            </svg>
+          </button>
+          <ul class="dropdown-menu">
+            <li class="m-1"><a class="dropdown-item" href="#">no notification yet</a></li>
+           
+          </ul>
+        </div>`;
 
     const userDropdown = `
-            <div class="dropdown" style="position: relative;">
-                <a class="btn btn-outline-secondary" 
-                   style="border-radius: 50%; width: 35px; height: 35px; padding: 0.385rem 0.55rem;" 
-                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   <i class="fi fi-rr-user" style="font-size: 16px;"></i>
-                </a>
-                <ul class="dropdown-menu" style="left: -178px;">
+            <div class="dropdown">
+            <button class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4 "
+                role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person"
+                    viewBox="0 0 16 16">
+                        <path
+                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                    </svg>
+            </button>
+
+                <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/nakiese/accounts/settings">Manage Account</a></li>
                     <li><a class="dropdown-item" href="#">Reviews</a></li>
                     <li><a class="dropdown-item" href="#">Saved</a></li>
@@ -307,13 +315,13 @@ document.addEventListener('DOMContentLoaded', function () {
         attachLogoutListener(); // Attach the logout event listener
     } else {
         const loginButton = `
-                <div style="padding-right: 20px;">
-                    <a href="/login" class="btn-nakiese text-light text-center">Login</a>
+                <div>
+                    <a href="/login" class="btn btn-primary ms-3 rounded-pill text-light text-center">Login</a>
                 </div>`;
 
         const signUpButton = `
                 <div>
-                    <a href="/register" class="btn-nakiese text-light text-center">Sign Up</a>
+                    <a href="/register" class="btn btn-primary ms-3 rounded-pill text-light text-center">Sign Up</a>
                 </div>`;
 
         utiles.innerHTML = `
@@ -326,16 +334,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     const logout = document.getElementById("logout");
+    const logoutSettings = document.getElementById("setSignout");
 
-    if (logout) {
+    if (logout ) {
         logout.addEventListener('click', function (event) {
             // event.preventDefault(); // Prevent default link behaviorn
-            localStorage.removeItem('user');
-            window.location.href = '/login';
+            localStorage.removeItem('nikaese-user');
+            window.location.reload();
         });
-    } else {
-        console.error("Logout button not found");
     }
+    if(logoutSettings){
+        logoutSettings.addEventListener('click', function (event) {
+            // event.preventDefault(); // Prevent default link behaviorn
+            localStorage.removeItem('nikaese-user');
+            window.location.reload()
+        });
+    } 
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -369,9 +383,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', async function () {
-    let user = localStorage.getItem('user');
+    let user = localStorage.getItem('nikaese-user');
+    let Personald = document.getElementById('Personal-d');
 
-    if (user) {
+    if (user && Personald) {
         try {
             // Parse the user object if it's stored as a JSON string
             user = JSON.parse(user);
@@ -414,7 +429,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (e) {
             // Error handling
             console.error('Request failed', e);
-            alert('An error occurred while processing the request');
+            butterup.toast({
+                title: 'Error',
+                message: "Please click " + " " + `<b><a href="/login">Login</a></b>` + " " + " to continue",
+                type: 'error',
+            });
         }
     }
 });
@@ -430,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (fName && lName && saveButton) {
 
         saveButton.addEventListener('click', async function () {
-            let user = localStorage.getItem('user');
+            let user = localStorage.getItem('nikaese-user');
             let token;
             user = JSON.parse(user);
             if (user) {
@@ -438,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Parse the user object if it's stored as a JSON string
                     token = user.token ? user.token.access : null;  // Safely check for the token
 
-                    
+
 
                     const requestData = {
                         first_name: fName.value,
@@ -468,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error("Unknown error:", error);
                     butterup.toast({
                         title: 'Authentication Error',
-                        message: "Please click " + " "+`<b><a href="/login">Login</a></b>` + " "+" to continue",
+                        message: "Please click " + " " + `<b><a href="/login">Login</a></b>` + " " + " to continue",
                         type: 'error',
                     });
                 }
@@ -476,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Error")
                 butterup.toast({
                     title: 'Authentication Error',
-                    message: "Please click " + " "+`<b><a href="/login">Login</a></b>` +" "+ "  to continue",
+                    message: "Please click " + " " + `<b><a href="/login">Login</a></b>` + " " + "  to continue",
                     type: 'error',
                 });
             }
@@ -487,51 +506,51 @@ document.addEventListener('DOMContentLoaded', function () {
     let savemail = document.getElementById('savemeil');
     if (emailId && savemail) {
         savemail.addEventListener('click', async function () {
-            let user = localStorage.getItem('user');
-            
+            let user = localStorage.getItem('nikaese-user');
+
             user = JSON.parse(user);
             if (user) {
-            try {
-                // Parse the user object if it's stored as a JSON string
-               
-                const requestData = {
-                    email: emailId.value,
+                try {
+                    // Parse the user object if it's stored as a JSON string
 
-                };
+                    const requestData = {
+                        email: emailId.value,
 
-                const response = await fetch('/account-control/user/profile/update', {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
-                    },
-                    body: JSON.stringify(requestData)  // Sending the data in JSON format
-                });
+                    };
 
-                if (response.ok) {
-                    window.location.reload();
-                } else {
+                    const response = await fetch('/account-control/user/profile/update', {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
+                        },
+                        body: JSON.stringify(requestData)  // Sending the data in JSON format
+                    });
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        butterup.toast({
+                            title: 'Updation Error',
+                            message: "Error while updating email, please try again",
+                            type: 'error',
+                        });
+                    }
+                } catch (error) {
                     butterup.toast({
-                        title: 'Updation Error',
-                        message: "Error while updating email, please try again",
+                        title: 'Unknown Error',
+                        message: "An Unknown error has been occured.",
                         type: 'error',
                     });
                 }
-            } catch (error) {
+            } else {
                 butterup.toast({
-                    title: 'Unknown Error',
-                    message: "An Unknown error has been occured.",
+                    title: 'Authentication Error',
+                    message: "Please click" + " " + `<b><a href="/login">Login</a></b>` + " " + "  to continue",
                     type: 'error',
                 });
             }
-        }else{
-                butterup.toast({
-                    title: 'Authentication Error',
-                    message: "Please click" +" "+ `<b><a href="/login">Login</a></b>` + " "+"  to continue",
-                    type: 'error',
-                });
-        }
         });
     }
 
@@ -539,51 +558,52 @@ document.addEventListener('DOMContentLoaded', function () {
     let savedob = document.getElementById('savedob');
     if (dob && savedob) {
         savedob.addEventListener('click', async function () {
-            let user = localStorage.getItem('user');
-            
+            let user = localStorage.getItem('nikaese-user');
+
             user = JSON.parse(user);
             if (user) {
-            try {
-                // Parse the user object if it's stored as a JSON string
-                user = JSON.parse(user);
+                try {
+                    // Parse the user object if it's stored as a JSON string
+                    user = JSON.parse(user);
 
-                const requestData = {
-                    date_of_bith: dob.value,
+                    const requestData = {
+                        date_of_bith: dob.value,
 
-                };
+                    };
 
-                const response = await fetch('/account-control/user/profile/update', {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
-                    },
-                    body: JSON.stringify(requestData)  // Sending the data in JSON format
-                });
+                    const response = await fetch('/account-control/user/profile/update', {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
+                        },
+                        body: JSON.stringify(requestData)  // Sending the data in JSON format
+                    });
 
-                if (response.ok) {
-                    window.location.reload();
-                } else {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        butterup.toast({
+                            title: 'Unknown Error',
+                            message: "An Unknown error has been occured.",
+                            type: 'error',
+                        });
+                    }
+                } catch (error) {
                     butterup.toast({
-                        title: 'Unknown Error',
-                        message: "An Unknown error has been occured.",
+                        title: 'Authentication Error',
+                        message: "Please click " + " " + `<b><a href="/login">Login</a></b>` + " " + "  to continue",
                         type: 'error',
                     });
                 }
-            } catch (error) {
+            } else {
                 butterup.toast({
                     title: 'Authentication Error',
-                    message: "Please click " +" "+ `<b><a href="/login">Login</a></b>` + " "+"  to continue",
+                    message: "Please click" + " " + `<b><a href="/login">Login</a></b>` + " " + " to continue",
                     type: 'error',
-                });            }
-        }else{
-            butterup.toast({
-                title: 'Authentication Error',
-                message: "Please click" + " "+`<b><a href="/login">Login</a></b>` +" "+ " to continue",
-                type: 'error',
-            });
-    }
+                });
+            }
         });
     }
     let nat = document.getElementById('nat');
@@ -720,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check if the elements are available
     if (phId && savePh) {
         // Retrieve and parse user data from localStorage
-        let user = localStorage.getItem('user');
+        let user = localStorage.getItem('nikaese-user');
         user = JSON.parse(user);
         if (user) {
             try {
@@ -772,14 +792,14 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 butterup.toast({
                     title: 'Authentication Error',
-                    message: "Please click" +" "+ `<a  href="/login">Login </a>` +" "+ "to continue",
+                    message: "Please click" + " " + `<a  href="/login">Login </a>` + " " + "to continue",
                     type: 'error',
                 });
             }
         } else {
             butterup.toast({
                 title: 'Authentication Error',
-                message: "Please click" + " "+`<a  href="/login">Login </a>` + " "+"to continue",
+                message: "Please click" + " " + `<a  href="/login">Login </a>` + " " + "to continue",
                 type: 'error',
             });
         }
@@ -793,4 +813,172 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error("attachLogoutListener function is not defined.");
     }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Get elements
+    const openModalLink = document.querySelector('.custom-open-modal-link');
+    const openModalDelLink = document.querySelector('.custom-open-modal-del-link');
+    const closeModalBtns = document.querySelectorAll('.custom-close-modal-btn');
+    const closeModalBtns2 = document.querySelectorAll('.custom-close-modal-btn2');
+    const modalOverlay = document.getElementById('customModalOverlay');
+    const modalOverlay2 = document.getElementById('customModalOverlay2');
+
+
+
+    // Open Modal
+    openModalLink.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default anchor behavior
+
+        modalOverlay.style.display = 'flex';
+    });
+    if(openModalDelLink){
+        openModalDelLink.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+    
+            modalOverlay2.style.display = 'flex';
+        });
+    }
+
+    // Close Modal
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+    });
+    closeModalBtns2.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalOverlay2.style.display = 'none';
+        });
+    });
+
+    // Prevent Modal Close on Outside Click
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            modalOverlay.style.display = 'none';
+        }
+    });
+   
+
+
+    let submitReset = document.getElementById("send-reset");
+    
+    const oldpass = document.getElementById('custom-old-password');
+    const newPass = document.getElementById('custom-new-password');
+    const condirPass = document.getElementById('custom-confirm-password');
+
+    let user = localStorage.getItem('nikaese-user');
+    user = JSON.parse(user);
+
+    if (submitReset) {
+        submitReset.addEventListener('click', async function () {
+            try {
+                if (!user && !user.token.access) {
+                    console.error("User not found");
+                    return
+                }
+                const requestData = {
+                    'old_password': oldpass.value,
+                    'new_password': newPass.value,
+                    'confirm_password': condirPass.value
+                };
+                try {
+                    const response = await fetch('/account-control/user/change-password', {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
+                        },
+                        body: JSON.stringify(requestData)  // Sending the data in JSON format
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        butterup.toast({
+                            title: 'Password Successfully Changed',
+                            message: result.detail,
+                            type: 'success',
+                        });
+                        modalOverlay.style.display = 'none';
+                    }
+                    else {
+                        butterup.toast({
+                            title: 'Unknown error Occured',
+                            message: error,
+                            type: 'error',
+                        });
+                    }
+                } catch (error) {
+                    butterup.toast({
+                        title: 'Unknown error Occured',
+                        message: error,
+                        type: 'error',
+                    });
+                }
+            } catch (error) {
+                butterup.toast({
+                    title: 'Unknown error Occured',
+                    message: error,
+                    type: 'error',
+                });
+            }
+        });
+    }
+    let delacc = document.getElementById("delacc");
+    if (delacc) {
+        delacc.addEventListener('click', async function () {
+            try {
+                if (!user && !user.token.access) {
+                    console.error("User not found");
+                    return
+                }
+               
+                try {
+                    const response = await fetch('/account-control/user/del', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
+                        },
+                   
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        butterup.toast({
+                            title: 'Delete Account',
+                            message: result.detail,
+                            type: 'success',
+                        });
+                        modalOverlay.style.display = 'none';
+                        localStorage.removeItem("nikaese-user");
+                        window.location.href = "/register";
+                    }
+                    else {
+                        butterup.toast({
+                            title: 'Unknown error Occured',
+                            message: error,
+                            type: 'error',
+                        });
+                    }
+                } catch (error) {
+                    butterup.toast({
+                        title: 'Unknown error Occured',
+                        message: error,
+                        type: 'error',
+                    });
+                }
+            } catch (error) {
+                butterup.toast({
+                    title: 'Unknown error Occured',
+                    message: error,
+                    type: 'error',
+                });
+            }
+        });
+    }
+
+
+
 });

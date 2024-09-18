@@ -6,9 +6,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
+class HotelImages(models.Model):
+    image = models.ImageField(upload_to="hotels/images", db_index=True)
+
 class Hotel(models.Model):
     hotel_id = models.CharField(max_length=100, unique=True, db_index=True)
-    image = models.ImageField(upload_to="hotels/images", db_index=True)
+    images = models.ManyToManyField(HotelImages, db_index=True, default="")
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     city = models.CharField(max_length=100, db_index=True)
@@ -29,9 +33,13 @@ class Hotel(models.Model):
 
         super(Hotel, self).save(*args, **kwargs)
     
+
+class ResturantImages(models.Model):
+    image = models.ImageField(upload_to="hotels/images", db_index=True)
+
 class Restaurant(models.Model):
     resturant_id = models.CharField(max_length=100, unique=True, db_index=True)
-    image = models.ImageField(upload_to="hotels/images", db_index=True)
+    images = models.ManyToManyField(ResturantImages, db_index=True, default="")
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     city = models.CharField(max_length=100, db_index=True)
@@ -60,6 +68,7 @@ class BedRoom(models.Model):
         ('double', 'double'),
         ('suite', 'suite'),
     )
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, db_index=True, default="")
     room_id = models.CharField(max_length=100, unique=True, db_index=True)
     room_type = models.CharField(max_length=100, choices=ROOM_TYPE, db_index=True)
     description = models.TextField(db_index=True)
@@ -77,6 +86,7 @@ class BedRoom(models.Model):
         super(BedRoom, self).save(*args, **kwargs)
 
 class Tables(models.Model):
+    resturant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, default="", db_index=True)
     table_id = models.CharField(max_length=100, unique=True, db_index=True)
     capacity = models.PositiveIntegerField(default=0)
     availabilty_from = models.DateField(null=True, default=None)
@@ -92,6 +102,7 @@ class Tables(models.Model):
 
 class MenuItem(models.Model):
     dish_id = models.CharField(max_length=100, unique=True, db_index=True)
+    resturant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, default="", db_index=True)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)

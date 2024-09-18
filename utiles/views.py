@@ -28,4 +28,10 @@ class HotelView(TemplateView):
 class ResturantView(TemplateView):
     template_name = 'utiles/restaurants.html'
 
+class Cart(TemplateView):
+    template_name = 'utiles/cart.html'
+
+class SearchView(TemplateView):
+    template_name = 'utiles/search.html'
+
 

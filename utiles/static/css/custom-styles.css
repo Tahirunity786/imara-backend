@@ -18,10 +18,7 @@
     max-width: 1200px;
   }
    */
-  .menu {
-    width: 70%;
-  }
-  
+ 
   .menu h2 {
     font-size: 1.8rem;
     margin-bottom: 20px;
@@ -93,7 +90,7 @@
   }
   
   .reservation {
-    width: 30%;
+    width: 100%;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
