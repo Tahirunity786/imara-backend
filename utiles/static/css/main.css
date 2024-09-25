@@ -273,46 +273,53 @@ hr {
 }
 
 /* auth pages */
-h1,h5,
+h1,
+h5,
 label,
-button, span {
+button,
+span {
     font-family: Baloo2;
 }
-p{
+
+p {
     font-family: Baloo2 Arial, Helvetica, sans-serif;
 }
+
 .separator {
     display: flex;
     align-items: center;
     text-align: center;
-  }
-  
-  .separator .line {
+}
+
+.separator .line {
     flex: 1;
     border: none;
     border-top: 1px solid #000;
     margin: 0 10px;
-  }
-  
-  .separator span {
+}
+
+.separator span {
     padding: 0 10px;
     font-weight: bold;
-  }
+}
 
-ul li{
+ul li {
     margin-top: 20px;
 }
-main{
+
+main {
     background: url("../images/hotel-1.jpg");
     width: 100%;
     height: 350px;
-    
+
 }
-main .cover{
+
+main .cover {
     width: 100%;
     height: 100%;
     background-color: #85858571;
 }
+
 .search-bar {
     background-color: #fff;
     padding: 10px;
@@ -320,8 +327,8 @@ main .cover{
 }
 
 .search-bar input {
-    border: none ;
-    outline: none ;
+    border: none;
+    outline: none;
     background-color: transparent;
     width: 100%;
 }
@@ -346,56 +353,69 @@ main .cover{
 .search-bar input::placeholder {
     color: #6c757d;
 }
+
 .search-land {
     padding-left: 0px;
     padding-right: 4px;
     outline: none;
     border: none;
     background-color: rgb(255, 249, 250, 1);
-    
+
 }
 
 .search-land:focus {
-    box-shadow: none !important; /* Remove blue focus border */
+    box-shadow: none !important;
+    /* Remove blue focus border */
     border: none !important;
     background-color: rgb(255, 249, 250, 1);
     pointer-events: none;
 }
+
 footer {
     background-color: #F3F3F3;
     height: auto;
-    
+
 }
 
 .fts-xe2 {
     margin-bottom: 50px;
 }
+
 .fts-xxe0 {
     margin-right: 40px;
 }
+
 .fts-xxe1 {
     margin-left: 40px;
 }
+
 .fts-xxe1,
 .fts-xxe0 {
     position: relative;
 }
+
 .fts-xxxe1 {
     position: absolute;
     top: 8px;
     left: 10px;
 }
+
 .modal.fade .modal-dialog {
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    transform: translateY(-25px); /* Starts slightly off-screen */
-    opacity: 0; /* Initially invisible */
+    transform: translateY(-25px);
+    /* Starts slightly off-screen */
+    opacity: 0;
+    /* Initially invisible */
 }
 
 .modal.show .modal-dialog {
-    transform: translateY(0); /* Slide in smoothly */
-    opacity: 1; /* Fully visible */
+    transform: translateY(0);
+    /* Slide in smoothly */
+    opacity: 1;
+    /* Fully visible */
 }
-.fm-ctrl{
+
+.fm-ctrl {
     width: 100%;
     border: 2px solid rgb(173, 173, 173) !important;
     border-radius: 10px;
@@ -405,6 +425,7 @@ footer {
     font-weight: 500;
 
 }
+
 /* Container styling */
 .custom-dropdown {
     position: absolute;
@@ -417,7 +438,8 @@ footer {
     border-radius: 8px;
     z-index: 9999;
     padding: 20px;
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
     transition: all 0.3s ease;
 }
 
@@ -445,28 +467,33 @@ footer {
     position: absolute;
     left: 20px;
     top: 50%;
-    transform: translateY(-50%); /* Centers vertically */
+    transform: translateY(-50%);
+    /* Centers vertically */
     font-size: 13px;
     display: inline-block;
     border-right: 1px solid black;
-    padding-right: 10px; /* Add some space on the right */
+    padding-right: 10px;
+    /* Add some space on the right */
     line-height: 1.2;
     font-weight: 800;
 }
 
 /* Styling the input field */
 .fm-ctrl {
-    padding-left: 100px; /* Adjust for the label's width */
-    height: 40px; /* Set the desired height for the input */
+    padding-left: 100px;
+    /* Adjust for the label's width */
+    height: 40px;
+    /* Set the desired height for the input */
     border: 1px solid #ccc;
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 5px;
+    /* Rounded corners */
     box-shadow: none;
     outline: none;
     width: 100%;
     box-sizing: border-box;
 }
 
-.fm-ctrl:focus{
+.fm-ctrl:focus {
     border: 1px solid black;
 }
 
@@ -485,6 +512,7 @@ footer {
     font-size: 14px;
     color: #555;
 }
+
 /* Normalize the checkbox size */
 input[type="checkbox"] {
     width: 16px;
@@ -508,7 +536,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::before {
-   
+
     font-size: 12px;
     color: white;
     position: absolute;
@@ -527,9 +555,12 @@ label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
-    z-index: 9998; /* Below the dropdown */
-    display: none; /* Hidden by default */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent dark background */
+    z-index: 9998;
+    /* Below the dropdown */
+    display: none;
+    /* Hidden by default */
     transition: all 0.3s ease;
 }
 
@@ -545,6 +576,7 @@ label {
         left: 10%;
         transform: none;
     }
+
     .custom-dropdown {
         top: 100%;
     }
@@ -555,27 +587,28 @@ label {
         width: 90%;
         left: 5%;
     }
-    
+
     /* Responsive button sizing */
     .custom-dropdown .btn {
         padding: 10px 20px;
         font-size: 14px;
     }
 }
+
 /* Link to Open Modal */
 .custom-open-modal-link {
     color: #007bff;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
-  }
-  
-  .custom-open-modal-link:hover {
+}
+
+.custom-open-modal-link:hover {
     text-decoration: underline;
-  }
-  
-  /* Modal Overlay */
-  .custom-modal-overlay {
+}
+
+/* Modal Overlay */
+.custom-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -586,29 +619,29 @@ label {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
-  /* Modal Box */
-  .custom-modal {
+}
+
+/* Modal Box */
+.custom-modal {
     background-color: #fff;
     width: 50%;
     max-width: 90%;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation: customFadeIn 0.3s ease-in-out;
-  }
-  
-  .custom-modal2 {
+}
+
+.custom-modal2 {
     background-color: #fff;
     width: 30%;
     max-width: 90%;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation: customFadeIn 0.3s ease-in-out;
-  }
-  
-  /* Modal Header */
-  .custom-modal-header {
+}
+
+/* Modal Header */
+.custom-modal-header {
     padding: 15px;
     background-color: white;
     color: black;
@@ -617,72 +650,73 @@ label {
     align-items: center;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-  }
-  
-  .custom-modal-header h2 {
+}
+
+.custom-modal-header h2 {
     margin: 0;
     font-size: 20px;
-  }
-  
-  .custom-modal-header .custom-close-modal-btn, .custom-close-modal-btn2 {
+}
+
+.custom-modal-header .custom-close-modal-btn,
+.custom-close-modal-btn2 {
     background: none;
     border: none;
     color: #fff;
     font-size: 24px;
     cursor: pointer;
-  }
-  
-  /* Modal Body */
-  .custom-modal-body {
+}
+
+/* Modal Body */
+.custom-modal-body {
     padding: 20px;
     font-size: 16px;
     color: #333;
-  }
-  
-  .custom-modal-body label {
+}
+
+.custom-modal-body label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-  .custom-modal-body input {
+}
+
+.custom-modal-body input {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
-  }
-  
-  .custom-error-message {
+}
+
+.custom-error-message {
     color: red;
     font-size: 12px;
     margin-bottom: 15px;
     display: none;
-  }
-  
-  /* Modal Footer */
-  .custom-modal-footer {
+}
+
+/* Modal Footer */
+.custom-modal-footer {
     padding: 10px 20px;
     display: flex;
     justify-content: flex-end;
-  }
-  
-  .custom-modal-footer .custom-close-modal-btn {
+}
+
+.custom-modal-footer .custom-close-modal-btn {
     background-color: whitesmoke;
     color: black;
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .custom-modal-footer .custom-close-modal-btn:hover {
+}
+
+.custom-modal-footer .custom-close-modal-btn:hover {
     background-color: rgb(227, 227, 227);
-  }
-  
-  /* Submit Button */
-  .custom-submit-btn {
+}
+
+/* Submit Button */
+.custom-submit-btn {
     padding: 10px 20px;
     background-color: #002871;
     color: white;
@@ -691,25 +725,48 @@ label {
     cursor: pointer;
     font-size: 16px;
     margin-left: 20px;
-  }
-  
-  .custom-submit-btn:hover {
+}
+
+.custom-submit-btn:hover {
     background-color: #0056b3;
-  }
-  
-  /* Animation for Modal */
-  @keyframes customFadeIn {
+}
+
+/* Animation for Modal */
+@keyframes customFadeIn {
     from {
-      opacity: 0;
-      transform: translateY(-20px);
+        opacity: 0;
+        transform: translateY(-20px);
     }
+
     to {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
-  .custom-image {
-    object-fit: cover; /* Ensures the image fills the area while maintaining aspect ratio */
-    width: 100%; /* Sets width to fill the container */
-    height: 200px; /* Force equal height */
+}
+
+.custom-image {
+    object-fit: cover;
+    /* Ensures the image fills the area while maintaining aspect ratio */
+    width: 100%;
+    /* Sets width to fill the container */
+    height: 200px;
+    /* Force equal height */
+}
+
+.btn-rev-nak {
+    font-size: medium;
+    outline: none;
+    border: none;
+    background-color: #4B75A5;
+    text-align: center;
+    color: white;
+    border-radius:5px;
+    padding-top: .7rem;
+    padding-bottom: .7rem;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+.btn-rev-nak:hover{
+    background-color: #577ba5;
 }
