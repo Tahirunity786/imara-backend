@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (response.ok) {
                     const result = await response.json();
-                  
-                    localStorage.setItem('nikaese-user', JSON.stringify(result.user))
+
+                    localStorage.setItem('exn-u-cookie', JSON.stringify(result.user))
                     window.location.href = '/';
                 } else {
                     // Handle errors
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = '/';
                     }
 
-                    localStorage.setItem('nikaese-user', JSON.stringify(result.user));
+                    localStorage.setItem('exn-u-cookie', JSON.stringify(result.user));
 
                 } else {
                     // Handle errors
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let studentDetails = document.getElementById("student-details");
 
     if (studentDetails) {
-        let user_data = localStorage.getItem('nikaese-user');
+        let user_data = localStorage.getItem('exn-u-cookie');
         let user = JSON.parse(user_data);
 
         (async () => {
@@ -201,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         // Create the patient item element
                         let patientItem = document.createElement('div');
-                        patientItem.className = 'patient-item';
-                        patientItem.id = `patient-item-${counter}`;
+                        patientItem.className = 'nak-item';
+                        patientItem.id = `nak-item-${counter}`;
                         patientItem.dataset.id = patient._id;
                         patientItem.textContent = `${patient.first_name} ${patient.last_name}`;
 
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const utiles = document.getElementById('utiles');
-    const user = localStorage.getItem('nikaese-user');
+    const user = localStorage.getItem('exn-u-cookie');
 
     const languageDropdown = `
             <button class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
@@ -336,20 +336,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const logout = document.getElementById("logout");
     const logoutSettings = document.getElementById("setSignout");
 
-    if (logout ) {
+    if (logout) {
         logout.addEventListener('click', function (event) {
             // event.preventDefault(); // Prevent default link behaviorn
-            localStorage.removeItem('nikaese-user');
+            localStorage.removeItem('exn-u-cookie');
             window.location.reload();
         });
     }
-    if(logoutSettings){
+    if (logoutSettings) {
         logoutSettings.addEventListener('click', function (event) {
             // event.preventDefault(); // Prevent default link behaviorn
-            localStorage.removeItem('nikaese-user');
+            localStorage.removeItem('exn-u-cookie');
             window.location.reload()
         });
-    } 
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', async function () {
-    let user = localStorage.getItem('nikaese-user');
+    let user = localStorage.getItem('exn-u-cookie');
     let Personald = document.getElementById('Personal-d');
 
     if (user && Personald) {
@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (fName && lName && saveButton) {
 
         saveButton.addEventListener('click', async function () {
-            let user = localStorage.getItem('nikaese-user');
+            let user = localStorage.getItem('exn-u-cookie');
             let token;
             user = JSON.parse(user);
             if (user) {
@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let savemail = document.getElementById('savemeil');
     if (emailId && savemail) {
         savemail.addEventListener('click', async function () {
-            let user = localStorage.getItem('nikaese-user');
+            let user = localStorage.getItem('exn-u-cookie');
 
             user = JSON.parse(user);
             if (user) {
@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let savedob = document.getElementById('savedob');
     if (dob && savedob) {
         savedob.addEventListener('click', async function () {
-            let user = localStorage.getItem('nikaese-user');
+            let user = localStorage.getItem('exn-u-cookie');
 
             user = JSON.parse(user);
             if (user) {
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check if the elements are available
     if (phId && savePh) {
         // Retrieve and parse user data from localStorage
-        let user = localStorage.getItem('nikaese-user');
+        let user = localStorage.getItem('exn-u-cookie');
         user = JSON.parse(user);
         if (user) {
             try {
@@ -834,10 +834,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalOverlay.style.display = 'flex';
     });
-    if(openModalDelLink){
+    if (openModalDelLink) {
         openModalDelLink.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent default anchor behavior
-    
+
             modalOverlay2.style.display = 'flex';
         });
     }
@@ -860,16 +860,16 @@ document.addEventListener("DOMContentLoaded", () => {
             modalOverlay.style.display = 'none';
         }
     });
-   
+
 
 
     let submitReset = document.getElementById("send-reset");
-    
+
     const oldpass = document.getElementById('custom-old-password');
     const newPass = document.getElementById('custom-new-password');
     const condirPass = document.getElementById('custom-confirm-password');
 
-    let user = localStorage.getItem('nikaese-user');
+    let user = localStorage.getItem('exn-u-cookie');
     user = JSON.parse(user);
 
     if (submitReset) {
@@ -934,7 +934,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.error("User not found");
                     return
                 }
-               
+
                 try {
                     const response = await fetch('/account-control/user/del', {
                         method: 'POST',
@@ -942,7 +942,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             'Accept': 'application/json',
                             'Authorization': `Bearer ${user.token.access}`  // Ensure the token is correct
                         },
-                   
+
                     });
                     if (response.ok) {
                         const result = await response.json();
@@ -952,7 +952,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             type: 'success',
                         });
                         modalOverlay.style.display = 'none';
-                        localStorage.removeItem("nikaese-user");
+                        localStorage.removeItem("exn-u-cookie");
                         window.location.href = "/register";
                     }
                     else {
@@ -980,5 +980,343 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+
+});
+
+// Hotel Home page
+document.addEventListener("DOMContentLoaded", () => {
+    const hotelGrid = document.getElementById("hotel__grid");
+    let user = localStorage.getItem('exn-u-cookie');
+    user = JSON.parse(user);
+
+    if (hotelGrid) {
+        async function HotelDataPupolator() {
+            try {
+                const response = await fetch('/posts/h-post/', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    let count = 0;
+
+                    result.forEach(ex => {
+                        const colItem = document.createElement('div');
+                        colItem.classList.add('col', 'd-flex', 'flex-column');
+                        const image = document.createElement('img');
+                        image.classList.add('img-fluid', 'custom-image');
+                        image.alt = ex.hotel.name;
+                        image.src = ex.image;
+                        image.style.borderRadius = '10px';
+
+                        const cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body', 'p-0');
+
+                        const cardTitle = document.createElement('a');
+                        cardTitle.id = `nak-${count}`;
+                        cardTitle.style.fontSize = '1.6rem';
+                        cardTitle.style.marginTop = '10px';
+                        cardTitle.style.cursor = 'pointer';
+                        cardTitle.classList.add('nav-link');
+                        cardTitle.dataset.targetnak = ex.room_id; // Set data-targetnak
+                        cardTitle.textContent = ex.hotel.name;
+
+                        const locationText = document.createElement('p');
+                        locationText.classList.add('card-text');
+                        const locationIcon = document.createElement('i');
+                        locationIcon.classList.add('fi', 'fi-rr-marker');
+                        locationText.appendChild(locationIcon);
+                        locationText.textContent += ` ${ex.hotel.city}, ${ex.hotel.country}`;
+
+                        const bedText = document.createElement('p');
+                        bedText.classList.add('card-text');
+                        const bedIcon = document.createElement('i');
+                        bedIcon.classList.add('fi', 'fi-rr-bed-alt');
+                        bedText.appendChild(bedIcon);
+                        bedText.textContent += ` ${ex.room_type}`;
+
+                        const priceRatingText = document.createElement('p');
+                        priceRatingText.classList.add('card-text');
+                        priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}`;
+
+                        cardBody.appendChild(cardTitle);
+                        cardBody.appendChild(locationText);
+                        cardBody.appendChild(bedText);
+                        cardBody.appendChild(priceRatingText);
+                        colItem.appendChild(image);
+                        colItem.appendChild(cardBody);
+
+                        hotelGrid.appendChild(colItem);
+
+                        // Add click event listener to the cardTitle for redirection
+                        cardTitle.addEventListener('click', () => {
+                            const targetId = cardTitle.dataset.targetnak; // Get data-targetnak value
+                            const url = `/nakiese/hotel/bed-detail/${targetId}`; // Append targetId to URL
+                            window.location.href = url; // Redirect to the detailed page
+                        });
+
+                        count++;
+                    });
+                } else {
+                    butterup.toast({
+                        title: 'Something went wrong',
+                        message: "please ",
+                        type: 'error',
+                    });
+                }
+            } catch (error) {
+                butterup.toast({
+                    title: 'Unknown error Occured',
+                    message: error,
+                    type: 'error',
+                });
+            }
+        }
+
+        HotelDataPupolator();
+    }
+
+    if (document.getElementById("nak-grid-2")) {
+        async function BedDetailPopulator() {
+            try {
+                const currentUrl = window.location.pathname;
+                const postId = currentUrl.split("/").pop();
+                const a1 = document.getElementById("a__1");
+                const a2 = document.getElementById("a__2");
+                const gridItem = document.getElementById("grid__items2");
+
+                if (postId) {
+                    const apiUrl = `/posts/sp-h-post/${postId}/`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`
+                        },
+                    });
+
+                    if (!response.ok) throw new Error('Failed to fetch hotel details');
+
+                    const data = await response.json();
+                    console.log(data);
+
+
+                    const container = document.getElementById('image-container');
+                    const reviewGridinn1 = document.getElementById('review__grid_inn_1');
+                    const reviewGridinn2 = document.getElementById('review__grid_inn_2');
+                    const reviewGrid2 = document.getElementById('review__grid_2');
+                    container.innerHTML = ''; // Clear previous content
+                    reviewGridinn1.innerHTML = ''; // Clear previous content
+                    reviewGridinn2.innerHTML = ''; // Clear previous content
+                    reviewGrid2.innerHTML = ''; // Clear previous content
+
+                    // Process hotel images
+                    if (data.specific_bed?.hotel?.images && Array.isArray(data.specific_bed.hotel.images)) {
+                        const images = data.specific_bed.hotel.images;
+                        container.innerHTML = generateImageGrid(images);
+                    } else {
+                        console.error("Hotel data or images array is missing");
+                    }
+
+                    // Append hotel address details
+                    if (data.specific_bed?.hotel?.city && data.specific_bed.hotel.country && data.specific_bed.hotel.address) {
+                        a1.innerText = `${data.specific_bed.hotel.city.name}, ${data.specific_bed.hotel.country}`;
+                        a2.innerText = data.specific_bed.hotel.address;
+                    } else {
+                        console.error("Missing hotel address details");
+                    }
+
+                    // A review Grid creation
+                    // A review Grid creation
+                    if (data.specific_bed?.reviews) {
+                        data.specific_bed.reviews.forEach(review => {
+                            // Create the outer div for the review
+                            let reviewBed = document.createElement('div');
+                            reviewBed.classList.add('mb-5');
+
+                            // Create the inner flex container
+                            let flexContainer = document.createElement('div');
+                            flexContainer.classList.add('d-flex', 'justify-content-start', 'align-item-center');
+
+                            // Create the image container
+                            let imageContainer = document.createElement('div');
+                            let image = document.createElement('img');
+                            image.src = "https://dummyimage.com/50x50/000/fff"; // Dummy image
+                            image.classList.add('rounded-pill');
+                            image.alt = "image";
+                            imageContainer.appendChild(image);
+
+                            // Create the text container
+                            let textContainer = document.createElement('div');
+                            textContainer.classList.add('ms-3');
+
+                            // Reviewer name
+                            let reviewerName = document.createElement('p');
+                            reviewerName.classList.add('mb-1');
+                            reviewerName.innerText = "Marie Nzala"; // Replace with actual reviewer name if available
+                            textContainer.appendChild(reviewerName);
+
+                            // Review date
+                            let reviewDate = document.createElement('p');
+                            reviewDate.classList.add('mb-1');
+                            reviewDate.innerText = new Date(review.date_of_notice).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long'
+                            }); // Format the date from the review object
+                            textContainer.appendChild(reviewDate);
+
+                            // Append the image and text containers to the flex container
+                            flexContainer.appendChild(imageContainer);
+                            flexContainer.appendChild(textContainer);
+
+                            // Create the review comment paragraph
+                            let commentParagraph = document.createElement('p');
+                            commentParagraph.style.marginTop = '10px';
+                            commentParagraph.style.marginLeft = '65px';
+                            commentParagraph.innerText = review.comment || "No comment available."; // Review comment text
+
+                            // Append everything to the main reviewBed div
+                            reviewBed.appendChild(flexContainer);
+                            reviewBed.appendChild(commentParagraph);
+
+                            // Finally, append reviewBed to the parent element (e.g., #review__grid)
+                            reviewGrid2.appendChild(reviewBed);
+                        });
+                    } else {
+                        console.error("Missing hotel reviews details");
+                    }
+                    if (data.specific_bed?.reviews) {
+                        let ratingSums = {};
+                        let ratingCounts = {};
+
+                        // Loop through each review and accumulate ratings for each review type
+                        data.specific_bed.reviews.forEach(review => {
+                            review.rating.forEach(rating => {
+                                if (!ratingSums[rating.name]) {
+                                    ratingSums[rating.name] = 0;  // Initialize sum for each review type
+                                    ratingCounts[rating.name] = 0;  // Initialize count for each review type
+                                }
+                                ratingSums[rating.name] += parseFloat(rating.rate);  // Add the rating
+                                ratingCounts[rating.name] += 1;  // Count the occurrence
+                            });
+                        });
+
+                        let sumOfAverage = 0;
+                        for (let type in ratingSums) {
+                            let averageRating = (ratingSums[type] / ratingCounts[type]).toFixed(1);  // Calculate average and fix to 1 decimal place
+                            sumOfAverage += parseFloat(averageRating);  // Convert the averageRating back to a number and add it to sumOfAverage
+
+                            // Create a new div for the review type name
+                            let nameDiv = document.createElement('div');
+                            let nameParagraph = document.createElement('p');
+                            nameParagraph.classList.add('mb-1');
+                            nameParagraph.textContent = type;  // The review type (e.g., Cleanliness)
+                            nameDiv.appendChild(nameParagraph);
+
+                            // Create a new div for the average rating
+                            let valueDiv = document.createElement('div');
+                            let valueParagraph = document.createElement('p');
+                            valueParagraph.classList.add('mb-1');
+                            valueParagraph.textContent = averageRating;  // The average rating (rounded to 1 decimal place)
+                            valueDiv.appendChild(valueParagraph);
+
+                            // Append both divs to the reviewGrid
+                            reviewGridinn1.appendChild(nameDiv);
+                            reviewGridinn2.appendChild(valueDiv);
+                        }
+                        document.getElementById("av_rating").innerText= (sumOfAverage/5).toFixed(1)
+
+                    } else {
+                        console.error("Missing hotel reviews details");
+                    }
+
+                    // Grid Items Creation
+                    if (gridItem && data.all_beds && Array.isArray(data.all_beds)) {
+                        gridItem.innerHTML = generateGridItems(data.all_beds);
+                    } else {
+                        console.error("No beds found or data.all_beds is not an array");
+                    }
+                } else {
+                    console.error('No postId found in the URL');
+                }
+            } catch (error) {
+                butterup.toast({
+                    title: 'Unknown error occurred',
+                    message: error.message || error,
+                    type: 'error',
+                });
+            }
+        }
+
+        BedDetailPopulator();
+
+        // Helper functions
+        function generateImageGrid(images) {
+            if (images.length === 1) {
+                return `
+                    <div class="col-lg-12">
+                        <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+                    </div>`;
+            } else {
+                return `
+                    <div class="col-lg-6">
+                        <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <img src="${images[1]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+                            </div>
+                            <div class="col-lg-6">
+                                <img src="${images[2]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+                            </div>
+                        </div>
+                        <div class="row pt-1">
+                            <div class="col-lg-6">
+                                <img src="${images[3]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+                            </div>
+                            <div class="col-lg-6">
+                                ${images[4] ? `<img src="${images[4].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function generateGridItems(beds) {
+            let gridHTML = '';
+            beds.forEach((ex, index) => {
+                gridHTML += `
+                    <div class="col d-flex flex-column">
+                        <img src="${ex.image}" alt="${ex.hotel.name}" class="img-fluid custom-image" style="border-radius: 10px;">
+                        <div class="card-body p-0">
+                            <a id="nak-${index}" style="font-size: 1.6rem; margin-top: 10px; cursor: pointer;" class="nav-link" data-targetnak="${ex.room_id}">
+                                ${ex.hotel.name}
+                            </a>
+                            <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.hotel.city}, ${ex.hotel.country}</p>
+                            <p class="card-text"><i class="fi fi-rr-bed-alt"></i> ${ex.room_type}</p>
+                            <p class="card-text"><strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}</p>
+                        </div>
+                    </div>`;
+            });
+
+            return gridHTML;
+        }
+        function reviewGrid(review) {
+
+        }
+
+        // Event delegation for clicks on card titles
+        document.addEventListener('click', function (e) {
+            if (e.target.matches('[id^="nak-"]')) {
+                const targetId = e.target.dataset.targetnak;
+                window.location.href = `/nakiese/hotel/bed-detail/${targetId}`;
+            }
+        });
+    }
 
 });

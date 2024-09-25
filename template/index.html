@@ -66,90 +66,16 @@
     <div class="mb-3">
       <h2>Les meilleurs hotels</h2>
     </div>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="mb-5">
-    <div class="mb-3">
-      <h2> Les meilleurs hotels</h2>
-    </div>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-      <div class="col d-flex flex-column">
-        <img src="{% static 'images/hotel-2.jpg' %}" class="img-fluid rounded-start" alt="Pulman Kinshasa">
-        <div class="card-body p-0">
-          <h5 class="card-title">Pulman Kinshasa</h5>
-          <p class="card-text"><i class="fi fi-rr-marker"></i> Kinshasa, Kinshasa</p>
-          <p class="card-text"><i class="fi fi-rr-bed-alt"></i> lit double</p>
-          <p class="card-text"><strong>$289</strong>/nuit ★4.9</p>
-        </div>
-      </div>
-    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="hotel__grid"></div>
+
+
+
   </div>
 </div>
 <div class="container mb-5">
+  <div class="mb-4 ms-3">
+    <h2> Explore Cities</h2>
+  </div>
   <div class="wrapper">
     <i id="left" class="fa-solid fa-angle-left"></i>
     <div class="carousel">
@@ -158,7 +84,8 @@
           <p class="text-dark">establishment</p>
           <h4>City Name</h4>
         </div>
-        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <button class="btn btn-light rounded-pill"
+          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
         <img src="{% static 'images/hotel-2.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
       <div style="position: relative; display: inline-block;">
@@ -166,7 +93,8 @@
           <p class="text-dark">establishment</p>
           <h4>City Name</h4>
         </div>
-        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <button class="btn btn-light rounded-pill"
+          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
         <img src="{% static 'images/hotel-1.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
       <div style="position: relative; display: inline-block;">
@@ -174,7 +102,8 @@
           <p class="text-dark">establishment</p>
           <h4>City Name</h4>
         </div>
-        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <button class="btn btn-light rounded-pill"
+          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
         <img src="{% static 'images/hotel-3.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
       <div style="position: relative; display: inline-block;">
@@ -182,7 +111,8 @@
           <p class="text-dark">establishment</p>
           <h4>City Name</h4>
         </div>
-        <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
+        <button class="btn btn-light rounded-pill"
+          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
         <img src="{% static 'images/hotel-4.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
       </div>
 

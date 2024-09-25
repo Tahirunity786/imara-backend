@@ -708,3 +708,8 @@ label {
       transform: translateY(0);
     }
   }
+  .custom-image {
+    object-fit: cover; /* Ensures the image fills the area while maintaining aspect ratio */
+    width: 100%; /* Sets width to fill the container */
+    height: 200px; /* Force equal height */
+}

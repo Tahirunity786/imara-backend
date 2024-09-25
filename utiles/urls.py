@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  AccountsEmailNotificaationView,AboutUsView, Cart,ResturantView, AccountsView,AccountsSecurityView,AccountsPaymentDetailsView, AccountsPersonalDetailView, AccountsPreferencesView, HotelView, SearchView
+from .views import  AccountsEmailNotificaationView,AboutUsView, BedDetailView, Cart,ResturantView, AccountsView,AccountsSecurityView,AccountsPaymentDetailsView, AccountsPersonalDetailView, AccountsPreferencesView, HotelView, SearchView
 urlpatterns = [
     path('accounts/settings', AccountsView.as_view(), name="utiles"),
     path('accounts/settings/email-notification', AccountsEmailNotificaationView.as_view(), name="notification"),
@@ -10,6 +10,7 @@ urlpatterns = [
     
     path('about-us', AboutUsView.as_view(), name="aboutsus"),
     path('hotels', HotelView.as_view(), name="hotels"),
+    path('hotel/bed-detail/<str:pro_id>', BedDetailView.as_view(), name="bed-detail"),
     path('resturants', ResturantView.as_view(), name="resturant"),
     path('cart', Cart.as_view(), name="cart"),
     path('Hébergements', SearchView.as_view(), name="search"),

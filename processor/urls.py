@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import RegisterView, RegisterProcessView, LoginView, IndexView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Worker Apis
     path('accounts/', include('core_control.urls')),  # Note: corrected 'acounts' to 'accounts'
+    path('posts/', include('core_posts.urls')),  # Note: corrected 'acounts' to 'accounts'
 
     # Templates Rendering
     
@@ -19,4 +22,4 @@ urlpatterns = [
 
     # App rendering
     path('account-control/', include('core_control.urls')),  # Changed the URL prefix to avoid conflict
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
