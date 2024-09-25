@@ -1102,13 +1102,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-                    console.log(data);
-
-
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');
                     const reviewGridinn2 = document.getElementById('review__grid_inn_2');
                     const reviewGrid2 = document.getElementById('review__grid_2');
+                    const bedDescription = document.getElementById('bed_description');
                     container.innerHTML = ''; // Clear previous content
                     reviewGridinn1.innerHTML = ''; // Clear previous content
                     reviewGridinn2.innerHTML = ''; // Clear previous content
@@ -1129,66 +1127,112 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         console.error("Missing hotel address details");
                     }
-
-                    // A review Grid creation
-                    // A review Grid creation
-                    if (data.specific_bed?.reviews) {
-                        data.specific_bed.reviews.forEach(review => {
-                            // Create the outer div for the review
-                            let reviewBed = document.createElement('div');
-                            reviewBed.classList.add('mb-5');
-
-                            // Create the inner flex container
-                            let flexContainer = document.createElement('div');
-                            flexContainer.classList.add('d-flex', 'justify-content-start', 'align-item-center');
-
-                            // Create the image container
-                            let imageContainer = document.createElement('div');
-                            let image = document.createElement('img');
-                            image.src = "https://dummyimage.com/50x50/000/fff"; // Dummy image
-                            image.classList.add('rounded-pill');
-                            image.alt = "image";
-                            imageContainer.appendChild(image);
-
-                            // Create the text container
-                            let textContainer = document.createElement('div');
-                            textContainer.classList.add('ms-3');
-
-                            // Reviewer name
-                            let reviewerName = document.createElement('p');
-                            reviewerName.classList.add('mb-1');
-                            reviewerName.innerText = "Marie Nzala"; // Replace with actual reviewer name if available
-                            textContainer.appendChild(reviewerName);
-
-                            // Review date
-                            let reviewDate = document.createElement('p');
-                            reviewDate.classList.add('mb-1');
-                            reviewDate.innerText = new Date(review.date_of_notice).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long'
-                            }); // Format the date from the review object
-                            textContainer.appendChild(reviewDate);
-
-                            // Append the image and text containers to the flex container
-                            flexContainer.appendChild(imageContainer);
-                            flexContainer.appendChild(textContainer);
-
-                            // Create the review comment paragraph
-                            let commentParagraph = document.createElement('p');
-                            commentParagraph.style.marginTop = '10px';
-                            commentParagraph.style.marginLeft = '65px';
-                            commentParagraph.innerText = review.comment || "No comment available."; // Review comment text
-
-                            // Append everything to the main reviewBed div
-                            reviewBed.appendChild(flexContainer);
-                            reviewBed.appendChild(commentParagraph);
-
-                            // Finally, append reviewBed to the parent element (e.g., #review__grid)
-                            reviewGrid2.appendChild(reviewBed);
-                        });
+                    // Append hotel Description
+                    if (data.specific_bed?.description) {
+                        bedDescription.innerText = '';
+                        bedDescription.innerText = data.specific_bed.description;
                     } else {
-                        console.error("Missing hotel reviews details");
+                        console.error("Missing hotel address details");
                     }
+
+                    let reviews = data.specific_bed.reviews; // Assuming this is populated with your data
+                    let reviewsPerPage = 3; // Number of reviews to show initially
+                
+                    // Function to display a limited number of reviews
+                    function displayReviews(limit) {
+                        reviewGrid2.innerHTML = ''; // Clear the review grid
+                        for (let i = 0; i < Math.min(limit, reviews.length); i++) {
+                            let review = reviews[i];
+                            let reviewBed = createReviewElement(review);
+                            reviewGrid2.appendChild(reviewBed);
+                        }
+                    }
+                
+                    // Function to create a review element
+                    function createReviewElement(review) {
+                        let reviewBed = document.createElement('div');
+                        reviewBed.classList.add('mb-3');
+                
+                        let flexContainer = document.createElement('div');
+                        flexContainer.classList.add('d-flex', 'justify-content-start', 'align-items-center');
+                
+                        let imageContainer = document.createElement('div');
+                        let image = document.createElement('img');
+                        image.src = "https://dummyimage.com/50x50/000/fff";
+                        image.classList.add('rounded-pill');
+                        image.alt = "image";
+                        imageContainer.appendChild(image);
+                
+                        let textContainer = document.createElement('div');
+                        textContainer.classList.add('ms-3');
+                
+                        let reviewerName = document.createElement('p');
+                        reviewerName.classList.add('mb-1');
+                        reviewerName.innerText = review.reviewer_name || "Anonymous";
+                        textContainer.appendChild(reviewerName);
+                
+                        let reviewDate = document.createElement('p');
+                        reviewDate.classList.add('mb-1');
+                        reviewDate.innerText = new Date(review.date_of_notice).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long'
+                        });
+                        textContainer.appendChild(reviewDate);
+                
+                        flexContainer.appendChild(imageContainer);
+                        flexContainer.appendChild(textContainer);
+                
+                        let commentParagraph = document.createElement('p');
+                        commentParagraph.style.marginTop = '10px';
+                        commentParagraph.style.marginLeft = '65px';
+                        commentParagraph.innerText = review.comment || "No comment available.";
+                
+                        reviewBed.appendChild(flexContainer);
+                        reviewBed.appendChild(commentParagraph);
+                
+                        return reviewBed;
+                    }
+                
+                    // Function to create the Load More button
+                    function createLoadMoreButton() {
+                        let loadMoreBtn = document.createElement('button');
+                        loadMoreBtn.id = 'loadMoreBtn';
+                        loadMoreBtn.classList.add('btn', 'btn-outline-dark', 'mt-3', 'mb-4');
+                        loadMoreBtn.innerText = 'Load More Reviews';
+                        loadMoreBtn.addEventListener('click', showAllReviews);
+                        return loadMoreBtn;
+                    }
+                
+                    // Function to create the Close Reviews button
+                    function createCloseButton() {
+                        let closeBtn = document.createElement('button');
+                        closeBtn.id = 'closeBtn';
+                        closeBtn.classList.add('btn', 'btn-outline-dark', 'mt-3', 'mb-4');
+                        closeBtn.innerText = 'Close Reviews';
+                        closeBtn.addEventListener('click', function() {
+                            displayReviews(reviewsPerPage);
+                            if (reviews.length > reviewsPerPage) {
+                                reviewGrid2.appendChild(createLoadMoreButton()); // Show the Load More button again
+                            }
+                            closeBtn.remove(); // Remove the Close button
+                        });
+                        return closeBtn;
+                    }
+                
+                    // Function to show all reviews
+                    function showAllReviews() {
+                        displayReviews(reviews.length); // Show all reviews
+                        let closeButton = createCloseButton();
+                        reviewGrid2.appendChild(closeButton); // Add the Close Reviews button
+                        document.getElementById('loadMoreBtn').remove(); // Remove the Load More button
+                    }
+                
+                    // Initial load: Show first 3 reviews and possibly the Load More button
+                    displayReviews(reviewsPerPage);
+                    if (reviews.length > reviewsPerPage) {
+                        reviewGrid2.appendChild(createLoadMoreButton());
+                    }
+                
                     if (data.specific_bed?.reviews) {
                         let ratingSums = {};
                         let ratingCounts = {};
@@ -1228,7 +1272,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGridinn1.appendChild(nameDiv);
                             reviewGridinn2.appendChild(valueDiv);
                         }
-                        document.getElementById("av_rating").innerText= (sumOfAverage/5).toFixed(1)
+                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1)
 
                     } else {
                         console.error("Missing hotel reviews details");
@@ -1244,11 +1288,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.error('No postId found in the URL');
                 }
             } catch (error) {
-                butterup.toast({
-                    title: 'Unknown error occurred',
-                    message: error.message || error,
-                    type: 'error',
-                });
+              console.log(error)
             }
         }
 
