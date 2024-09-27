@@ -1,6 +1,28 @@
 from rest_framework import serializers
-from core_posts.models import BedRoom, Cities, Hotel, HotelImages, Review, ReviewType
+from core_posts.models import BedRoom, Cities, Hotel, MenuItem, Tables, HotelImages, Review, ReviewType, Restaurant, ResturantImages
 
+class CitySerializer(serializers.ModelSerializer):
+    """
+    Serializer for Cities model.
+    Handles city fields fields.
+    """
+    class Meta:
+        model = Cities
+        fields = ['city_id', 'name', 'image']  # 'image' instead of 'images'
+        read_only_fields = ['city_id']  # ID is generated automatically
+
+class SpecificCitySerializer(serializers.ModelSerializer):
+    """
+    Serializer for Cities model.
+    Handles city fields fields.
+    """
+    class Meta:
+        model = Cities
+        fields = ['city_id', 'name']  # 'image' instead of 'images'
+        read_only_fields = ['city_id']  # ID is generated automatically
+
+
+# Hotel Data supplier
 class HotelImagesSerializer(serializers.ModelSerializer):
     """
     Serializer for HotelImages model.
@@ -11,15 +33,12 @@ class HotelImagesSerializer(serializers.ModelSerializer):
         fields = ['hotel_image_id', 'image']  # 'image' instead of 'images'
         read_only_fields = ['hotel_image_id']  # ID is generated automatically
 
-class CitySerializer(serializers.ModelSerializer):
-    """
-    Serializer for Cities model.
-    Handles city fields fields.
-    """
+
+class AllHotelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cities
-        fields = ['city_id', 'name']  # 'image' instead of 'images'
-        read_only_fields = ['city_id']  # ID is generated automatically
+        model = Hotel
+        fields = ['hotel_id', 'name', 'city', 'country']
+        read_only_fields = ['hotel_id', 'name']  # Prevent updates on auto-generated ID and unique email
 
 class HotelRelationSerializer(serializers.ModelSerializer):
     images = HotelImagesSerializer(many=True, read_only=True)
@@ -29,13 +48,66 @@ class HotelRelationSerializer(serializers.ModelSerializer):
         model = Hotel
         fields = ['hotel_id', 'images', 'country', 'address', 'city']  # 'images' references the related set of HotelImages
         read_only_fields = ['hotel_id']
-        
-class AllHotelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hotel
-        fields = ['hotel_id', 'name', 'city', 'country']
-        read_only_fields = ['hotel_id', 'name']  # Prevent updates on auto-generated ID and unique email
 
+class AllBedSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Bed model.
+    
+    Optimized for performance by minimizing fields and using read-only where possible.
+    """
+    hotel = AllHotelSerializer(read_only=True)
+    class Meta:
+        model = BedRoom
+        fields = ['room_id', 'image','hotel', 'room_type','description','price', 'capacity', 'room_amenities']
+        read_only_fields = ['room_id']
+
+
+
+# Resturant Data supplier
+
+
+
+class ResturantImagesSerializer(serializers.ModelSerializer):
+    """
+    Serializer for HotelImages model.
+    Handles Review image-related fields.
+    """
+    class Meta:
+        model = ResturantImages
+        fields = ['restaurant_image_id', 'image']  
+        read_only_fields = ['restaurant_image_id']  
+
+
+class AllResturantSerializer(serializers.ModelSerializer):
+    city = SpecificCitySerializer(read_only=True)
+
+    class Meta:
+        model = Restaurant
+        fields = ['restaurant_id', 'city', 'country', 'address', 'name']  # Fixed typo and added fields
+        read_only_fields = ['resturant_id']
+
+
+
+
+class RelationResturantSerializer(serializers.ModelSerializer):
+    city = SpecificCitySerializer(read_only=True)
+    images = ResturantImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Restaurant
+        fields = ['restaurant_id', 'city', 'country', 'address', 'name', 'images']  # Fixed typo and added fields
+        read_only_fields = ['resturant_id']
+
+class MenuSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = MenuItem
+        fields = ['dish_id','image',  'name', 'description', 'price', 'category']  # Fixed typo and added fields
+        read_only_fields = ['dish_id']
+
+
+
+# Review Data supplier
 class ReviewTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -51,8 +123,19 @@ class ReviewHotelSerializer(serializers.ModelSerializer):
         fields = ['review_id','user', 'room', 'rating', 'comment', 'date_of_notice']
         read_only_fields = ['review_id']
 
+class ReviewResturantSerializer(serializers.ModelSerializer):
+    rating = ReviewTypeSerializer(many=True, read_only=True)  # Add many=True here
+
+    class Meta:
+        model = Review
+        fields = ['review_id','user', 'tables_of_resturant', 'rating', 'comment', 'date_of_notice']
+        read_only_fields = ['review_id']
 
 
+
+
+
+# Specific data supplier
 class DetailBedSerializer(serializers.ModelSerializer):
     """
     Serializer for BedRoom model.
@@ -65,16 +148,29 @@ class DetailBedSerializer(serializers.ModelSerializer):
         fields = ['room_id', 'room_type', 'description', 'price', 'capacity', 'room_amenities', 'hotel', 'reviews']
         read_only_fields = ['room_id']
 
-class AllBedSerializer(serializers.ModelSerializer):
-    """
-    Serializer for Bed model.
-    
-    Optimized for performance by minimizing fields and using read-only where possible.
-    """
-    hotel = AllHotelSerializer(read_only=True)
-    class Meta:
-        model = BedRoom
-        fields = ['room_id', 'image','hotel', 'room_type','description','price', 'capacity', 'room_amenities']
-        read_only_fields = ['room_id']
 
-    
+class DetailTableSerializer(serializers.ModelSerializer):
+    """
+    Serializer for BedRoom model.
+    """
+    restaurant = RelationResturantSerializer(read_only=True)  # No 'many=True' since it's a ForeignKey relation
+    review = ReviewResturantSerializer(many=True,read_only=True)  # No 'many=True' since it's a ForeignKey relation
+
+    class Meta:
+        model = Tables
+        fields = ['table_id', 'restaurant', 'review', 'capacity', 'availability_from']
+        read_only_fields = ['table_id']
+
+
+class TableSerializer(serializers.ModelSerializer):
+    """
+    Serializer for HotelImages model.
+    Handles Review image-related fields.
+    """
+    restaurant = AllResturantSerializer(read_only=True)
+    review = ReviewResturantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Tables
+        fields = ['table_id', 'images', 'restaurant', 'review', 'capacity']  
+        read_only_fields = ['table_id']  

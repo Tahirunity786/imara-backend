@@ -2,45 +2,58 @@ import random
 import string
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.db.models import Avg
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
+def generate_unique_id(prefix="nak"):
+    """Generate a unique ID using random choices of letters and digits."""
+    unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
+    return f"{prefix}-{unique_str}"
+
+# Cities Model Section
 class Cities(models.Model):
+    """
+    Represents a city with its name and an optional image.
+    """
     city_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
     name = models.CharField(max_length=100, db_index=True)
-
+    image = models.ImageField(upload_to="cities/images", db_index=True, default="cities/images/default.jpg", null=True, blank=True)
 
     def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
         if not self.city_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.city_id = f'nak-{unique_str}'
+            self.city_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
-        super(Cities, self).save(*args, **kwargs)
 
+# Hotel Model Section
 class HotelImages(models.Model):
-    hotel_image_id = models.CharField(max_length=100, unique=True, db_index=True, default=None, null=True, blank=True)
+    """
+    Represents an image for a hotel.
+    """
+    hotel_image_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
     image = models.ImageField(upload_to="hotels/images", db_index=True)
-    
+
     def __str__(self):
-        return self.hotel_image_id
+        return self.hotel_image_id or "Hotel Image"
     
     def save(self, *args, **kwargs):
         if not self.hotel_image_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.hotel_image_id = f'nak-{unique_str}'
-
-        super(HotelImages, self).save(*args, **kwargs)
+            self.hotel_image_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
 
 class Hotel(models.Model):
+    """
+    Represents a hotel with basic information, images, and its associated city.
+    """
     hotel_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
-    city = models.ForeignKey(Cities, on_delete=models.CASCADE, db_index=True, null=True, default="")
-    images = models.ManyToManyField(HotelImages, db_index=True, default="")
+    city = models.ForeignKey(Cities, on_delete=models.CASCADE, db_index=True, null=True)
+    images = models.ManyToManyField(HotelImages, db_index=True, blank=True)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     visitors = models.PositiveBigIntegerField(db_index=True, default=0)
@@ -56,33 +69,67 @@ class Hotel(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.hotel_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.hotel_id = f'nak-{unique_str}'
+            self.hotel_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
-        super(Hotel, self).save(*args, **kwargs)
 
-class ResturantImages(models.Model):
-    resturant_img_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+class BedRoom(models.Model):
+    """
+    Represents a hotel room with its type, description, and amenities.
+    """
+    ROOM_TYPES = (
+        ('single', 'Single'),
+        ('double', 'Double'),
+        ('suite', 'Suite'),
+    )
 
-    image = models.ImageField(upload_to="resturant/images", db_index=True)
+    room_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    image = models.ImageField(upload_to="beds/images", db_index=True, null=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, db_index=True)
+    reviews = models.ManyToManyField('Review', db_index=True, blank=True)
+    room_type = models.CharField(max_length=100, choices=ROOM_TYPES, db_index=True)
+    description = models.TextField(db_index=True)
+    price = models.PositiveIntegerField(default=0)
+    capacity = models.PositiveIntegerField(default=0)
+    room_amenities = models.CharField(max_length=100, db_index=True)
+    availability_from = models.DateField(null=True, default=None)
+    availability_till = models.DateField(null=True, default=None)
+
+    def __str__(self):
+        return f"{self.room_type.capitalize()} - {self.hotel.name}"
+
     def save(self, *args, **kwargs):
-        if not self.resturant_img_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.resturant_img_id = f'nak-{unique_str}'
+        if not self.room_id:
+            self.room_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
-        super(ResturantImages, self).save(*args, **kwargs)
-    
+
+# Restaurant Model Section
+class ResturantImages(models.Model):
+    """
+    Represents an image for a restaurant.
+    """
+    restaurant_image_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    image = models.ImageField(upload_to="restaurants/images", db_index=True)
+
+    def save(self, *args, **kwargs):
+        if not self.restaurant_image_id:
+            self.restaurant_image_id = generate_unique_id()
+        super().save(*args, **kwargs)
+
 
 class Restaurant(models.Model):
-    resturant_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
-    city = models.ForeignKey(Cities, on_delete=models.CASCADE, null=True, db_index=True, default="")
-    images = models.ManyToManyField(ResturantImages, db_index=True, default="")
+    """
+    Represents a restaurant with basic details and related images.
+    """
+    restaurant_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    city = models.ForeignKey(Cities, on_delete=models.CASCADE, db_index=True, null=True)
+    images = models.ManyToManyField(ResturantImages, db_index=True, blank=True)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
-    city = models.CharField(max_length=100, db_index=True)
     country = models.CharField(max_length=100, db_index=True)
     address = models.TextField()
-    phone_number = models.CharField(max_length=15, db_index=True)
+    phone_number = models.CharField(max_length=30, db_index=True)
     email = models.EmailField(unique=True, db_index=True)
     website = models.URLField(max_length=200, blank=True)
     company_registration_number = models.PositiveBigIntegerField(db_index=True)
@@ -91,57 +138,40 @@ class Restaurant(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        if not self.resturant_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.resturant_id = f'nak-{unique_str}'
-     
-        super(Restaurant, self).save(*args, **kwargs)
-    
+        if not self.restaurant_id:
+            self.restaurant_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
-class BedRoom(models.Model):
-
-    ROOM_TYPE = (
-        ('single', 'single'),
-        ('double', 'double'),
-        ('suite', 'suite'),
-    )
-    room_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
-    image = models.ImageField(upload_to="beds/images", db_index=True, default=None, null=True)
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, db_index=True, default="")
-    reviews = models.ManyToManyField('Review', db_index=True)
-    room_type = models.CharField(max_length=100, choices=ROOM_TYPE, db_index=True)
-    description = models.TextField(db_index=True)
-    price = models.PositiveIntegerField(default=0)
-    capacity = models.PositiveIntegerField(default=0)
-    room_amenities =  models.CharField(max_length=100,  db_index=True)
-    availabilty_from = models.DateField(null=True, default=None)
-    availabilty_till = models.DateField(null=True, default=None)
-
-    def save(self, *args, **kwargs):
-        if not self.room_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.room_id = f'nak-{unique_str}'
-  
-        super(BedRoom, self).save(*args, **kwargs)
 
 class Tables(models.Model):
-    resturant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, default="", db_index=True)
+    """
+    Represents a table in a restaurant with its availability and capacity.
+    """
     table_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    images = models.ImageField(upload_to='table/images', db_index=True, default=None, null=True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, db_index=True, default=None) #Defualt for dummy
+    review = models.ManyToManyField('Review', db_index=True, blank=True) #Defualt for dummy
     capacity = models.PositiveIntegerField(default=0)
-    availabilty_from = models.DateField(null=True, default=None)
-    availabilty_till = models.DateField(null=True, default=None)
+    availability_from = models.DateField(null=True, default=None)
+    availability_till = models.DateField(null=True, default=None)
+
+    def __str__(self):
+        return f"Table {self.table_id} at {self.restaurant.name}"
 
     def save(self, *args, **kwargs):
         if not self.table_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.table_id = f'nak-{unique_str}'
-  
-        super(Tables, self).save(*args, **kwargs)
+            self.table_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
 
 class MenuItem(models.Model):
+    """
+    Represents a menu item in a restaurant with its category and pricing.
+    """
     dish_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
-    resturant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, default="", db_index=True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, db_index=True, default=None) #Defualt for dummy
+    image = models.ImageField(upload_to='menu/images', db_index=True, default=None, null=True)
+    table = models.ForeignKey(Tables, on_delete=models.CASCADE, db_index=True, default=None) #Defualt for dummy
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -155,15 +185,18 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.name
+
     def save(self, *args, **kwargs):
         if not self.dish_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.dish_id = f'nak-{unique_str}'
-  
-        super(MenuItem, self).save(*args, **kwargs)
+            self.dish_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
 
+# Review Model Section
 class ReviewType(models.Model):
+    """
+    Represents the type and rating of a review for a hotel or restaurant.
+    """
     TYPES = [
         ('Cleanliness', 'Cleanliness'),
         ('Accuracy of information', 'Accuracy of information'),
@@ -176,20 +209,21 @@ class ReviewType(models.Model):
     name = models.CharField(max_length=100, choices=TYPES, db_index=True)
     rate = models.DecimalField(max_digits=5, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if not self.review_type_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.review_type_id = f'nak-{unique_str}'
-  
-        super(ReviewType, self).save(*args, **kwargs)
-
     def __str__(self):
         return f'{self.name} - {self.rate}'
 
+    def save(self, *args, **kwargs):
+        if not self.review_type_id:
+            self.review_type_id = generate_unique_id()
+        super().save(*args, **kwargs)
+
 
 class Review(models.Model):
+    """
+    Represents a review submitted by a user for a hotel room or restaurant.
+    """
     review_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
+    tables_of_resturant = models.ForeignKey(Tables, on_delete=models.CASCADE, null=True, blank=True, related_name="tables")
     room = models.ForeignKey(BedRoom, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.ManyToManyField(ReviewType, db_index=True)
@@ -197,20 +231,16 @@ class Review(models.Model):
     date_of_notice = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Review {self.review_id} by {self.user}'
-    
+        return f'Review {self.review_id} by {self.user.username}'
+
     def save(self, *args, **kwargs):
         if not self.review_id:
-            unique_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-            self.review_id = f'nak-{unique_str}'
-  
-        super(Review, self).save(*args, **kwargs)
+            self.review_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
-    # Method to calculate overall average rating for all review types combined
-    @staticmethod
-    def get_overall_average_rating():
-        # Aggregate the average for all ratings in ReviewType
-        overall_avg = ReviewType.objects.aggregate(average_rating=Avg('rate'))['average_rating']
-        print(overall_avg)
-        # Return the rounded average or None if no reviews exist
-        return round(overall_avg, 2) if overall_avg else None
+    def average_rating(self):
+        """
+        Calculate the average rating for the review.
+        """
+        avg_rating = self.rating.aggregate(Avg('rate'))
+        return avg_rating.get('rate__avg', 0)

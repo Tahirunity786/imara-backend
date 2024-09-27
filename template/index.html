@@ -15,57 +15,57 @@
 
       <!-- Added margin-top to create space between text and row -->
       <div class="container mt-5 ps-5 pe-5">
-      <div class="container">
+        <div class="container">
 
-        <div class="row bg-light mt-4 justify-content-center p-3 search-bar">
-          <div class="col-lg-11">
-            <div class="row">
+          <div class="row bg-light mt-4 justify-content-center p-3 search-bar">
+            <div class="col-lg-11">
+              <div class="row">
 
-              <div class="col-lg-3 mt-0 position-relative" style="border-right: 2px solid rgb(179, 179, 179);">
-                <h6 class="text-muted">Ou aller vous ?</h6>
-                <input type="text" id="cityInput" class="form-control form-control-land"
-                  placeholder="Chercher une destination" autocomplete="off">
-                <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
-              </div>
-              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                <h6 class="text-muted nav-link">Date d'arriver (From)</h6>
-                <input type="text" id="dateInputg" class="form-control form-control-land"
-                  placeholder="Ajouter une date">
-              </div>
-              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                <h6 class="text-muted">Date d'arriver (Till)</h6>
-                <input type="text" id="dateInputa" class="form-control form-control-land"
-                  placeholder="Ajouter une date">
-              </div>
+                <div class="col-lg-3 mt-0 position-relative" style="border-right: 2px solid rgb(179, 179, 179);">
+                  <h6 class="text-muted">Ou aller vous ?</h6>
+                  <input type="text" id="cityInput" class="form-control form-control-land"
+                    placeholder="Chercher une destination" autocomplete="off">
+                  <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
+                </div>
+                <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                  <h6 class="text-muted nav-link">Date d'arriver (From)</h6>
+                  <input type="text" id="dateInputg" class="form-control form-control-land"
+                    placeholder="Ajouter une date">
+                </div>
+                <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                  <h6 class="text-muted">Date d'arriver (Till)</h6>
+                  <input type="text" id="dateInputa" class="form-control form-control-land"
+                    placeholder="Ajouter une date">
+                </div>
 
-              <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                <h6 class="text-muted">Nbre de personne</h6>
-                <input type="text" placeholder="Ajouter" class="form-control form-control-land">
+                <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                  <h6 class="text-muted">Nbre de personne</h6>
+                  <input type="text" placeholder="Ajouter" class="form-control form-control-land">
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-1 d-flex justify-content-center align-items-center">
+            <div class="col-lg-1 d-flex justify-content-center align-items-center">
 
-            <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
-              style="width: 40px; height: 40px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-search"
-                viewBox="0 0 16 16">
-                <path
-                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-              </svg>
+              <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+                style="width: 40px; height: 40px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-search"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
 
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
 
 
 </main>
-<div class="container">
+<div class="container" >
   <div class="mb-5">
-    <div class="mb-3">
+    <div style="margin-bottom: 30px;">
       <h2>Les meilleurs hotels</h2>
     </div>
     <div class="row row-cols-1 row-cols-md-4 g-4" id="hotel__grid"></div>
@@ -78,48 +78,14 @@
   <div class="mb-4 ms-3">
     <h2> Explore Cities</h2>
   </div>
-  <div class="wrapper">
-    <i id="left" class="fa-solid fa-angle-left"></i>
-    <div class="carousel">
-      <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; top:20px; left: 40px;">
-          <p class="text-dark">establishment</p>
-          <h4>City Name</h4>
-        </div>
-        <button class="btn btn-light rounded-pill"
-          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
-        <img src="{% static 'images/hotel-2.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
+  <div id="cities__area">
+    <div class="wrapper">
+      <i id="left" class="fa-solid fa-angle-left"></i>
+      <div class="carousel">
+        <!-- Dynamic city items will be appended here by JavaScript -->
       </div>
-      <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; top:20px; left: 40px;">
-          <p class="text-dark">establishment</p>
-          <h4>City Name</h4>
-        </div>
-        <button class="btn btn-light rounded-pill"
-          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
-        <img src="{% static 'images/hotel-1.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
-      </div>
-      <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; top:20px; left: 40px;">
-          <p class="text-dark">establishment</p>
-          <h4>City Name</h4>
-        </div>
-        <button class="btn btn-light rounded-pill"
-          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
-        <img src="{% static 'images/hotel-3.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
-      </div>
-      <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; top:20px; left: 40px;">
-          <p class="text-dark">establishment</p>
-          <h4>City Name</h4>
-        </div>
-        <button class="btn btn-light rounded-pill"
-          style="position: absolute; bottom: 40px; left: 40px;">Explore</button>
-        <img src="{% static 'images/hotel-4.jpg' %}" alt="img" class="rounded-3" draggable="false" style="width: 90%;">
-      </div>
-
+      <i id="right" class="fa-solid fa-angle-right"></i>
     </div>
-    <i id="right" class="fa-solid fa-angle-right"></i>
   </div>
 
 </div>

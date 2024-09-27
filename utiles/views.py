@@ -28,6 +28,9 @@ class HotelView(TemplateView):
 class BedDetailView(TemplateView):
     template_name = 'utiles/hotels-overview.html'
 
+class TableDetailView(TemplateView):
+    template_name = 'utiles/table-overview.html'
+
 class ResturantView(TemplateView):
     template_name = 'utiles/restaurants.html'
 

@@ -12,3 +12,10 @@ class RegisterProcessView(TemplateView):
 class IndexView(TemplateView):
     template_name = 'index.html'
 
+
+class TermsAndCondition(TemplateView):
+    template_name = 'terms-and-condition.html'
+    
+class ProvacyPolicy(TemplateView):
+    template_name = 'Privacy-policies.html'
+

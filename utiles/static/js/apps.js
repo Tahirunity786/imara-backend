@@ -829,11 +829,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // Open Modal
-    openModalLink.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent default anchor behavior
+    if (openModalLink) {
 
-        modalOverlay.style.display = 'flex';
-    });
+
+        openModalLink.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+
+            modalOverlay.style.display = 'flex';
+        });
+    }
     if (openModalDelLink) {
         openModalDelLink.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent default anchor behavior
@@ -983,9 +987,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// Hotel Home page
+
 document.addEventListener("DOMContentLoaded", () => {
     const hotelGrid = document.getElementById("hotel__grid");
+    const tableGrid = document.getElementById("table__grid");
+    const cityArea = document.getElementById("cities__area");
     let user = localStorage.getItem('exn-u-cookie');
     user = JSON.parse(user);
 
@@ -1002,64 +1008,94 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (response.ok) {
                     const result = await response.json();
                     let count = 0;
+                    if (result?.hotel_data) {
+                        result.hotel_data.forEach(ex => {
+                            const colItem = document.createElement('div');
+                            colItem.classList.add('col', 'd-flex', 'flex-column');
+                            const image = document.createElement('img');
+                            image.classList.add('img-fluid', 'custom-image');
+                            image.alt = ex.hotel.name;
+                            image.src = ex.image;
+                            image.style.borderRadius = '10px';
 
-                    result.forEach(ex => {
-                        const colItem = document.createElement('div');
-                        colItem.classList.add('col', 'd-flex', 'flex-column');
-                        const image = document.createElement('img');
-                        image.classList.add('img-fluid', 'custom-image');
-                        image.alt = ex.hotel.name;
-                        image.src = ex.image;
-                        image.style.borderRadius = '10px';
+                            const cardBody = document.createElement('div');
+                            cardBody.classList.add('card-body', 'p-0');
 
-                        const cardBody = document.createElement('div');
-                        cardBody.classList.add('card-body', 'p-0');
+                            const cardTitle = document.createElement('a');
+                            cardTitle.id = `nak-${count}`;
+                            cardTitle.style.fontSize = '1.6rem';
+                            cardTitle.style.marginTop = '10px';
+                            cardTitle.style.cursor = 'pointer';
+                            cardTitle.classList.add('nav-link');
+                            cardTitle.dataset.targetnak = ex.room_id; // Set data-targetnak
+                            cardTitle.textContent = ex.hotel.name;
 
-                        const cardTitle = document.createElement('a');
-                        cardTitle.id = `nak-${count}`;
-                        cardTitle.style.fontSize = '1.6rem';
-                        cardTitle.style.marginTop = '10px';
-                        cardTitle.style.cursor = 'pointer';
-                        cardTitle.classList.add('nav-link');
-                        cardTitle.dataset.targetnak = ex.room_id; // Set data-targetnak
-                        cardTitle.textContent = ex.hotel.name;
+                            const locationText = document.createElement('p');
+                            locationText.classList.add('card-text');
+                            const locationIcon = document.createElement('i');
+                            locationIcon.classList.add('fi', 'fi-rr-marker');
+                            locationText.appendChild(locationIcon);
+                            locationText.textContent += ` ${ex.hotel.city}, ${ex.hotel.country}`;
 
-                        const locationText = document.createElement('p');
-                        locationText.classList.add('card-text');
-                        const locationIcon = document.createElement('i');
-                        locationIcon.classList.add('fi', 'fi-rr-marker');
-                        locationText.appendChild(locationIcon);
-                        locationText.textContent += ` ${ex.hotel.city}, ${ex.hotel.country}`;
+                            const bedText = document.createElement('p');
+                            bedText.classList.add('card-text');
+                            const bedIcon = document.createElement('i');
+                            bedIcon.classList.add('fi', 'fi-rr-bed-alt');
+                            bedText.appendChild(bedIcon);
+                            bedText.textContent += ` ${ex.room_type}`;
 
-                        const bedText = document.createElement('p');
-                        bedText.classList.add('card-text');
-                        const bedIcon = document.createElement('i');
-                        bedIcon.classList.add('fi', 'fi-rr-bed-alt');
-                        bedText.appendChild(bedIcon);
-                        bedText.textContent += ` ${ex.room_type}`;
+                            const priceRatingText = document.createElement('p');
+                            priceRatingText.classList.add('card-text');
+                            priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}`;
 
-                        const priceRatingText = document.createElement('p');
-                        priceRatingText.classList.add('card-text');
-                        priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}`;
+                            cardBody.appendChild(cardTitle);
+                            cardBody.appendChild(locationText);
+                            cardBody.appendChild(bedText);
+                            cardBody.appendChild(priceRatingText);
+                            colItem.appendChild(image);
+                            colItem.appendChild(cardBody);
 
-                        cardBody.appendChild(cardTitle);
-                        cardBody.appendChild(locationText);
-                        cardBody.appendChild(bedText);
-                        cardBody.appendChild(priceRatingText);
-                        colItem.appendChild(image);
-                        colItem.appendChild(cardBody);
+                            hotelGrid.appendChild(colItem);
 
-                        hotelGrid.appendChild(colItem);
+                            // Add click event listener to the cardTitle for redirection
+                            cardTitle.addEventListener('click', () => {
+                                const targetId = cardTitle.dataset.targetnak; // Get data-targetnak value
+                                const url = `/nakiese/hotel/bed-detail/${targetId}`; // Append targetId to URL
+                                window.location.href = url; // Redirect to the detailed page
+                            });
 
-                        // Add click event listener to the cardTitle for redirection
-                        cardTitle.addEventListener('click', () => {
-                            const targetId = cardTitle.dataset.targetnak; // Get data-targetnak value
-                            const url = `/nakiese/hotel/bed-detail/${targetId}`; // Append targetId to URL
-                            window.location.href = url; // Redirect to the detailed page
+                            count++;
                         });
+                    }
 
-                        count++;
-                    });
+
+                    const carousel = document.querySelector('.carousel');  // Select the carousel container
+                    if (result?.cities && carousel) {
+
+                        // Clear previous cities (if needed)
+                        carousel.innerHTML = '';
+
+                        result.cities.forEach(city => {
+
+
+                            const cityElement = `
+                                <div style="position: relative; display: inline-block;">
+                                    <div style="position: absolute; top:20px; left: 40px;">
+                                        <p class="text-dark">${city.establishment}</p>
+                                        <h4>${city.name}</h4>  <!-- Assuming 'name' contains the city name -->
+                                    </div>
+                                    <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">
+                                        Explore
+                                    </button>
+                                    <img src="${city.image}" alt="${city.name}" class="rounded-3" draggable="false" style="width: 90%;">
+                                </div>
+                            `;
+
+                            // Append the newly created city item to the carousel
+                            carousel.insertAdjacentHTML('beforeend', cityElement);
+                        });
+                    }
+
                 } else {
                     butterup.toast({
                         title: 'Something went wrong',
@@ -1137,7 +1173,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     let reviews = data.specific_bed.reviews; // Assuming this is populated with your data
                     let reviewsPerPage = 3; // Number of reviews to show initially
-                
+
                     // Function to display a limited number of reviews
                     function displayReviews(limit) {
                         reviewGrid2.innerHTML = ''; // Clear the review grid
@@ -1147,30 +1183,30 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGrid2.appendChild(reviewBed);
                         }
                     }
-                
+
                     // Function to create a review element
                     function createReviewElement(review) {
                         let reviewBed = document.createElement('div');
                         reviewBed.classList.add('mb-3');
-                
+
                         let flexContainer = document.createElement('div');
                         flexContainer.classList.add('d-flex', 'justify-content-start', 'align-items-center');
-                
+
                         let imageContainer = document.createElement('div');
                         let image = document.createElement('img');
                         image.src = "https://dummyimage.com/50x50/000/fff";
                         image.classList.add('rounded-pill');
                         image.alt = "image";
                         imageContainer.appendChild(image);
-                
+
                         let textContainer = document.createElement('div');
                         textContainer.classList.add('ms-3');
-                
+
                         let reviewerName = document.createElement('p');
                         reviewerName.classList.add('mb-1');
                         reviewerName.innerText = review.reviewer_name || "Anonymous";
                         textContainer.appendChild(reviewerName);
-                
+
                         let reviewDate = document.createElement('p');
                         reviewDate.classList.add('mb-1');
                         reviewDate.innerText = new Date(review.date_of_notice).toLocaleDateString('en-US', {
@@ -1178,21 +1214,21 @@ document.addEventListener("DOMContentLoaded", () => {
                             month: 'long'
                         });
                         textContainer.appendChild(reviewDate);
-                
+
                         flexContainer.appendChild(imageContainer);
                         flexContainer.appendChild(textContainer);
-                
+
                         let commentParagraph = document.createElement('p');
                         commentParagraph.style.marginTop = '10px';
                         commentParagraph.style.marginLeft = '65px';
                         commentParagraph.innerText = review.comment || "No comment available.";
-                
+
                         reviewBed.appendChild(flexContainer);
                         reviewBed.appendChild(commentParagraph);
-                
+
                         return reviewBed;
                     }
-                
+
                     // Function to create the Load More button
                     function createLoadMoreButton() {
                         let loadMoreBtn = document.createElement('button');
@@ -1202,14 +1238,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         loadMoreBtn.addEventListener('click', showAllReviews);
                         return loadMoreBtn;
                     }
-                
+
                     // Function to create the Close Reviews button
                     function createCloseButton() {
                         let closeBtn = document.createElement('button');
                         closeBtn.id = 'closeBtn';
                         closeBtn.classList.add('btn', 'btn-outline-dark', 'mt-3', 'mb-4');
                         closeBtn.innerText = 'Close Reviews';
-                        closeBtn.addEventListener('click', function() {
+                        closeBtn.addEventListener('click', function () {
                             displayReviews(reviewsPerPage);
                             if (reviews.length > reviewsPerPage) {
                                 reviewGrid2.appendChild(createLoadMoreButton()); // Show the Load More button again
@@ -1218,7 +1254,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         return closeBtn;
                     }
-                
+
                     // Function to show all reviews
                     function showAllReviews() {
                         displayReviews(reviews.length); // Show all reviews
@@ -1226,13 +1262,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         reviewGrid2.appendChild(closeButton); // Add the Close Reviews button
                         document.getElementById('loadMoreBtn').remove(); // Remove the Load More button
                     }
-                
+
                     // Initial load: Show first 3 reviews and possibly the Load More button
                     displayReviews(reviewsPerPage);
                     if (reviews.length > reviewsPerPage) {
                         reviewGrid2.appendChild(createLoadMoreButton());
                     }
-                
+
                     if (data.specific_bed?.reviews) {
                         let ratingSums = {};
                         let ratingCounts = {};
@@ -1288,44 +1324,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.error('No postId found in the URL');
                 }
             } catch (error) {
-              console.log(error)
+                console.log(error)
             }
         }
 
         BedDetailPopulator();
 
         // Helper functions
-        function generateImageGrid(images) {
-            if (images.length === 1) {
-                return `
-                    <div class="col-lg-12">
-                        <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
-                    </div>`;
-            } else {
-                return `
-                    <div class="col-lg-6">
-                        <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="row mb-3">
-                            <div class="col-lg-6">
-                                <img src="${images[1]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
-                            </div>
-                            <div class="col-lg-6">
-                                <img src="${images[2]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
-                            </div>
-                        </div>
-                        <div class="row pt-1">
-                            <div class="col-lg-6">
-                                <img src="${images[3]?.image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
-                            </div>
-                            <div class="col-lg-6">
-                                ${images[4] ? `<img src="${images[4].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">` : ''}
-                            </div>
-                        </div>
-                    </div>`;
-            }
-        }
 
         function generateGridItems(beds) {
             let gridHTML = '';
@@ -1346,9 +1351,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return gridHTML;
         }
-        function reviewGrid(review) {
-
-        }
 
         // Event delegation for clicks on card titles
         document.addEventListener('click', function (e) {
@@ -1359,4 +1361,449 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+});
+
+// Universal grid creater
+function generateImageGrid(images) {
+    if (images.length === 1) {
+        return `
+            <div class="col-lg-12">
+                <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-auto rounded-4">
+            </div>`;
+    } else {
+        return `
+            <div class="col-lg-6">
+                <img src="${images[0].image}" alt="image" class="img-fluid w-100 h-100 rounded-4">
+            </div>
+            <div class="col-lg-6">
+                <div class="row mb-3">
+                    <div class="col-lg-6">
+                        <img src="${images[1]?.image}" alt="image" class="img-fluid w-100 h-100 rounded-4">
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="${images[2]?.image}" alt="image" class="img-fluid w-100 h-100 rounded-4">
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-lg-6">
+                        <img src="${images[3]?.image}" alt="image" class="img-fluid w-100 h-100 rounded-4">
+                    </div>
+                    <div class="col-lg-6">
+                        ${images[4] ? `<img src="${images[4].image}" alt="image" class="img-fluid w-100 h-100 rounded-4">` : ''}
+                    </div>
+                </div>
+            </div>`;
+    }
+}
+// Ending
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const tableGrid = document.getElementById("table__grid");
+
+    let user = localStorage.getItem('exn-u-cookie');
+    user = JSON.parse(user);
+
+    if (tableGrid) {
+        async function hotelDataPopulator() {
+            try {
+                const response = await fetch('/posts/t-post/', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    console.error('Fetch failed with status:', response.status);
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (!result?.table_data) return;
+
+                let fragment = document.createDocumentFragment(); // Use a document fragment for batch DOM updates
+                let count = 0;
+                result.table_data.forEach(ex => {
+                    if (!ex || !ex.restaurant) {
+                        console.warn(`Missing data for entry:`, ex);
+                        return;
+                    }
+
+                    // Create elements
+                    const colItem = document.createElement('div');
+                    colItem.classList.add('col', 'd-flex', 'flex-column');
+
+                    const image = document.createElement('img');
+                    image.classList.add('img-fluid', 'rounded-2', 'mb-2');
+                    image.alt = ex.restaurant.name || 'Unknown Restaurant';
+                    image.src = ex.images || '/static/images/default-hotel.jpg';
+
+                    const cardBody = document.createElement('div');
+                    cardBody.classList.add('card-body', 'p-0');
+
+                    const titleContainer = document.createElement('div');
+                    titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+
+                    const cardTitle = document.createElement('a');
+                    cardTitle.textContent = ex.restaurant.name || 'Unknown Restaurant';
+                    cardTitle.id = `nak-${count}`;
+                    const ratingText = document.createElement('h5');
+                    ratingText.textContent = `★${ex.rating || '4.9'}`;
+                    ratingText.style.marginTop = '10px';
+                    cardTitle.style.fontSize = '1.6rem';
+                    cardTitle.style.marginTop = '10px';
+                    cardTitle.style.cursor = 'pointer';
+                    cardTitle.classList.add('nav-link', 'mt-0');
+                    cardTitle.dataset.targetnak = ex.table_id;
+
+                    const locationText = document.createElement('p');
+                    locationText.classList.add('card-text', 'mb-0');
+                    locationText.innerHTML = `<i class="fi fi-rr-marker"></i> ${ex.restaurant.city.name || 'Unknown City'}, ${ex.restaurant.country || 'Unknown Country'}`;
+
+                    const bedText = document.createElement('p');
+                    bedText.classList.add('card-text', 'mb-1');
+                    bedText.innerHTML = `<i class="fi fi-rr-bed-alt"></i> ${ex.capacity || 'Unknown Capacity'}`;
+
+                    const priceText = document.createElement('p');
+                    priceText.classList.add('card-text', 'mb-1');
+                    priceText.innerHTML = `<strong>$${ex.price || '0'}</strong>/table`;
+
+                    // Append elements to card body and colItem
+                    titleContainer.appendChild(cardTitle);
+                    titleContainer.appendChild(ratingText);
+                    cardBody.appendChild(titleContainer);
+                    cardBody.appendChild(locationText);
+                    cardBody.appendChild(bedText);
+                    cardBody.appendChild(priceText);
+                    colItem.appendChild(image);
+                    colItem.appendChild(cardBody);
+
+                    // Append colItem to fragment (not directly to the DOM)
+                    fragment.appendChild(colItem);
+
+                    // Redirect user on cardTitle click
+                    cardTitle.addEventListener('click', () => {
+                        const targetId = ex.table_id;
+                        if (targetId) {
+                            window.location.href = `/nakiese/resturant/table/${targetId}`;
+                        } else {
+                            console.warn('Missing room_id for entry:', ex);
+                        }
+                    });
+                    count++;
+                });
+
+                // Append fragment to tableGrid in one operation
+                tableGrid.appendChild(fragment);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Debounce the population function to avoid rapid firing
+        const debouncedHotelDataPopulator = debounce(hotelDataPopulator, 300);
+        debouncedHotelDataPopulator();
+    }
+
+    // Debounce utility function
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+
+
+    if (document.getElementById('nak-grid-3')) {
+
+        async function BedDetailPopulator() {
+            try {
+                const currentUrl = window.location.pathname;
+                const postId = currentUrl.split("/").pop();
+                const a1 = document.getElementById("t__1");
+                const a2 = document.getElementById("t__2");
+                const gridItem = document.getElementById("grid__items2");
+
+                if (postId) {
+                    const apiUrl = `/posts/sp-t-post/${postId}/`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${user.token.access}`
+                        },
+                    });
+
+                    if (!response.ok) throw new Error('Failed to fetch hotel details');
+
+
+                    const data = await response.json();
+
+                    console.log(data);
+
+                    const container = document.getElementById('image-container');
+                    const reviewGridinn1 = document.getElementById('review__grid_inn_1');
+                    const reviewGridinn2 = document.getElementById('review__grid_inn_2');
+                    const reviewGrid2 = document.getElementById('review__grid_2');
+                    const bedDescription = document.getElementById('table_description');
+                    const menuGrid = document.getElementById('menu__grid');
+                    container.innerHTML = ''; // Clear previous content
+                    reviewGridinn1.innerHTML = ''; // Clear previous content
+                    reviewGridinn2.innerHTML = ''; // Clear previous content
+                    reviewGrid2.innerHTML = ''; // Clear previous content
+                    menuGrid.innerHTML = ''; // Clear previous content
+
+                    // Process hotel images
+                    if (data.specific_table?.restaurant?.images && Array.isArray(data.specific_table.restaurant.images)) {
+                        const images = data.specific_table.restaurant.images;
+                        container.innerHTML = generateImageGrid(images);
+                    } else {
+                        console.error("Hotel data or images array is missing");
+                    }
+
+                    // Append hotel address details
+                    if (data.specific_table?.restaurant?.city && data.specific_table?.restaurant.country ) {
+                        a1.innerText = `${data.specific_table.restaurant.city.name}, ${data.specific_table.restaurant.country}`;
+                        a2.innerText = data.specific_table.restaurant.address;
+                    } else {
+                        console.error("Missing hotel address details");
+                    }
+                    // Append hotel Description
+                    if (data.specific_table?.restaurant?.description) {
+                        bedDescription.innerText = '';
+                        bedDescription.innerText = data.specific_table.restaurant.description;
+                    } else {
+                        console.error("Missing hotel address details");
+                    }
+                    // All Relation Menu
+                    if (data?.menu) {
+                        menuGrid.innerHTML = generateGridItem_a(data.menu)
+                    } else {
+                        console.error("Missing hotel address details");
+                    }
+
+                    let reviews = data.specific_table.review; // Assuming this is populated with your data
+                    let reviewsPerPage = 3; // Number of reviews to show initially
+
+                    // Function to display a limited number of reviews
+                    function displayReviews(limit) {
+                        reviewGrid2.innerHTML = ''; // Clear the review grid
+                        for (let i = 0; i < Math.min(limit, reviews.length); i++) {
+                            let review = reviews[i];
+                            let reviewBed = createReviewElement(review);
+                            reviewGrid2.appendChild(reviewBed);
+                        }
+                    }
+
+                    // Function to create a review element
+                    function createReviewElement(review) {
+                        
+                        
+                        let reviewBed = document.createElement('div');
+                        reviewBed.classList.add('mb-3');
+
+                        let flexContainer = document.createElement('div');
+                        flexContainer.classList.add('d-flex', 'justify-content-start', 'align-items-center');
+
+                        let imageContainer = document.createElement('div');
+                        let image = document.createElement('img');
+                        image.src = "https://dummyimage.com/50x50/000/fff";
+                        image.classList.add('rounded-pill');
+                        image.alt = "image";
+                        imageContainer.appendChild(image);
+
+                        let textContainer = document.createElement('div');
+                        textContainer.classList.add('ms-3');
+
+                        let reviewerName = document.createElement('p');
+                        reviewerName.classList.add('mb-1');
+                        reviewerName.innerText = review.reviewer_name || "Anonymous";
+                        textContainer.appendChild(reviewerName);
+
+                        let reviewDate = document.createElement('p');
+                        reviewDate.classList.add('mb-1');
+                        reviewDate.innerText = new Date(review.date_of_notice).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long'
+                        });
+                        textContainer.appendChild(reviewDate);
+
+                        flexContainer.appendChild(imageContainer);
+                        flexContainer.appendChild(textContainer);
+
+                        let commentParagraph = document.createElement('p');
+                        commentParagraph.style.marginTop = '10px';
+                        commentParagraph.style.marginLeft = '65px';
+                        commentParagraph.innerText = review.comment || "No comment available.";
+
+                        reviewBed.appendChild(flexContainer);
+                        reviewBed.appendChild(commentParagraph);
+
+                        return reviewBed;
+                    }
+
+                    // Function to create the Load More button
+                    function createLoadMoreButton() {
+                        let loadMoreBtn = document.createElement('button');
+                        loadMoreBtn.id = 'loadMoreBtn';
+                        loadMoreBtn.classList.add('btn', 'btn-outline-dark', 'mt-3', 'mb-4');
+                        loadMoreBtn.innerText = 'Load More Reviews';
+                        loadMoreBtn.addEventListener('click', showAllReviews);
+                        return loadMoreBtn;
+                    }
+
+                    // Function to create the Close Reviews button
+                    function createCloseButton() {
+                        let closeBtn = document.createElement('button');
+                        closeBtn.id = 'closeBtn';
+                        closeBtn.classList.add('btn', 'btn-outline-dark', 'mt-3', 'mb-4');
+                        closeBtn.innerText = 'Close Reviews';
+                        closeBtn.addEventListener('click', function () {
+                            displayReviews(reviewsPerPage);
+                            if (reviews.length > reviewsPerPage) {
+                                reviewGrid2.appendChild(createLoadMoreButton()); // Show the Load More button again
+                            }
+                            closeBtn.remove(); // Remove the Close button
+                        });
+                        return closeBtn;
+                    }
+
+                    // Function to show all reviews
+                    function showAllReviews() {
+                        displayReviews(reviews.length); // Show all reviews
+                        let closeButton = createCloseButton();
+                        reviewGrid2.appendChild(closeButton); // Add the Close Reviews button
+                        document.getElementById('loadMoreBtn').remove(); // Remove the Load More button
+                    }
+
+                    // Initial load: Show first 3 reviews and possibly the Load More button
+                    displayReviews(reviewsPerPage);
+                    if (reviews.length > reviewsPerPage) {
+                        reviewGrid2.appendChild(createLoadMoreButton());
+                    }
+
+                    if (data.specific_table?.review) {
+                        let ratingSums = {};
+                        let ratingCounts = {};
+
+                        // Loop through each review and accumulate ratings for each review type
+                        data.specific_table.review.forEach(review => {
+                            review.rating.forEach(rating => {
+                                if (!ratingSums[rating.name]) {
+                                    ratingSums[rating.name] = 0;  // Initialize sum for each review type
+                                    ratingCounts[rating.name] = 0;  // Initialize count for each review type
+                                }
+                                ratingSums[rating.name] += parseFloat(rating.rate);  // Add the rating
+                                ratingCounts[rating.name] += 1;  // Count the occurrence
+                            });
+                        });
+                        
+                        let sumOfAverage = 0;
+                        for (let type in ratingSums) {
+                            let averageRating = (ratingSums[type] / ratingCounts[type]).toFixed(1);  // Calculate average and fix to 1 decimal place
+                            sumOfAverage += parseFloat(averageRating);  // Convert the averageRating back to a number and add it to sumOfAverage
+
+                            // Create a new div for the review type name
+                            let nameDiv = document.createElement('div');
+                            let nameParagraph = document.createElement('p');
+                            nameParagraph.classList.add('mb-1');
+                            nameParagraph.textContent = type;  // The review type (e.g., Cleanliness)
+                            nameDiv.appendChild(nameParagraph);
+
+                            // Create a new div for the average rating
+                            let valueDiv = document.createElement('div');
+                            let valueParagraph = document.createElement('p');
+                            valueParagraph.classList.add('mb-1');
+                            valueParagraph.textContent = averageRating;  // The average rating (rounded to 1 decimal place)
+                            valueDiv.appendChild(valueParagraph);
+
+                            // Append both divs to the reviewGrid
+                            reviewGridinn1.appendChild(nameDiv);
+                            reviewGridinn2.appendChild(valueDiv);
+                        }
+                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1);
+                        document.getElementById("av_rating_b").innerText = (sumOfAverage / 5).toFixed(1);
+
+                    } else {
+                        console.error("Missing hotel reviews details");
+                    }
+
+                    // Grid Items Creation
+                   
+                } else {
+                    console.error('No postId found in the URL');
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        BedDetailPopulator();
+
+        function generateGridItem_a(tables) {
+            let gridHTML = '';
+            tables.forEach((ex, index) => {
+                console.log(ex);
+                
+                gridHTML += `
+                <div class="mb-3">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src=${ex.image} class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body p-4">
+                                <p class="card-text mb-0">${ex.category}</p>
+                                <h5 class="card-title mb-4">${ex.name}</h5>
+                                    <p class="card-text" style="font-weight:bold;">$${ex.price}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            return gridHTML;
+        }
+        function generateGridItem_b(tables) {
+            let gridHTML = '';
+            tables.forEach((ex, index) => {
+                console.log(ex);
+                
+                gridHTML += `
+                <div class="col d-flex flex-column">
+                    <img src="${ex.images}" alt="${ex.restaurant.name}" class="img-fluid custom-image" style="border-radius: 10px;">
+                    <div class="card-body p-0">
+                        <a id="nak-${index}" style="font-size: 1.6rem; margin-top: 10px; cursor: pointer;" class="nav-link" data-targetnak="${ex.table_id}">
+                            ${ex.restaurant.name}
+                        </a>
+                        <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.restaurant.city.name}, ${ex.restaurant.country}</p>
+                    
+                       
+                    </div>
+                </div>`;
+            });
+
+            return gridHTML;
+        }
+        document.addEventListener('click', function (e) {
+            if (e.target.matches('[id^="nak-"]')) {
+                const targetId = e.target.dataset.targetnak;
+                window.location.href = `/nakiese/resturant/table/${targetId}`;
+            }
+        });
+    }
+
+    // Detail handle
 });
