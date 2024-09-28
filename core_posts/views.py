@@ -86,7 +86,7 @@ class SpecificHotelDetail(APIView):
     Caches the result for better performance with repeated requests.
     Requires user to be authenticated.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, post_id):
         # Cache key for the specific hotel data
@@ -125,7 +125,7 @@ class SpecificTableDetail(APIView):
     Caches the result for better performance with repeated requests.
     Requires user to be authenticated.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, post_id):
         # Cache key for the specific hotel data
