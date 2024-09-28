@@ -1,5 +1,14 @@
 from rest_framework import serializers
 from core_posts.models import BedRoom, Cities, Hotel, MenuItem, Tables, HotelImages, Review, ReviewType, Restaurant, ResturantImages
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class UserSearializer(serializers.ModelSerializer):
+    class Meta:
+        model= User
+        fields = ['profile_url','first_name', "last_name"]
+
 
 class CitySerializer(serializers.ModelSerializer):
     """
@@ -117,7 +126,7 @@ class ReviewTypeSerializer(serializers.ModelSerializer):
 
 class ReviewHotelSerializer(serializers.ModelSerializer):
     rating = ReviewTypeSerializer(many=True, read_only=True)  # Add many=True here
-
+    user = UserSearializer(read_only = True)
     class Meta:
         model = Review
         fields = ['review_id','user', 'room', 'rating', 'comment', 'date_of_notice']
@@ -125,7 +134,7 @@ class ReviewHotelSerializer(serializers.ModelSerializer):
 
 class ReviewResturantSerializer(serializers.ModelSerializer):
     rating = ReviewTypeSerializer(many=True, read_only=True)  # Add many=True here
-
+    user = UserSearializer(read_only = True)
     class Meta:
         model = Review
         fields = ['review_id','user', 'tables_of_resturant', 'rating', 'comment', 'date_of_notice']

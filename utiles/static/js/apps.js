@@ -1137,6 +1137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
+                    
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');
                     const reviewGridinn2 = document.getElementById('review__grid_inn_2');
@@ -1203,7 +1204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         let reviewerName = document.createElement('p');
                         reviewerName.classList.add('mb-1');
-                        reviewerName.innerText = review.reviewer_name || "Anonymous";
+                        reviewerName.innerText = `${review.user.first_name} ${review.user.last_name}` || "Anonymous";
                         textContainer.appendChild(reviewerName);
 
                         let reviewDate = document.createElement('p');
@@ -1268,7 +1269,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         reviewGrid2.appendChild(createLoadMoreButton());
                     }
 
-                    if (data.specific_bed?.reviews) {
+                    if (data.specific_bed?.reviews && data.specific_bed.reviews.length >0 ) {
                         let ratingSums = {};
                         let ratingCounts = {};
 
@@ -1307,18 +1308,35 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGridinn1.appendChild(nameDiv);
                             reviewGridinn2.appendChild(valueDiv);
                         }
-                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1)
+                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1) 
 
                     } else {
-                        console.error("Missing hotel reviews details");
+                        let reviewContainer = document.getElementById("review__container");
+                        reviewContainer.innerHTML = "";
+                        reviewContainer.style.marginBottom = "50px";
+                        let H6 = document.createElement('h6');
+                        H6.innerText = "No reviews available";
+                        H6.style.width = "100%";
+                        reviewContainer.append(H6);
+                        document.getElementById("av_rating").innerText = "0";
                     }
 
                     // Grid Items Creation
-                    if (gridItem && data.all_beds && Array.isArray(data.all_beds)) {
+                    if (gridItem && data.all_beds && Array.isArray(data.all_beds) && data.all_beds.length > 0) {
                         gridItem.innerHTML = generateGridItems(data.all_beds);
                     } else {
-                        console.error("No beds found or data.all_beds is not an array");
+                        if (gridItem) {
+                            gridItem.style.width="100%";
+                            let H6 = document.createElement('h6');
+                            H6.innerText = "No beds available at the moment. Please check back later.";
+                            H6.style.width = "100%";
+                            gridItem.innerHTML = ''; // Clear any existing content
+                            gridItem.appendChild(H6); // Append the new H3 element
+                        } 
                     }
+                    
+                    
+                    
                 } else {
                     console.error('No postId found in the URL');
                 }
@@ -1539,7 +1557,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         method: 'GET',
                         headers: {
                             'Accept': 'application/json',
-                            
+
                         },
                     });
 
@@ -1571,7 +1589,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     // Append hotel address details
-                    if (data.specific_table?.restaurant?.city && data.specific_table?.restaurant.country ) {
+                    if (data.specific_table?.restaurant?.city && data.specific_table?.restaurant.country) {
                         a1.innerText = `${data.specific_table.restaurant.city.name}, ${data.specific_table.restaurant.country}`;
                         a2.innerText = data.specific_table.restaurant.address;
                     } else {
@@ -1606,8 +1624,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // Function to create a review element
                     function createReviewElement(review) {
-                        
-                        
+
+
                         let reviewBed = document.createElement('div');
                         reviewBed.classList.add('mb-3');
 
@@ -1706,7 +1724,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ratingCounts[rating.name] += 1;  // Count the occurrence
                             });
                         });
-                        
+
                         let sumOfAverage = 0;
                         for (let type in ratingSums) {
                             let averageRating = (ratingSums[type] / ratingCounts[type]).toFixed(1);  // Calculate average and fix to 1 decimal place
@@ -1746,7 +1764,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     // Grid Items Creation
-                   
+
                 } else {
                     console.error('No postId found in the URL');
                 }
@@ -1765,13 +1783,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src=${ex.image} class="img-fluid rounded-start" alt="...">
+                                <img src=${ex.image} class="img-fluid rounded-start" alt="${ex.name}">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body p-4">
                                 <p class="card-text mb-0">${ex.category}</p>
                                 <h5 class="card-title mb-4">${ex.name}</h5>
-                                    <p class="card-text" style="font-weight:bold;">$${ex.price}</p>
+                                <p class="card-text" style="font-weight:bold;">
+                                    $${(Number(ex.price) || 0).toFixed(0)}
+                                </p>
                                 </div>
                             </div>
                         </div>
@@ -1785,7 +1805,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let gridHTML = '';
             tables.forEach((ex, index) => {
                 console.log(ex);
-                
+
                 gridHTML += `
                 <div class="col d-flex flex-column">
                     <img src="${ex.images}" alt="${ex.restaurant.name}" class="img-fluid custom-image" style="border-radius: 10px;">

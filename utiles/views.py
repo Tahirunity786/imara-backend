@@ -40,4 +40,10 @@ class Cart(TemplateView):
 class SearchView(TemplateView):
     template_name = 'utiles/search.html'
 
+class MyList(TemplateView):
+    template_name = 'utiles/my-booking.html'
+    
+class PaymentRenser(TemplateView):
+    template_name = 'utiles/Payment.html'
+
 

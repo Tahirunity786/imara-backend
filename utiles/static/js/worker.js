@@ -109,28 +109,56 @@ document.addEventListener('DOMContentLoaded', function () {
         let citiesToDisplay = expanded ? cities : cities.slice(0, initialDisplayCount);
 
         citiesToDisplay.forEach(city => {
+            // Create the list item
             let cityItem = document.createElement('li');
             cityItem.classList.add('dropdown-item');
-            cityItem.textContent = city;
+            cityItem.style.cursor = "pointer";
+
+            // Create the SVG icon
+            let svgIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svgIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            svgIcon.setAttribute("width", "16");
+            svgIcon.setAttribute("height", "16");
+            svgIcon.setAttribute("fill", "currentColor");
+            svgIcon.setAttribute("class", "bi bi-geo-alt-fill me-2"); // Adding a Bootstrap margin for spacing
+            svgIcon.setAttribute("viewBox", "0 0 16 16");
+
+            // Create the path for the SVG
+            let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6");
+
+            // Append the path to the SVG
+            svgIcon.appendChild(path);
+
+            // Append the SVG to the list item
+            cityItem.appendChild(svgIcon);
+
+            // Add the city name after the SVG
+            cityItem.append(city);
+
+            // Add click event listener
             cityItem.addEventListener('click', function () {
                 document.getElementById('cityInput').value = city;
                 cityDropdown.classList.remove('show'); // Hide dropdown on item selection
             });
+
+            // Append the list item to the dropdown
             cityDropdown.appendChild(cityItem);
         });
 
+
         // Add "See more" option if the list is not fully expanded
-        if (!expanded && cities.length > initialDisplayCount) {
-            let seeMoreItem = document.createElement('li');
-            seeMoreItem.classList.add('dropdown-item', 'text-center', 'text-primary');
-            seeMoreItem.textContent = 'See more cities...';
-            seeMoreItem.style.cursor = 'pointer';
-            seeMoreItem.addEventListener('click', function () {
-                expanded = true;
-                populateDropdown(); // Repopulate to show all cities
-            });
-            cityDropdown.appendChild(seeMoreItem);
-        }
+        // if (!expanded && cities.length > initialDisplayCount) {
+        //     let seeMoreItem = document.createElement('li');
+        //     seeMoreItem.classList.add( 'text-center', 'text-primary');
+        //     seeMoreItem.textContent = 'See more cities...';
+        //     seeMoreItem.style.cursor = 'pointer';
+        //     seeMoreItem.addEventListener('click', function () {
+        //         expanded = true;
+        //         populateDropdown(); // Repopulate to show all cities
+        //     });
+        //     cityDropdown.appendChild(seeMoreItem);
+        // }
     }
 
     // Show the dropdown on input click
@@ -169,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
             firstDayOfWeek: 1 // Start the week on Monday
         },
         disableMobile: true,  // Ensure the custom UI works on mobile as well
-        onChange: function(selectedDates, dateStr, instance) {
+        onChange: function (selectedDates, dateStr, instance) {
             // Set the minimum date of the "Date Till" field based on the selected "Date From"
             dateTill.set("minDate", selectedDates[0]);  // selectedDates[0] is the selected "Date From"
         }
