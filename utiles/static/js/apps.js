@@ -1802,24 +1802,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return gridHTML;
         }
 
-        document.addEventListener('click', function (e) {
-            if (e.target.matches('[id^="nak-"]')) {
-                const targetId = e.target.dataset.targetnak;
-                window.location.href = `/nakiese/resturant/table/${targetId}`;
-            }
-        });
+      
     }
 
     // Detail handle
 });
 
 
-document.addEventListener('click', function (e) {
-    if (e.target.matches('[id^="nak-"]')) {
-        const targetId = e.target.dataset.targetnak;
-        window.location.href = `/nakiese/resturant/table/${targetId}`;
-    }
-});
+
+
 // Search optimization
 function searchHotelRooms() {
     const cityName = document.getElementById('cityInput').value;

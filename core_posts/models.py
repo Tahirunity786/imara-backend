@@ -72,6 +72,16 @@ class Hotel(models.Model):
             self.hotel_id = generate_unique_id()
         super().save(*args, **kwargs)
 
+class Amenities(models.Model):
+    amenities_id = models.CharField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    name = models.CharField(max_length=100, db_index=True)
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.amenities_id:
+            self.amenities_id = generate_unique_id()
+        super().save(*args, **kwargs)
 
 class BedRoom(models.Model):
     """
@@ -91,7 +101,7 @@ class BedRoom(models.Model):
     description = models.TextField(db_index=True)
     price = models.PositiveIntegerField(default=0)
     capacity = models.PositiveIntegerField(default=0)
-    room_amenities = models.CharField(max_length=100, db_index=True)
+    room_amenities = models.ManyToManyField(Amenities, db_index=True)
     availability_from = models.DateField(null=True, default=None)
     availability_till = models.DateField(null=True, default=None)
 
