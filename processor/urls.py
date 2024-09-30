@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Worker Apis
-    path('accounts/', include('core_control.urls')),  # Note: corrected 'acounts' to 'accounts'
+    # path('accounts/', include('core_control.urls')),  # Note: corrected 'acounts' to 'accounts'
     path('posts/', include('core_posts.urls')),  # Note: corrected 'acounts' to 'accounts'
 
     # Templates Rendering

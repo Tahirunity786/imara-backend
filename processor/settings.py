@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'core_payments.apps.CorePaymentsConfig',
     'core_posts.apps.CorePostsConfig',
     'utiles.apps.UtilesConfig',
+    'django_filters',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

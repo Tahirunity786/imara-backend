@@ -146,19 +146,6 @@ document.addEventListener('DOMContentLoaded', function () {
             cityDropdown.appendChild(cityItem);
         });
 
-
-        // Add "See more" option if the list is not fully expanded
-        // if (!expanded && cities.length > initialDisplayCount) {
-        //     let seeMoreItem = document.createElement('li');
-        //     seeMoreItem.classList.add( 'text-center', 'text-primary');
-        //     seeMoreItem.textContent = 'See more cities...';
-        //     seeMoreItem.style.cursor = 'pointer';
-        //     seeMoreItem.addEventListener('click', function () {
-        //         expanded = true;
-        //         populateDropdown(); // Repopulate to show all cities
-        //     });
-        //     cityDropdown.appendChild(seeMoreItem);
-        // }
     }
 
     // Show the dropdown on input click

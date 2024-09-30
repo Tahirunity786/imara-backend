@@ -39,6 +39,12 @@ class Cart(TemplateView):
 
 class SearchView(TemplateView):
     template_name = 'utiles/search.html'
+    
+class HotelSearchView(TemplateView):
+    template_name = 'utiles/hotel-search.html'
+
+class ResturantSearchView(TemplateView):
+    template_name = 'utiles/resturant-search.html'
 
 class MyList(TemplateView):
     template_name = 'utiles/my-booking.html'

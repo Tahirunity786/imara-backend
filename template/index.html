@@ -20,40 +20,43 @@
           <div class="row bg-light mt-4 justify-content-center p-3 search-bar">
             <div class="col-lg-11">
               <div class="row">
-
+                <!-- City Input Field -->
                 <div class="col-lg-3 mt-0 position-relative" style="border-right: 2px solid rgb(179, 179, 179);">
-                  <h6 class="text-muted">Ou aller vous ?</h6>
+                  <h6 class="text-muted">Où allez-vous ?</h6>
                   <input type="text" id="cityInput" class="form-control form-control-land"
                     placeholder="Chercher une destination" autocomplete="off">
                   <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
                 </div>
+                <!-- Date From Input Field -->
                 <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                  <h6 class="text-muted nav-link">Date d'arriver (From)</h6>
-                  <input type="text" id="dateInputg" class="form-control form-control-land"
+                  <h6 class="text-muted nav-link">Date d'arrivée (From)</h6>
+                  <input type="date" id="dateInputg" class="form-control form-control-land"
                     placeholder="Ajouter une date">
                 </div>
+                <!-- Date Till Input Field -->
                 <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                  <h6 class="text-muted">Date d'arriver (Till)</h6>
-                  <input type="text" id="dateInputa" class="form-control form-control-land"
+                  <h6 class="text-muted">Date de départ (Till)</h6>
+                  <input type="date" id="dateInputa" class="form-control form-control-land"
                     placeholder="Ajouter une date">
                 </div>
-
+                <!-- Capacity Input Field -->
                 <div class="col-lg-3 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
-                  <h6 class="text-muted">Nbre de personne</h6>
-                  <input type="text" placeholder="Ajouter" class="form-control form-control-land">
+                  <h6 class="text-muted">Nombre de personnes</h6>
+                  <input type="number" id="capacityInput" class="form-control form-control-land" placeholder="Ajouter">
                 </div>
               </div>
             </div>
+            <!-- Search Button -->
             <div class="col-lg-1 d-flex justify-content-center align-items-center">
-
-              <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+              <button id="searchButton"
+                class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
                 style="width: 40px; height: 40px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-search"
                   viewBox="0 0 16 16">
                   <path
                     d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                 </svg>
-
+              </button>
             </div>
           </div>
         </div>
@@ -63,15 +66,12 @@
 
 
 </main>
-<div class="container" >
+<div class="container">
   <div class="mb-5">
     <div style="margin-bottom: 30px;">
       <h2>Les meilleurs hotels</h2>
     </div>
     <div class="row row-cols-1 row-cols-md-4 g-4" id="hotel__grid"></div>
-
-
-
   </div>
 </div>
 <div class="container mb-5">

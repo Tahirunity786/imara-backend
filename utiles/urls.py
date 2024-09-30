@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  AccountsEmailNotificaationView,AboutUsView, BedDetailView, Cart, MyList, PaymentRenser,ResturantView, AccountsView,AccountsSecurityView,AccountsPaymentDetailsView, AccountsPersonalDetailView, AccountsPreferencesView, HotelView, SearchView, TableDetailView
+from .views import  AccountsEmailNotificaationView,HotelSearchView, ResturantSearchView, AboutUsView, BedDetailView, Cart, MyList, PaymentRenser,ResturantView, AccountsView,AccountsSecurityView,AccountsPaymentDetailsView, AccountsPersonalDetailView, AccountsPreferencesView, HotelView, SearchView, TableDetailView
 urlpatterns = [
     path('accounts/settings', AccountsView.as_view(), name="utiles"),
     path('accounts/settings/email-notification', AccountsEmailNotificaationView.as_view(), name="notification"),
@@ -19,4 +19,6 @@ urlpatterns = [
 
     path('booking-list', MyList.as_view(), name="list"),
     path('payment', PaymentRenser.as_view(), name="payment"),
+    path('search-h', HotelSearchView.as_view(), name="hotel-search"),
+    path('search-res', ResturantSearchView.as_view(), name="res-search"),
 ]

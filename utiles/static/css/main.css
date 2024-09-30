@@ -762,10 +762,13 @@ label {
     color: white;
     border-radius:5px;
     padding-top: .7rem;
-    padding-bottom: .7rem;
-    font-weight: bold;
+    padding-bottom: .7rem;    
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn-rev-nak:hover{
     background-color: #577ba5;
@@ -957,3 +960,4 @@ label {
     color: #fff;
     border: none;
 }
+

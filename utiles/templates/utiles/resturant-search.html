@@ -1,0 +1,180 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Room Details{% endblock title %}
+{% block content %}
+
+<section style="margin-bottom: 80px; background-color: #4B75A5; padding: 20px; max-height: auto;">
+    <div class="cover d-flex justify-content-center align-items-center">
+      <div class="w-100">
+        <div class="mb-4 text-center mt-5"> <!-- Adjusted margin-bottom -->
+          <h1 style="font-size: 2rem; font-weight: bold;" class="text-light">Discover Your Ideal Stay – Search Available Hotel Rooms</h1>
+        </div>
+
+        <!-- Added margin-top to create space between text and row -->
+        <div class="container mt-5 ps-4 pe-4">
+          <div class="container">
+            <div class="row bg-light mt-4 justify-content-center p-3 search-bar">
+              <div class="col-lg-11">
+                <div class="row">
+
+                  <div class="col-lg-4 mt-0 position-relative" style="border-right: 2px solid rgb(179, 179, 179);">
+                    <h6 class="text-muted">Ou aller vous ?</h6>
+                    <input type="text" id="cityInput" class="form-control form-control-land"
+                      placeholder="Chercher une destination" autocomplete="off">
+                    <ul class="dropdown-menu w-100" id="cityDropdown"></ul>
+                  </div>
+                  <div class="col-lg-4 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                    <h6 class="text-muted">Date d'arriver (From)</h6>
+                    <input type="text" id="dateInputg" class="form-control form-control-land"
+                      placeholder="Ajouter une date">
+                  </div>
+                 
+
+                  <div class="col-lg-4 mt-0" style="border-right: 2px solid rgb(179, 179, 179);">
+                    <h6 class="text-muted">Nbre de personne</h6>
+                    <input type="text" placeholder="Ajouter" class="form-control form-control-land">
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-1 d-flex justify-content-center align-items-center">
+
+                <button class="btn btn-dark rounded-pill d-flex justify-content-center align-items-center"
+                  style="width: 40px; height: 40px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-search" viewBox="0 0 16 16">
+                    <path
+                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                  </svg>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card" style="width: 18rem;position: sticky; top: 10px; bottom:20px;">
+          <div class="card-body">
+            <h5 class="card-title">Filters</h5>
+            <ul class="ps-1" style="list-style: none;">
+              <li><div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label mt-1" for="flexCheckDefault">
+                  Default checkbox
+                </label>
+              </div></li>
+              <li><div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="query1">
+                <label class="form-check-label mt-1" for="query1">
+                  Default checkbox
+                </label>
+              </div></li>
+              <li><div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="query2">
+                <label class="form-check-label mt-1" for="query2">
+                  Default checkbox
+                </label>
+              </div></li>
+              <li><div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="query3">
+                <label class="form-check-label mt-1" for="query3">
+                  Default checkbox
+                </label>
+              </div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="mb-5">
+          <div class="mb-3">
+            <div class="card mb-3" style="max-width: 90%;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="./images/dish-1.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="card mb-3" style="max-width: 90%;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="./images/dish-1.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="card mb-3" style="max-width: 90%;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="./images/dish-1.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="card mb-3" style="max-width: 90%;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="./images/dish-1.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="card mb-3" style="max-width: 90%;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="./images/dish-1.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endblock content %}

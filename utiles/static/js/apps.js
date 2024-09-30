@@ -260,8 +260,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const user = localStorage.getItem('exn-u-cookie');
 
     const languageDropdown = `
-            <button class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
-          style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);">
+            <button type="button" class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
+          style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);" data-bs-toggle="modal" data-bs-target="#languageop">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe"
             viewBox="0 0 16 16">
             <path
@@ -1137,7 +1137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-                    
+
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');
                     const reviewGridinn2 = document.getElementById('review__grid_inn_2');
@@ -1269,7 +1269,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         reviewGrid2.appendChild(createLoadMoreButton());
                     }
 
-                    if (data.specific_bed?.reviews && data.specific_bed.reviews.length >0 ) {
+                    if (data.specific_bed?.reviews && data.specific_bed.reviews.length > 0) {
                         let ratingSums = {};
                         let ratingCounts = {};
 
@@ -1308,7 +1308,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGridinn1.appendChild(nameDiv);
                             reviewGridinn2.appendChild(valueDiv);
                         }
-                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1) 
+                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1)
 
                     } else {
                         let reviewContainer = document.getElementById("review__container");
@@ -1326,17 +1326,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         gridItem.innerHTML = generateGridItems(data.all_beds);
                     } else {
                         if (gridItem) {
-                            gridItem.style.width="100%";
+                            gridItem.style.width = "100%";
                             let H6 = document.createElement('h6');
                             H6.innerText = "No beds available at the moment. Please check back later.";
                             H6.style.width = "100%";
                             gridItem.innerHTML = ''; // Clear any existing content
                             gridItem.appendChild(H6); // Append the new H3 element
-                        } 
+                        }
                     }
-                    
-                    
-                    
+
+
+
                 } else {
                     console.error('No postId found in the URL');
                 }
@@ -1801,27 +1801,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return gridHTML;
         }
-        function generateGridItem_b(tables) {
-            let gridHTML = '';
-            tables.forEach((ex, index) => {
-                console.log(ex);
 
-                gridHTML += `
-                <div class="col d-flex flex-column">
-                    <img src="${ex.images}" alt="${ex.restaurant.name}" class="img-fluid custom-image" style="border-radius: 10px;">
-                    <div class="card-body p-0">
-                        <a id="nak-${index}" style="font-size: 1.6rem; margin-top: 10px; cursor: pointer;" class="nav-link" data-targetnak="${ex.table_id}">
-                            ${ex.restaurant.name}
-                        </a>
-                        <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.restaurant.city.name}, ${ex.restaurant.country}</p>
-                    
-                       
-                    </div>
-                </div>`;
-            });
-
-            return gridHTML;
-        }
         document.addEventListener('click', function (e) {
             if (e.target.matches('[id^="nak-"]')) {
                 const targetId = e.target.dataset.targetnak;
@@ -1831,4 +1811,75 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Detail handle
+});
+
+
+document.addEventListener('click', function (e) {
+    if (e.target.matches('[id^="nak-"]')) {
+        const targetId = e.target.dataset.targetnak;
+        window.location.href = `/nakiese/resturant/table/${targetId}`;
+    }
+});
+// Search optimization
+function searchHotelRooms() {
+    const cityName = document.getElementById('cityInput').value;
+    const availabilityFromInput = document.getElementById('dateInputg').value; // e.g., "29-09-2024"
+    const availabilityTillInput = document.getElementById('dateInputa').value; // e.g., "30-09-2024"
+    const capacity = document.getElementById('capacityInput').value;
+
+    // Validate city name (required field)
+    if (!cityName) {
+        alert('City is required for search.');
+        return;
+    }
+
+    // Check and validate dates
+    if (!availabilityFromInput || !availabilityTillInput) {
+        alert('Both availability dates are required.');
+        return;
+    }
+
+    // Function to parse date in "d-m-Y" format
+    // Function to parse date in "d-m-Y" format
+    function manualParseDateDMY(dateString) {
+        const [day, month, year] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // month is 0-based in JavaScript Date
+
+        if (isNaN(date.getTime())) {
+            throw new Error('Invalid date format. Please use a valid date.');
+        }
+
+        // Manually adjust to prevent timezone issues
+        date.setHours(12); // Set time to noon to avoid timezone shifts
+
+        // Return formatted date in YYYY-MM-DD
+        return date.toISOString().split('T')[0];
+    }
+
+    // Try to create date objects and format them to YYYY-MM-DD
+    let formattedAvailabilityFrom, formattedAvailabilityTill;
+    try {
+        formattedAvailabilityFrom = manualParseDateDMY(availabilityFromInput);
+        formattedAvailabilityTill = manualParseDateDMY(availabilityTillInput);
+    } catch (error) {
+        alert(error.message); // Show error to user
+        return;
+    }
+
+    // Prepare the URL with query parameters
+    const queryParams = new URLSearchParams({
+        hotel_city_name: cityName,
+        availability_from: formattedAvailabilityFrom,
+        availability_till: formattedAvailabilityTill,
+        capacity: capacity || ''
+    });
+
+    // Redirect to search results page with query parameters
+    window.location.href = `/nakiese/search-h?${queryParams.toString()}`;
+}
+
+// Event listener for the search button
+document.getElementById('searchButton').addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent form submission
+    searchHotelRooms(); // Redirect to search results page
 });
