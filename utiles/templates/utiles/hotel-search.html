@@ -163,7 +163,11 @@ function renderHotelRooms(hotelRooms) {
     console.log("Hotel Rooms Data:", hotelRooms); // Debugging log to check hotel rooms data
 
     if (hotelRooms.results.length === 0) {
-        container.innerHTML = '<p>No rooms found for the given search criteria.</p>';
+      let img = document.createElement('img');
+      img.src = '/static/images/image_processing20210917-4617-1u39vt2.gif';
+      img.alt = "Not Found"
+      img.classList.add('h-100','w-100');
+        container.append(img)
         return;
     }
 

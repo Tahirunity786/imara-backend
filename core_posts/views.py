@@ -185,10 +185,63 @@ class BedRoomListView(generics.ListAPIView):
         availability_from_str = self.request.query_params.get('availability_from', None)
         availability_till_str = self.request.query_params.get('availability_till', None)
         capacity = self.request.query_params.get('capacity', None)
-        print(city_name)
-        print(availability_from_str)
-        print(availability_till_str)
-        print(capacity)
+     
+        if not availability_from_str or not availability_till_str:
+            raise ValidationError({'availability_dates': 'Both availability dates are required.'})
+        
+        # Ensure the input is a string before parsing
+        if isinstance(availability_from_str, str):
+            availability_from = parse_date(availability_from_str)
+        else:
+            raise ValidationError({'availability_from': 'Invalid date format.'})
+        
+        if isinstance(availability_till_str, str):
+            availability_till = parse_date(availability_till_str)
+        else:
+            raise ValidationError({'availability_till': 'Invalid date format.'})
+        
+    
+        if not city_name:
+            raise ValidationError({'hotel_city_name': 'This field is required.'})
+    
+        availability_from = parse_date(availability_from_str)
+        availability_till = parse_date(availability_till_str)
+    
+        if not availability_from or not availability_till:
+            raise ValidationError({'availability_dates': 'Both availability dates are required.'})
+    
+        # Apply filtering based on availability
+        queryset = super().get_queryset()
+        queryset = queryset.filter(availability_from__lte=availability_till, availability_till__gte=availability_from, capacity=capacity)
+        
+        return queryset.order_by('availability_from')
+
+
+class Tablesilter(filters.FilterSet):
+    availability_from = filters.DateFilter(field_name="availability_from", lookup_expr="gte")
+    capacity = filters.NumberFilter(field_name="capacity", lookup_expr="gte")
+    hotel_city_name = filters.CharFilter(field_name="hotel__city__name", lookup_expr="icontains")
+
+    class Meta:
+        model = BedRoom
+        fields = ['availability_from', 'availability_till', 'capacity', 'hotel_city_name']
+
+
+class TablesListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = BedRoom.objects.select_related('hotel', 'hotel__city').all()
+    serializer_class = AllBedSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = BedRoomFilter
+    pagination_class = CustomPagination  # Define or use DRF's default pagination
+
+    def get_queryset(self):
+       
+        city_name = self.request.query_params.get('hotel_city_name', None)
+        availability_from_str = self.request.query_params.get('availability_from', None)
+        availability_till_str = self.request.query_params.get('availability_till', None)
+        capacity = self.request.query_params.get('capacity', None)
+     
         if not availability_from_str or not availability_till_str:
             raise ValidationError({'availability_dates': 'Both availability dates are required.'})
         
