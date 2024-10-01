@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core_posts.models import BedRoom, Cities, Hotel, MenuItem, Tables, HotelImages, Review, ReviewType, Restaurant, ResturantImages
+from core_posts.models import Amenities, BedRoom, Cities, Hotel, MenuItem, Tables, HotelImages, Review, ReviewType, Restaurant, ResturantImages
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -32,6 +32,17 @@ class SpecificCitySerializer(serializers.ModelSerializer):
 
 
 # Hotel Data supplier
+
+class AmenitiesSerializers(serializers.ModelSerializer):
+    """
+    Serializer for HotelImages model.
+    Handles hotel image-related fields.
+    """
+    class Meta:
+        model = Amenities
+        fields = ['name']  # 'image' instead of 'images'
+        read_only_fields = ['name']  # ID is generated automatically
+
 class HotelImagesSerializer(serializers.ModelSerializer):
     """
     Serializer for HotelImages model.
@@ -70,6 +81,27 @@ class AllBedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BedRoom
+        fields = ['room_id', 'image', 'hotel', 'room_type', 'description', 'price', 'capacity', 'availability_from', 'availability_till']
+        read_only_fields = ['room_id']
+        write_only_fields = ['availability_from', 'availability_till']
+
+    def get_image(self, obj):
+        # Return the relative path to the image instead of the absolute URL
+        if obj.image:
+            return obj.image.url  # This will return the relative path (e.g., 'beds/images/hotel-1.jpg')
+        return None
+class SearchBedSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Bed model.
+
+    Optimized for performance by minimizing fields and using read-only where possible.
+    """
+    hotel = AllHotelSerializer(read_only=True)
+    room_amenities = AmenitiesSerializers(read_only=True, many=True)
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BedRoom
         fields = ['room_id', 'image', 'hotel', 'room_type', 'description', 'price', 'capacity', 'room_amenities', 'availability_from', 'availability_till']
         read_only_fields = ['room_id']
         write_only_fields = ['availability_from', 'availability_till']
@@ -83,8 +115,6 @@ class AllBedSerializer(serializers.ModelSerializer):
 
 
 # Resturant Data supplier
-
-
 
 class ResturantImagesSerializer(serializers.ModelSerializer):
     """
@@ -161,6 +191,7 @@ class DetailBedSerializer(serializers.ModelSerializer):
     """
     hotel = HotelRelationSerializer(read_only=True)  # No 'many=True' since it's a ForeignKey relation
     reviews = ReviewHotelSerializer(many=True,read_only=True)  # No 'many=True' since it's a ForeignKey relation
+    room_amenities = AmenitiesSerializers(many=True,read_only=True)  # No 'many=True' since it's a ForeignKey relation
 
     class Meta:
         model = BedRoom

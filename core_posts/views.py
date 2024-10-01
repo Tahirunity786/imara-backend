@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from django.utils.dateparse import parse_date
 from django_filters import rest_framework as filters
 from core_posts.models import BedRoom, Cities, Tables, MenuItem
-from core_posts.serializers import DetailBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, TableSerializer
+from core_posts.serializers import DetailBedSerializer,SearchBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, TableSerializer
 from core_posts.pagination import CustomPagination
 
 
@@ -174,13 +174,12 @@ class BedRoomFilter(filters.FilterSet):
 class BedRoomListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = BedRoom.objects.select_related('hotel', 'hotel__city').all()
-    serializer_class = AllBedSerializer
+    serializer_class = SearchBedSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = BedRoomFilter
     pagination_class = CustomPagination  # Define or use DRF's default pagination
 
     def get_queryset(self):
-        print(self.request.query_params)
         city_name = self.request.query_params.get('hotel_city_name', None)
         availability_from_str = self.request.query_params.get('availability_from', None)
         availability_till_str = self.request.query_params.get('availability_till', None)
@@ -213,7 +212,6 @@ class BedRoomListView(generics.ListAPIView):
         # Apply filtering based on availability
         queryset = super().get_queryset()
         queryset = queryset.filter(availability_from__lte=availability_till, availability_till__gte=availability_from, capacity=capacity)
-        
         return queryset.order_by('availability_from')
 
 

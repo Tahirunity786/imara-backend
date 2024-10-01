@@ -1012,15 +1012,26 @@ document.addEventListener("DOMContentLoaded", () => {
                         result.hotel_data.forEach(ex => {
                             const colItem = document.createElement('div');
                             colItem.classList.add('col', 'd-flex', 'flex-column');
+
+                            // Image element
                             const image = document.createElement('img');
                             image.classList.add('img-fluid', 'custom-image');
                             image.alt = ex.hotel.name;
                             image.src = ex.image;
                             image.style.borderRadius = '10px';
+                            image.style.cursor = 'pointer'; // Make the image clickable
 
+                            // Attach event listener to the image for redirection
+                            image.addEventListener('click', () => {
+                                const targetId = ex.room_id; // Use the room_id for redirection
+                                window.location.href = `/nakiese/hotel/bed-detail/${targetId}`;
+                            });
+
+                            // Card body with hotel name and details
                             const cardBody = document.createElement('div');
                             cardBody.classList.add('card-body', 'p-0');
 
+                            // Hotel name as clickable link
                             const cardTitle = document.createElement('a');
                             cardTitle.id = `nak-${count}`;
                             cardTitle.style.fontSize = '1.6rem';
@@ -1030,13 +1041,21 @@ document.addEventListener("DOMContentLoaded", () => {
                             cardTitle.dataset.targetnak = ex.room_id; // Set data-targetnak
                             cardTitle.textContent = ex.hotel.name;
 
+                            // Attach event listener to the cardTitle for redirection
+                            cardTitle.addEventListener('click', () => {
+                                const targetId = cardTitle.dataset.targetnak; // Get data-targetnak value
+                                window.location.href = `/nakiese/hotel/bed-detail/${targetId}`; // Redirect to the detailed page
+                            });
+
+                            // Location text
                             const locationText = document.createElement('p');
                             locationText.classList.add('card-text');
                             const locationIcon = document.createElement('i');
                             locationIcon.classList.add('fi', 'fi-rr-marker');
                             locationText.appendChild(locationIcon);
-                            locationText.textContent += ` ${ex.hotel.city}, ${ex.hotel.country}`;
+                            locationText.textContent += ` ${ex.hotel.city.name}, ${ex.hotel.country}`;
 
+                            // Bed text
                             const bedText = document.createElement('p');
                             bedText.classList.add('card-text');
                             const bedIcon = document.createElement('i');
@@ -1044,10 +1063,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             bedText.appendChild(bedIcon);
                             bedText.textContent += ` ${ex.room_type}`;
 
+                            // Price and rating
                             const priceRatingText = document.createElement('p');
                             priceRatingText.classList.add('card-text');
                             priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}`;
 
+                            // Append elements to card body and column
                             cardBody.appendChild(cardTitle);
                             cardBody.appendChild(locationText);
                             cardBody.appendChild(bedText);
@@ -1055,14 +1076,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             colItem.appendChild(image);
                             colItem.appendChild(cardBody);
 
+                            // Append the column to the hotel grid container
                             hotelGrid.appendChild(colItem);
-
-                            // Add click event listener to the cardTitle for redirection
-                            cardTitle.addEventListener('click', () => {
-                                const targetId = cardTitle.dataset.targetnak; // Get data-targetnak value
-                                const url = `/nakiese/hotel/bed-detail/${targetId}`; // Append targetId to URL
-                                window.location.href = url; // Redirect to the detailed page
-                            });
 
                             count++;
                         });
@@ -1137,12 +1152,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
+                    
+                    
 
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');
                     const reviewGridinn2 = document.getElementById('review__grid_inn_2');
                     const reviewGrid2 = document.getElementById('review__grid_2');
-                    const bedDescription = document.getElementById('bed_description');
+                    const Amenities = document.getElementById('amenities');
                     container.innerHTML = ''; // Clear previous content
                     reviewGridinn1.innerHTML = ''; // Clear previous content
                     reviewGridinn2.innerHTML = ''; // Clear previous content
@@ -1163,12 +1180,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         console.error("Missing hotel address details");
                     }
-                    // Append hotel Description
-                    if (data.specific_bed?.description) {
-                        bedDescription.innerText = '';
-                        bedDescription.innerText = data.specific_bed.description;
+                   
+                    if (data?.specific_bed?.room_amenities) {
+                       Amenities.innerHTML = '';
+                        data.specific_bed.room_amenities.forEach(
+                            (ex, index) => {
+                                let Li = document.createElement('li');
+                                Li.classList.add('badge', 'text-bg-primary', 'p-2');
+                                Li.style.fontSize = '16px';
+                                Li.innerText = ex.name;
+                                Amenities.append(Li);
+                            }
+                        );
+
+                        // bedDescription.innerText = data.specific_bed.description;
                     } else {
-                        console.error("Missing hotel address details");
+                        console.error("Room amenities not found");
                     }
 
                     let reviews = data.specific_bed.reviews; // Assuming this is populated with your data
@@ -1314,10 +1341,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         let reviewContainer = document.getElementById("review__container");
                         reviewContainer.innerHTML = "";
                         reviewContainer.style.marginBottom = "50px";
-                        let H6 = document.createElement('h6');
-                        H6.innerText = "No reviews available";
-                        H6.style.width = "100%";
-                        reviewContainer.append(H6);
+                        let img = document.createElement('img');
+                        img.src = '/static/images/image-review.png';
+                        img.style.maxWidth = '300px';
+                        img.style.maxHeight = '300px';
+                        img.alt = 'Not reviews available';
+                        reviewContainer.append(img);
                         document.getElementById("av_rating").innerText = "0";
                     }
 
@@ -1354,12 +1383,13 @@ document.addEventListener("DOMContentLoaded", () => {
             beds.forEach((ex, index) => {
                 gridHTML += `
                     <div class="col d-flex flex-column">
-                        <img src="${ex.image}" alt="${ex.hotel.name}" class="img-fluid custom-image" style="border-radius: 10px;">
-                        <div class="card-body p-0">
-                            <a id="nak-${index}" style="font-size: 1.6rem; margin-top: 10px; cursor: pointer;" class="nav-link" data-targetnak="${ex.room_id}">
-                                ${ex.hotel.name}
-                            </a>
-                            <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.hotel.city}, ${ex.hotel.country}</p>
+                        <a id="nak-${ex.room_id}" data-targetnak="${ex.room_id}" class="w-100 h-100" style="cursor: pointer;">
+                          <img src="${ex.image}" class="img-fluid rounded-start h-100" alt="Room image">
+                        </a>                        <div class="card-body p-0">
+                        <a id="nak-${ex.room_id}-title" class="fs-4 nav-link" data-targetnak="${ex.room_id}" style="cursor: pointer;">
+                            ${ex.hotel.name}
+                        </a>
+                            <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.hotel.city.name}, ${ex.hotel.country}</p>
                             <p class="card-text"><i class="fi fi-rr-bed-alt"></i> ${ex.room_type}</p>
                             <p class="card-text"><strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}</p>
                         </div>
@@ -1368,12 +1398,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return gridHTML;
         }
+        
 
         // Event delegation for clicks on card titles
+        // Event listener for room detail links (image or hotel name)
         document.addEventListener('click', function (e) {
-            if (e.target.matches('[id^="nak-"]')) {
-                const targetId = e.target.dataset.targetnak;
-                window.location.href = `/nakiese/hotel/bed-detail/${targetId}`;
+            // Traverse up to find the closest <a> tag with id starting with "nak-"
+            const anchor = e.target.closest('a[id^="nak-"]');
+
+            if (anchor) {
+                const targetId = anchor.dataset.targetnak;
+                if (targetId) {
+                    window.location.href = `/nakiese/hotel/bed-detail/${targetId}`;
+                }
             }
         });
     }
@@ -1802,7 +1839,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return gridHTML;
         }
 
-      
+
     }
 
     // Detail handle

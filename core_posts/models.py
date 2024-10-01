@@ -101,7 +101,7 @@ class BedRoom(models.Model):
     description = models.TextField(db_index=True)
     price = models.PositiveIntegerField(default=0)
     capacity = models.PositiveIntegerField(default=0)
-    room_amenities = models.ManyToManyField(Amenities, db_index=True)
+    room_amenities = models.ManyToManyField(Amenities, db_index=True, related_name='bed_rooms')
     availability_from = models.DateField(null=True, default=None)
     availability_till = models.DateField(null=True, default=None)
 
