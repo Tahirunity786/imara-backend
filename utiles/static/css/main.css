@@ -961,3 +961,20 @@ label {
     border: none;
 }
 
+.nk-like, .nk-share{
+    width: 40px;
+    height: 40px;
+    outline: none;
+    border: none;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    
+}
+.nk-like:hover{
+background-color: rgb(255, 84, 112);
+color: white;
+}
+.nk-share:hover{
+background-color: #4B75A5;
+color: white;
+}

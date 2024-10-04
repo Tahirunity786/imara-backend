@@ -1132,7 +1132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         HotelDataPupolator();
     }
 
-    if (document.getElementById("nak-grid-2")) {
+    if (document.getElementById("nak__grid-2")) {
         async function BedDetailPopulator() {
             try {
                 const currentUrl = window.location.pathname;
@@ -1154,10 +1154,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-                    
-                    
+
                     document.getElementById("av_rating").innerText = data.
                     specific_bed.avg_rating;
+                    let nkShare = document.getElementById('nak-share');
+                    nkShare.dataset.id = data.specific_bed.room_id;
 
 
                     const container = document.getElementById('image-container');
@@ -1191,7 +1192,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         data.specific_bed.room_amenities.forEach(
                             (ex, index) => {
                                 let Li = document.createElement('li');
-                                Li.classList.add('badge', 'text-bg-primary', 'p-2');
+                                Li.classList.add('badge', 'text-bg-primary', 'p-2', 'me-2');
                                 Li.style.fontSize = '16px';
                                 Li.innerText = ex.name;
                                 Amenities.append(Li);
@@ -1200,7 +1201,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         // bedDescription.innerText = data.specific_bed.description;
                     } else {
-                        console.error("Room amenities not found");
+                        let Para = document.createElement('p');
+                        Para.innerText = "Room has not amenities";
+                        Amenities.append(Para);
                     }
 
                     let reviews = data.specific_bed.reviews; // Assuming this is populated with your data
@@ -1914,3 +1917,6 @@ document.getElementById('searchButton').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent form submission
     searchHotelRooms(); // Redirect to search results page
 });
+
+
+

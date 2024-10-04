@@ -15,8 +15,11 @@ from core_posts.serializers import DetailBedSerializer,SearchBedSerializer, AllB
 from core_posts.pagination import CustomPagination
 from django.db import models
 from django_filters import rest_framework as django_filters
-
-
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.shortcuts import get_object_or_404
+from django.conf import settings
+from django.utils.encoding import DjangoUnicodeDecodeError
 
 class HotelDetails(APIView):
     permission_classes = [AllowAny]
@@ -89,24 +92,33 @@ class SpecificHotelDetail(APIView):
     API View to retrieve details of a specific hotel by its post_id.
     Sends all bed objects along with the specified bed detail.
     Caches the result for better performance with repeated requests.
-    Requires user to be authenticated.
+    Allows access without requiring authentication.
     """
     permission_classes = [AllowAny]
 
     def get(self, request, post_id):
-        # Cache key for the specific hotel data
+        # Step 1: Attempt to decode the post_id if it's encoded
+        try:
+            decoded_post_id = urlsafe_base64_decode(post_id).decode('utf-8')
+            post_id = decoded_post_id  # If decoding is successful, use decoded value
+        except (DjangoUnicodeDecodeError, ValueError):
+            # If decoding fails, post_id is likely in raw form, so we leave it as is
+            pass
+
+        # Step 2: Cache key for the specific hotel data
         cache_key = f'hotel_{post_id}'
         hotel_data = cache.get(cache_key)
 
+        # Step 3: Check if cached data exists, otherwise fetch from the database
         if hotel_data is None:
-            # Fetch the specific bed by its room_id
+            # Fetch the specific bed by its room_id (decoded or raw)
             bed = get_object_or_404(BedRoom, room_id=post_id)
             hotel = bed.hotel  # Get the hotel object linked to the bed
 
             # Fetch all bed objects related to the same hotel, excluding the specific bed
             all_beds = BedRoom.objects.filter(hotel=hotel).exclude(id=bed.id)
 
-            # Serialize the specific bed and all remaining related beds
+            # Serialize the specific bed and all related beds
             specific_bed_serializer = DetailBedSerializer(bed)
             all_beds_serializer = AllBedSerializer(all_beds, many=True)
 
@@ -116,12 +128,13 @@ class SpecificHotelDetail(APIView):
                 'all_beds': all_beds_serializer.data
             }
 
-            # Cache the result to optimize repeated queries
+            # Cache the result to optimize repeated queries (set for 10 minutes)
             cache.set(cache_key, hotel_data, timeout=600)
 
-        # Return cached or freshly serialized data
+        # Step 4: Return cached or freshly serialized data
         return Response(hotel_data, status=200)
-    
+
+
 # Specific Table post agent
 class SpecificTableDetail(APIView):
     """
@@ -178,7 +191,6 @@ class BedRoomFilter(filters.FilterSet):
         model = BedRoom
         fields = ['availability_from', 'availability_till', 'capacity', 'hotel_city_name', 'room_amenities']
 
-
 class BedRoomListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = BedRoom.objects.select_related('hotel', 'hotel__city').all()
@@ -196,9 +208,6 @@ class BedRoomListView(generics.ListAPIView):
         room_amenities = self.request.query_params.get('room_amenities', '')  # Handle amenities as a string
         price = self.request.query_params.get('price', None)  # Get the price filter
         rating_str = self.request.query_params.get('room_rating', None)  # Get the rating filter
-        
-        # Debugging: Print received query parameters
-        print(f"Received query params: city_name={city_name}, availability_from={availability_from_str}, availability_till={availability_till_str}, capacity={capacity}, room_amenities={room_amenities}, price={price}, rating={rating_str}")
         
         # Validate availability dates
         if not availability_from_str or not availability_till_str:
@@ -253,7 +262,7 @@ class BedRoomListView(generics.ListAPIView):
             matching_rooms = []
             for room in queryset:
                 avg_rating = room.average_rating()
-                if int(avg_rating) == rating:  # Match rooms with avg_rating greater than or equal to the requested rating
+                if int(avg_rating) == rating:  # Match rooms with avg_rating equal to the requested rating
                     matching_rooms.append(room.id)
 
             queryset = queryset.filter(id__in=matching_rooms)  # Filter queryset with rooms matching the average rating
@@ -261,7 +270,18 @@ class BedRoomListView(generics.ListAPIView):
         # Return filtered and sorted queryset
         return queryset.order_by('availability_from')
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        
+        # Add query parameters to the response
+        response.data['query_params'] = {
+            'hotel_city_name': request.query_params.get('hotel_city_name', None),
+            'availability_from': request.query_params.get('availability_from', None),
+            'availability_till': request.query_params.get('availability_till', None),
+            'capacity': request.query_params.get('capacity', None),
+        }
 
+        return response
 
 class Tablesilter(filters.FilterSet):
     availability_from = filters.DateFilter(field_name="availability_from", lookup_expr="gte")
@@ -318,3 +338,25 @@ class TablesListView(generics.ListAPIView):
         
         return queryset.order_by('availability_from')
 
+
+
+class ShareableLinkView(APIView):
+    """
+    Class-based view to generate a secure shareable link for a room.
+    """
+    permission_classes = [AllowAny]  # Only authenticated users can access the API
+
+    def get(self, request, room_id):
+        # Fetch the room securely
+        room = get_object_or_404(BedRoom, room_id=room_id)
+
+        # Securely encode the room ID to generate the link
+        encoded_id = urlsafe_base64_encode(force_bytes(room.room_id))
+
+        # Construct the shareable URL
+        shareable_link = f"{settings.FRONTEND_URL}/nakiese/hotel/bed-detail/{encoded_id}"
+
+        # Respond with the shareable link
+        return Response({
+            "shareable_link": shareable_link
+        }, status=200)

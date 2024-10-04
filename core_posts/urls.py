@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HotelDetails,BedRoomListView, SpecificHotelDetail, ResturantDetails, SpecificTableDetail
+from .views import HotelDetails,BedRoomListView, ShareableLinkView, SpecificHotelDetail, ResturantDetails, SpecificTableDetail
 
 urlpatterns = [
     path("sp-h-post/<str:post_id>/",SpecificHotelDetail.as_view()),
@@ -8,5 +8,9 @@ urlpatterns = [
     path("t-post/",ResturantDetails.as_view()),
 
     # Search Mechanism
-    path('search/hotel', BedRoomListView.as_view())
+    path('search/hotel', BedRoomListView.as_view()),
+
+    # Share mechanism
+    path('shareable-link/<str:room_id>/', ShareableLinkView.as_view(), name='generate_shareable_link'),
+
 ]

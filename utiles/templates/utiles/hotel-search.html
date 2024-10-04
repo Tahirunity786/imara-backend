@@ -186,6 +186,7 @@ const availabilityFrom = params.get('availability_from');
 const availabilityTill = params.get('availability_till');
 const capacity = params.get('capacity');
 
+
 const cityInput = document.getElementById("cityInput");
 const capacityInput = document.getElementById("capacityInput");
 
@@ -244,7 +245,8 @@ for (let i = 1; i <= intReviews; i++) { reviewFlex +=` <div class="me-1">
   const container = document.getElementById('hotel_search__grid');
   const ex_c = document.getElementById("destination");
   const ex_c_2 = document.getElementById("countFound");
-
+  console.log(cityName);
+  
   if (!container || !ex_c || !ex_c_2) {
   console.error("Required elements not found.");
   return;
