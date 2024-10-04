@@ -90,27 +90,7 @@ class AllBedSerializer(serializers.ModelSerializer):
         if obj.image:
             return obj.image.url  # This will return the relative path (e.g., 'beds/images/hotel-1.jpg')
         return None
-class SearchBedSerializer(serializers.ModelSerializer):
-    """
-    Serializer for Bed model.
 
-    Optimized for performance by minimizing fields and using read-only where possible.
-    """
-    hotel = AllHotelSerializer(read_only=True)
-    room_amenities = AmenitiesSerializers(read_only=True, many=True)
-    image = serializers.SerializerMethodField()
-
-    class Meta:
-        model = BedRoom
-        fields = ['room_id', 'image', 'hotel', 'room_type', 'description', 'price', 'capacity', 'room_amenities', 'availability_from', 'availability_till']
-        read_only_fields = ['room_id']
-        write_only_fields = ['availability_from', 'availability_till']
-
-    def get_image(self, obj):
-        # Return the relative path to the image instead of the absolute URL
-        if obj.image:
-            return obj.image.url  # This will return the relative path (e.g., 'beds/images/hotel-1.jpg')
-        return None
 
 
 
@@ -224,3 +204,26 @@ class TableSerializer(serializers.ModelSerializer):
         model = Tables
         fields = ['table_id', 'images', 'restaurant', 'review', 'capacity']  
         read_only_fields = ['table_id']  
+
+# Search with reviews
+class SearchBedSerializer(serializers.ModelSerializer):
+    hotel = AllHotelSerializer(read_only=True)
+    room_amenities = AmenitiesSerializers(read_only=True, many=True)
+    image = serializers.SerializerMethodField()
+    reviews = ReviewHotelSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = BedRoom
+        fields = [
+            'room_id', 'image', 'hotel', 'room_type', 'description', 
+            'price', 'capacity', 'room_amenities', 'reviews', 
+            'availability_from', 'availability_till', 
+        ]
+        read_only_fields = ['room_id']
+        write_only_fields = ['availability_from', 'availability_till']
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.url  # Return relative path of image
+        return None
+

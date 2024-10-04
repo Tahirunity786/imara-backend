@@ -1152,8 +1152,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-                    
-                    
+
+
 
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');
@@ -1180,9 +1180,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         console.error("Missing hotel address details");
                     }
-                   
+
                     if (data?.specific_bed?.room_amenities) {
-                       Amenities.innerHTML = '';
+                        Amenities.innerHTML = '';
                         data.specific_bed.room_amenities.forEach(
                             (ex, index) => {
                                 let Li = document.createElement('li');
@@ -1398,7 +1398,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return gridHTML;
         }
-        
+
 
         // Event delegation for clicks on card titles
         // Event listener for room detail links (image or hotel name)
@@ -1602,8 +1602,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     const data = await response.json();
-
-                    console.log(data);
 
                     const container = document.getElementById('image-container');
                     const reviewGridinn1 = document.getElementById('review__grid_inn_1');

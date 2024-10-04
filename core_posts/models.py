@@ -105,15 +105,18 @@ class BedRoom(models.Model):
     availability_from = models.DateField(null=True, default=None)
     availability_till = models.DateField(null=True, default=None)
 
-    def __str__(self):
-        return f"{self.room_type.capitalize()} - {self.hotel.name}"
-
     def save(self, *args, **kwargs):
         if not self.room_id:
             self.room_id = generate_unique_id()
         super().save(*args, **kwargs)
 
+    # Add this method to calculate the average rating
+    def average_rating(self):
+        avg_rating = self.reviews.aggregate(average=Avg('rating__rate'))['average']
+        return round(avg_rating, 1) if avg_rating is not None else 0
 
+    def __str__(self):
+        return f"{self.room_type.capitalize()} - {self.hotel.name}"
 # Restaurant Model Section
 class ResturantImages(models.Model):
     """
@@ -250,7 +253,9 @@ class Review(models.Model):
 
     def average_rating(self):
         """
-        Calculate the average rating for the review.
+        Calculate the average rating for all reviews related to this bedroom,
+        rounded to one decimal place.
         """
-        avg_rating = self.rating.aggregate(Avg('rate'))
-        return avg_rating.get('rate__avg', 0)
+        avg_rating = self.reviews.aggregate(average=Avg('rating__rate'))['average']
+        # Round to one decimal place and return
+        return round(avg_rating, 1) if avg_rating is not None else 0
