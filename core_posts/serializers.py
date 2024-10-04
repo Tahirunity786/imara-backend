@@ -72,21 +72,26 @@ class HotelRelationSerializer(serializers.ModelSerializer):
 
 class AllBedSerializer(serializers.ModelSerializer):
     """
-    Serializer for Bed model.
+    Serializer for BedRoom model.
 
     Optimized for performance by minimizing fields and using read-only where possible.
     """
     hotel = AllHotelSerializer(read_only=True)
     image = serializers.SerializerMethodField()
+    avg_rating = serializers.SerializerMethodField()  # Change to SerializerMethodField
 
     class Meta:
         model = BedRoom
-        fields = ['room_id', 'image', 'hotel', 'room_type', 'description', 'price', 'capacity', 'availability_from', 'availability_till']
+        fields = ['room_id', 'image', 'hotel', 'room_type', 'description', 'price', 'capacity', 'avg_rating', 'availability_from', 'availability_till']
         read_only_fields = ['room_id']
         write_only_fields = ['availability_from', 'availability_till']
 
+    def get_avg_rating(self, obj):
+        """Retrieve the average rating for the room."""
+        return obj.average_rating()  # Call the method on the BedRoom model
+
     def get_image(self, obj):
-        # Return the relative path to the image instead of the absolute URL
+        """Return the relative path to the image instead of the absolute URL."""
         if obj.image:
             return obj.image.url  # This will return the relative path (e.g., 'beds/images/hotel-1.jpg')
         return None
@@ -172,11 +177,17 @@ class DetailBedSerializer(serializers.ModelSerializer):
     hotel = HotelRelationSerializer(read_only=True)  # No 'many=True' since it's a ForeignKey relation
     reviews = ReviewHotelSerializer(many=True,read_only=True)  # No 'many=True' since it's a ForeignKey relation
     room_amenities = AmenitiesSerializers(many=True,read_only=True)  # No 'many=True' since it's a ForeignKey relation
+    avg_rating = serializers.SerializerMethodField()  # Change to SerializerMethodField
 
     class Meta:
         model = BedRoom
-        fields = ['room_id', 'room_type', 'description', 'price', 'capacity', 'room_amenities', 'hotel', 'reviews']
+        fields = ['room_id', 'room_type', 'description', 'price', 'capacity', 'room_amenities', 'avg_rating','hotel', 'reviews']
         read_only_fields = ['room_id']
+    
+    def get_avg_rating(self, obj):
+        """Retrieve the average rating for the room."""
+        return obj.average_rating()  # Call the method on the BedRoom model
+
 
 
 class DetailTableSerializer(serializers.ModelSerializer):

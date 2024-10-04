@@ -1007,6 +1007,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (response.ok) {
                     const result = await response.json();
+                    
+                    
                     let count = 0;
                     if (result?.hotel_data) {
                         result.hotel_data.forEach(ex => {
@@ -1066,7 +1068,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             // Price and rating
                             const priceRatingText = document.createElement('p');
                             priceRatingText.classList.add('card-text');
-                            priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}`;
+                            priceRatingText.innerHTML = `<strong>$${ex.price}</strong>/nuit ★${ex.avg_rating || '0'}`;
 
                             // Append elements to card body and column
                             cardBody.appendChild(cardTitle);
@@ -1152,7 +1154,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-
+                    
+                    
+                    document.getElementById("av_rating").innerText = data.
+                    specific_bed.avg_rating;
 
 
                     const container = document.getElementById('image-container');
@@ -1335,7 +1340,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGridinn1.appendChild(nameDiv);
                             reviewGridinn2.appendChild(valueDiv);
                         }
-                        document.getElementById("av_rating").innerText = (sumOfAverage / 5).toFixed(1)
+                        
 
                     } else {
                         let reviewContainer = document.getElementById("review__container");
@@ -1391,7 +1396,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </a>
                             <p class="card-text"><i class="fi fi-rr-marker"></i> ${ex.hotel.city.name}, ${ex.hotel.country}</p>
                             <p class="card-text"><i class="fi fi-rr-bed-alt"></i> ${ex.room_type}</p>
-                            <p class="card-text"><strong>$${ex.price}</strong>/nuit ★${ex.rating || '4.9'}</p>
+                            <p class="card-text"><strong>$${ex.price}</strong>/nuit ★${ex.avg_rating || '0'}</p>
                         </div>
                     </div>`;
             });
