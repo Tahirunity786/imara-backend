@@ -29,6 +29,7 @@
 .wrapper i#left{
   left: -22px;
   display: block; /* Ensure it's visible */
+  z-index: 99;
 }
 .wrapper i#right{
   right: -22px;

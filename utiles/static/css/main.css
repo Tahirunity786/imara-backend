@@ -760,9 +760,9 @@ label {
     background-color: #4B75A5;
     text-align: center;
     color: white;
-    border-radius:5px;
+    border-radius: 5px;
     padding-top: .7rem;
-    padding-bottom: .7rem;    
+    padding-bottom: .7rem;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -770,9 +770,11 @@ label {
     justify-content: center;
     align-items: center;
 }
-.btn-rev-nak:hover{
+
+.btn-rev-nak:hover {
     background-color: #577ba5;
 }
+
 .p-xe01 {
     height: 40px;
     border-radius: 50px;
@@ -780,6 +782,7 @@ label {
     border: 1px solid #8B8B8B;
     padding: 8px 20px;
 }
+
 .custom-select {
     appearance: none;
     -webkit-appearance: none;
@@ -808,6 +811,7 @@ label {
     /* Adjust padding to make room for the arrow */
 
 }
+
 .p-xe01 {
     height: 40px;
     border-radius: 50px;
@@ -961,20 +965,24 @@ label {
     border: none;
 }
 
-.nk-like, .nk-share{
+.nk-like,
+.nk-share {
     width: 40px;
     height: 40px;
     outline: none;
     border: none;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    
+
 }
-.nk-like:hover{
-background-color: rgb(255, 84, 112);
-color: white;
+
+.nk-like:hover {
+    background-color: rgb(255, 84, 112);
+    color: white;
 }
-.nk-share:hover{
-background-color: #4B75A5;
-color: white;
+
+.nk-share:hover {
+    background-color: #4B75A5;
+    color: white;
 }
+

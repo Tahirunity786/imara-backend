@@ -1007,8 +1007,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (response.ok) {
                     const result = await response.json();
-                    
-                    
+
+
                     let count = 0;
                     if (result?.hotel_data) {
                         result.hotel_data.forEach(ex => {
@@ -1085,21 +1085,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                     }
 
-
                     const carousel = document.querySelector('.carousel');  // Select the carousel container
+
                     if (result?.cities && carousel) {
-
-                        // Clear previous cities (if needed)
-                        carousel.innerHTML = '';
-
+                        carousel.innerHTML = ''; // Clear previous cities (if needed)
+                    
                         result.cities.forEach(city => {
-
-
                             const cityElement = `
                                 <div style="position: relative; display: inline-block;">
                                     <div style="position: absolute; top:20px; left: 40px;">
                                         <p class="text-dark">${city.establishment}</p>
-                                        <h4>${city.name}</h4>  <!-- Assuming 'name' contains the city name -->
+                                        <h4>${city.name}</h4>
                                     </div>
                                     <button class="btn btn-light rounded-pill" style="position: absolute; bottom: 40px; left: 40px;">
                                         Explore
@@ -1107,11 +1103,52 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <img src="${city.image}" alt="${city.name}" class="rounded-3" draggable="false" style="width: 90%;">
                                 </div>
                             `;
-
-                            // Append the newly created city item to the carousel
-                            carousel.insertAdjacentHTML('beforeend', cityElement);
+                            carousel.insertAdjacentHTML('beforeend', cityElement); // Append the newly created city item
                         });
+                    
+                        // Define initCarousel function here since it's used in the reinitAfterDynamicContent
+                        const initCarousel = () => {
+                            let firstImg = carousel?.querySelectorAll("img")[0];
+                            let arrowIcons = document.querySelectorAll(".wrapper i");
+                    
+                            if (!firstImg || !arrowIcons.length) {
+                                console.error("Carousel or arrow icons not found.");
+                                return;
+                            }
+                    
+                            const showHideIcons = () => {
+                                let scrollWidth = carousel.scrollWidth - carousel.clientWidth; 
+                                arrowIcons[0].style.display = carousel.scrollLeft === 0 ? "none" : "block";
+                                arrowIcons[1].style.display = carousel.scrollLeft === scrollWidth ? "none" : "block";
+                            }
+                    
+                            arrowIcons.forEach(icon => {
+                                icon.addEventListener("click", () => {
+                                    let firstImgWidth = firstImg.clientWidth + 14; 
+                                    carousel.scrollLeft += icon.id === "left" ? -firstImgWidth : firstImgWidth;
+                                    setTimeout(() => showHideIcons(), 60); 
+                                });
+                            });
+                    
+                            carousel.addEventListener("mousedown", dragStart);
+                            carousel.addEventListener("touchstart", dragStart);
+                            document.addEventListener("mousemove", dragging);
+                            carousel.addEventListener("touchmove", dragging);
+                            document.addEventListener("mouseup", dragStop);
+                            carousel.addEventListener("touchend", dragStop);
+                    
+                            showHideIcons();
+                        };
+                    
+                        const reinitAfterDynamicContent = () => {
+                            setTimeout(() => {
+                                if (carousel) initCarousel(); // Now `initCarousel` is available here
+                            }, 100); // Delay to ensure images are loaded
+                        };
+                    
+                        reinitAfterDynamicContent();  // Call after content is added
                     }
+                    
 
                 } else {
                     butterup.toast({
@@ -1156,7 +1193,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const data = await response.json();
 
                     document.getElementById("av_rating").innerText = data.
-                    specific_bed.avg_rating;
+                        specific_bed.avg_rating;
                     let nkShare = document.getElementById('nak-share');
                     nkShare.dataset.id = data.specific_bed.room_id;
 
@@ -1343,7 +1380,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             reviewGridinn1.appendChild(nameDiv);
                             reviewGridinn2.appendChild(valueDiv);
                         }
-                        
+
 
                     } else {
                         let reviewContainer = document.getElementById("review__container");
