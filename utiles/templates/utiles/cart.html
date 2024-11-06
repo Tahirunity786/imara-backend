@@ -1,0 +1,68 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/custom-styles.css' %}" />
+{% endblock css %}
+{% block title %}Account Settings{% endblock title %}
+{% block content %}
+
+<div class="container mt-5 pt-5">
+    <div class="menu">
+        <h2>Cart Items</h2>
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <div class="menu-item">
+                    <img src="{% static 'images/dish-2.jpg' %}" alt="Dish" />
+                    <div class="menu-details">
+                        <span class="status">Disponible</span>
+                        <h3>La bouillabaisse + spécialité du chef</h3>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <span>4.9 (127 avis)</span>
+                        </div>
+                        <p class="price">$20</p>
+                    </div>
+                    <div class="favorite"><i class="fa fa-heart"></i></div>
+                </div>
+                <div class="menu-item">
+                    <img src="{% static 'images/dish-2.jpg' %}" alt="Dish" />
+                    <div class="menu-details">
+                        <span class="status">Disponible</span>
+                        <h3>La bouillabaisse + spécialité du chef</h3>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <span>4.9 (127 avis)</span>
+                        </div>
+                        <p class="price">$20</p>
+                    </div>
+                    <div class="favorite"><i class="fa fa-heart"></i></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="reservation">
+                    <div class="reservation-header">
+                        <span class="price">$250</span><span>/table</span>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <span>4.99</span>
+                        </div>
+                    </div>
+                    <div class="reservation-details">
+                        <div class="date">DATE: 11/10/1999</div>
+                        <div class="persons">NOMBRE DE PERSONNE: 2 personnes</div>
+                    </div>
+                    <button class="reserve-button">Reserve</button>
+                    <div class="reservation-summary">
+                        <p>1 table pour 2: <span>$500.00</span></p>
+                        <p>Reductions: <span>-$0.00</span></p>
+                        <p>Autres frais: <span>$0.00</span></p>
+                        <p class="total">Total à payer: <span>$2,400</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+{% endblock content %}

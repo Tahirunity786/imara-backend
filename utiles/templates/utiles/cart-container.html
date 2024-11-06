@@ -1,0 +1,292 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Cart{% endblock title %}
+{% block content %}
+
+
+<section class="container" style="margin-bottom: 50px; margin-top: 50px;">
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card" style="margin-bottom: 50px;">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 style="color: #4B75A5;">Exclusive discounts for Members </h5>
+                    </div>
+                    <div class="mb-2">
+                        <p class="mb-0">Unlock exclusive discounts and special offers when you <a href="/register"
+                            class="btn btn-primary">Sign Up</a> or <a href="/login"
+                                style="text-decoration: none;">Login</a></p>
+                    </div>
+                </div>
+            </div>
+            <div id="sel__rooms_sec"></div>
+            <div id="sel__table_sec"></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mb-2">Summary</h4>
+                    <a class="nav-link mb-2" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                        aria-expanded="false" aria-controls="collapseExample">
+                        Do you have promo code
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                            </svg>
+                        </span>
+                    </a>
+                    <div class="collapse mt-2 mb-2" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="p-code" placeholder="Promo Code">
+                            </div>
+                            <button class="btn btn-dark">Apply Code</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-2 d-flex align-items-center justify-content-between">
+                        <p class="mb-0">Subtotal</p>
+                        <p class="mb-0" id="sub___total"></p>
+                    </div>
+                    <div class="mb-5 d-flex align-items-center justify-content-between">
+                        <p class="mb-0">Estimated Tax</p>
+                        <p class="mb-0">0$</p>
+                    </div>
+                    <hr>
+                        <div class="mb-2 mt-3 d-flex align-items-center justify-content-between">
+                            <h4 class="mb-0">Total<h4>
+                                <p class="mb-0" id="G___total"></p>
+                            </div>
+                        </div>
+                </div>
+                <div class="mb-2 mt-4">
+                    <button class="btn pt-2 pb-2 btn-dark rounded-pill w-100" id="sum__checkout">Checkout</button>
+                </div>
+            </div>
+        </div>
+</section>
+{% endblock content %}
+
+{% block script %}
+
+document.addEventListener('DOMContentLoaded', () => {
+    let sumCheckout = document.getElementById('sum__checkout');
+    function encodeBase64(data) {
+        return btoa(JSON.stringify(data));
+    }
+
+    function decodeBase64(encodedData) {
+        try {
+            // Check if encodedData looks like a base64 string
+            if (!/^[A-Za-z0-9+/=]+$/.test(encodedData)) {
+                throw new Error("Data is not in valid base64 format.");
+            }
+            return JSON.parse(atob(encodedData)); // Decode and parse JSON
+        } catch (error) {
+            console.error("Error decoding base64 data:", error);
+            return []; // Return empty array on failure
+        }
+    }
+
+    const cacheGet = localStorage.getItem('nk-pmt-data');
+    if (!cacheGet) return console.log('No cached data found.');
+
+    const decodedCache = decodeBase64(cacheGet);
+
+
+
+    if (!decodedCache || !Array.isArray(decodedCache) || decodedCache.length === 0) {
+        return console.warn('Decoded cache is empty or invalid.');
+    }
+
+    const { roomDataByType, tableDataByType } = decodedCache.reduce(
+        (acc, item) => {
+            const { room_id, table_id, type, nights, date } = item;
+
+            if (room_id && type && nights != null) {
+                acc.roomDataByType[type] = acc.roomDataByType[type] || { ids: [], nights: [] };
+                acc.roomDataByType[type].ids.push(room_id);
+                acc.roomDataByType[type].nights.push(nights);
+            }
+
+            if (table_id && type && date) {
+                acc.tableDataByType[type] = acc.tableDataByType[type] || { ids: [], dates: [] };
+                acc.tableDataByType[type].ids.push(table_id);
+                acc.tableDataByType[type].dates.push(date);
+            }
+
+            return acc;
+        },
+        { roomDataByType: {}, tableDataByType: {} }
+    );
+
+    function cartItemSpreader(data, type) {
+        const roomsSec = document.getElementById('sel__rooms_sec');
+        const tablesSec = document.getElementById('sel__table_sec');
+
+        if (type === 'room') {
+            const roomData = data.filter(item => item.room_id);
+            roomsSec.innerHTML = roomData.length > 0 ? generateRoomHtml(roomData) : '<p>No rooms selected.</p>';
+        }
+
+        if (type === 'table') {
+            const tableData = data.filter(item => item.table_id);
+            tablesSec.innerHTML = tableData.length > 0 ? generateTableHtml(tableData) : '<p>No tables selected.</p>';
+        }
+    }
+
+    function generateRoomHtml(roomData) {
+        const roomRows = roomData.map(item => `
+            <tr>
+                <th scope="row">${item.hotel || 'N/A'}</th>
+                <td><img src="${item.image || ''}" height="60" width="60" alt="image" class="rounded-3"></td>
+                <td>${item.nights}</td>
+                <td>${item.total_price}$</td>
+                 <td>
+                <button class="btn btn-danger p-0 d-flex align-items-center justify-content-center del" style="width: 35px; height: 35px;" data-id=${item.room_id}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+                    </svg>
+                </button>
+                </td>
+            </tr>`).join('');
+
+        return `
+            <div class="mb-4"><h4>Selected Rooms</h4></div>
+            <div class="card"><div class="card-body">
+                <table class="table">
+                    <thead><tr><th>Hotel</th><th>Image</th><th>Nights</th><th>Price</th><th>Delete</th></tr></thead>
+                    <tbody>${roomRows}</tbody>
+                </table>
+            </div></div>`;
+    }
+
+    function generateTableHtml(tableData) {
+        const tableRows = tableData.map(item => `
+            <tr>
+                <th scope="row">${item.restaurant.name || 'N/A'}</th>
+                <td><img src="${item.images || ''}" height="60" width="60" alt="image" class="rounded-3"></td>
+                <td>${item.date || 'N/A'}</td>
+                <td>${item.price}$</td>
+                <td>
+                <button class="btn btn-danger p-0 d-flex align-items-center justify-content-center del" style="width: 35px; height: 35px;" data-id=${item.table_id}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+                    </svg>
+                </button>
+                </td>
+            </tr>`).join('');
+
+        return `
+            <div class="mb-4 mt-5"><h4>Selected Tables</h4></div>
+            <div class="card"><div class="card-body">
+                <table class="table">
+                    <thead><tr><th>Hotel</th><th>Image</th><th>Date</th><th>Price</th><th>Delete</th></tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+            </div></div>`;
+    }
+
+    async function fetchCartData(type, url, requestBody) {
+        if (!requestBody || !requestBody.ids || requestBody.ids.length === 0) {
+            console.warn(`No ${type} data found in cache.`);
+            return;
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (!response.ok) {
+                const errorMsg = await response.text();
+                console.error(`Failed to fetch ${type} details:`, errorMsg);
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            cartItemSpreader(data, type);
+
+
+        } catch (error) {
+            console.error(`Error in ${type} cart render:`, error);
+        }
+    }
+    function SummaryCal() {
+        // Retrieve and decode the base64 encoded data from localStorage
+        const encodedData = localStorage.getItem('nk-pmt-data');
+        if (!encodedData) return 0; // Return 0 if there's no data
+
+        // Decode, parse, and calculate the subtotal based on nights
+        const subPrice = JSON.parse(atob(encodedData))
+            .reduce((total, { price = 0, nights = 1 }) => total + (price * nights), 0);
+
+        document.getElementById('sub___total').innerText = `${subPrice}$`;
+        document.getElementById('G___total').innerText = `${subPrice}$`;
+    }
+    async function renderCarts() {
+        const roomRequestBody = roomDataByType['bed'] ? { ids: roomDataByType['bed'].ids, nights: roomDataByType['bed'].nights } : null;
+        const tableRequestBody = tableDataByType['table'] ? { ids: tableDataByType['table'].ids, dates: tableDataByType['table'].dates } : null;
+
+        await Promise.all([
+            fetchCartData('room', '/posts/cart/room', roomRequestBody),
+            fetchCartData('table', '/posts/cart/table', tableRequestBody),
+        ]);
+
+        SummaryCal();
+    }
+
+    renderCarts();
+
+
+    document.body.addEventListener('click', function (event) {
+        if (event.target.closest('.del')) { // Checks if the clicked element or its parent has the 'del' class
+            const button = event.target.closest('.del'); // Gets the button element
+
+            const itemId = button.getAttribute('data-id');
+
+            // Decode and parse data from localStorage
+            const encodedData = localStorage.getItem('nk-pmt-data');
+            if (encodedData) {
+                let decodedData = decodeBase64(encodedData);
+
+                // Filter out the item based on room_id or table_id
+                decodedData = decodedData.filter(item => item.room_id !== itemId && item.table_id !== itemId);
+
+                // Encode and save the updated data back to localStorage
+                const updatedEncodedData = btoa(JSON.stringify(decodedData));
+                localStorage.setItem('nk-pmt-data', updatedEncodedData);
+
+                renderCarts();
+                window.location.reload();
+            }
+        }
+    });
+
+    sumCheckout.addEventListener('click', () => {
+        let source = localStorage.getItem('nk-pmt-data');
+        if (source) {
+            setTimeout(() => {
+                window.location.href = `/nakiese/payment?source=${source}`
+            }, 1000)
+        } else {
+            butterup.toast({
+                title: 'Empty Cart',
+                message: 'Your cart is empty!',
+                type: 'info',
+            });
+        }
+    })
+});
+
+
+
+
+{% endblock script %}
