@@ -1,65 +1,76 @@
 from django.views.generic import TemplateView
 
-class AccountsView(TemplateView):
-    template_name = 'utiles/Account.html'
+class LanguageTemplateView(TemplateView):
+    lang = 'en'  # Default language
 
-class AccountsEmailNotificaationView(TemplateView):
-    template_name = 'utiles/Email-notification.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['lang'] = self.lang  # Pass the language to the template context
+        return context
 
-class AccountsPersonalDetailView(TemplateView):
-    template_name = 'utiles/pesonal-details.html'
+    def get_template_names(self):
+        # Determine the language from the URL parameter or fallback to default
+        lang = self.kwargs.get('lang', 'en')
+        self.lang = lang  # Set the lang attribute for context
+        return [f'utiles/{lang}/{self.template_file}']
 
-class AccountsPreferencesView(TemplateView):
-    template_name = 'utiles/preferences.html'
+# Keep the original class names but inherit from LanguageTemplateView
+class AccountsView(LanguageTemplateView):
+    template_file = 'Account.html'
 
-class AccountsPaymentDetailsView(TemplateView):
-    template_name = 'utiles/Payment-detail.html'
+class AccountsEmailNotificaationView(LanguageTemplateView):
+    template_file = 'Email-notification.html'
 
+class AccountsPersonalDetailView(LanguageTemplateView):
+    template_file = 'personal-details.html'
 
-class AccountsSecurityView(TemplateView):
-    template_name = 'utiles/Security.html'
+class AccountsPreferencesView(LanguageTemplateView):
+    template_file = 'preferences.html'
 
-class AboutUsView(TemplateView):
-    template_name = 'utiles/about.html'
+class AccountsPaymentDetailsView(LanguageTemplateView):
+    template_file = 'Payment-detail.html'
 
-class HotelView(TemplateView):
-    template_name = 'utiles/hotels.html'
+class AccountsSecurityView(LanguageTemplateView):
+    template_file = 'Security.html'
 
-class BedDetailView(TemplateView):
-    template_name = 'utiles/hotels-overview.html'
+class AboutUsView(LanguageTemplateView):
+    template_file = 'about.html'
 
-class TableDetailView(TemplateView):
-    template_name = 'utiles/table-overview.html'
+class HotelView(LanguageTemplateView):
+    template_file = 'hotels.html'
 
-class ResturantView(TemplateView):
-    template_name = 'utiles/restaurants.html'
+class BedDetailView(LanguageTemplateView):
+    template_file = 'hotels-overview.html'
 
-class Cart(TemplateView):
-    template_name = 'utiles/cart.html'
+class TableDetailView(LanguageTemplateView):
+    template_file = 'table-overview.html'
 
-class SearchView(TemplateView):
-    template_name = 'utiles/search.html'
-    
-class HotelSearchView(TemplateView):
-    template_name = 'utiles/hotel-search.html'
+class ResturantView(LanguageTemplateView):
+    template_file = 'restaurants.html'
 
-class ResturantSearchView(TemplateView):
-    template_name = 'utiles/resturant-search.html'
+class Cart(LanguageTemplateView):
+    template_file = 'cart.html'
 
-class MyList(TemplateView):
-    template_name = 'utiles/my-booking.html'
-    
-class PaymentRenser(TemplateView):
-    template_name = 'utiles/Payment.html'
+class SearchView(LanguageTemplateView):
+    template_file = 'search.html'
 
-class MainCart(TemplateView):
-    template_name = 'utiles/cart-container.html'
+class HotelSearchView(LanguageTemplateView):
+    template_file = 'hotel-search.html'
 
-class CityExplore(TemplateView):
-    template_name = 'utiles/city-explore.html'
+class ResturantSearchView(LanguageTemplateView):
+    template_file = 'restaurant-search.html'
 
+class MyList(LanguageTemplateView):
+    template_file = 'my-booking.html'
 
-class ConfirmationView(TemplateView):
-    template_name = 'utiles/confirmation-page.html'
+class PaymentRenser(LanguageTemplateView):
+    template_file = 'Payment.html'
 
+class MainCart(LanguageTemplateView):
+    template_file = 'cart-container.html'
 
+class CityExplore(LanguageTemplateView):
+    template_file = 'city-explore.html'
+
+class ConfirmationView(LanguageTemplateView):
+    template_file = 'confirmation-page.html'

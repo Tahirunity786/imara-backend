@@ -1,3 +1,20 @@
+const LanguageManager = (function () {
+    const DEFAULT_LANGUAGE = 'en';
+
+    function getLanguage() {
+        return localStorage.getItem('lang') || DEFAULT_LANGUAGE;
+    }
+
+    function setLanguage(lang) {
+        localStorage.setItem('lang', lang);
+    }
+
+    return {
+        getLanguage,
+        setLanguage
+    };
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
     // Handle the signup form
     const signupForm = document.getElementById('signupForm');
@@ -98,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             } catch (error) {
-               
+
                 butterup.toast({
                     title: 'Registration Error',
                     message: 'An error occurred while submitting the form.',
@@ -246,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             } catch (error) {
-               
+
                 butterup.toast({
                     title: 'Error',
                     message: 'An error occurred while fetching patient data. Please check your network connection and try again.',
@@ -260,14 +277,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const user = localStorage.getItem('exn-u-cookie');
 
     const languageDropdown = `
-            <button type="button" class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
-          style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);" data-bs-toggle="modal" data-bs-target="#languageop">
+    <div class="dropdown">
+        <button type="button" class="btn btn-light rounded-pill d-flex justify-content-center align-items-center p-0 ms-4"
+          style="height: 40px; width: 40px; border: 1px solid rgb(218, 218, 218);" data-bs-toggle="dropdown" aria-expanded="false">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe"
             viewBox="0 0 16 16">
             <path
               d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z" />
           </svg>
-        </button>`;
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" id="en">English</a></li>
+            <li><a class="dropdown-item" href="#" id="fr">French</a></li>
+        </ul>
+    </div>
+        `;
 
     const notificationDropdown = `
             <div class="dropdown">
@@ -299,10 +323,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </button>
 
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/nakiese/accounts/settings">Manage Account</a></li>
+                    <li><a class="dropdown-item" href="/nakiese/${LanguageManager.getLanguage()}/accounts/settings">Manage Account</a></li>
                     <li><a class="dropdown-item" href="#">My Bookings</a></li>
                     <li><a class="dropdown-item" href="#">My Reviews</a></li>
-                    <li><a class="dropdown-item" href="/nakiese/booking-list">My Favourites</a></li>
+                    <li><a class="dropdown-item" href="/nakiese/${LanguageManager.getLanguage()}/booking-list">My Favourites</a></li>
                     <li><a class="dropdown-item" id="logout" href="#">Logout</a></li>
                 </ul>
             </div>`;
@@ -334,6 +358,25 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    function setLanguage(lang) {
+        localStorage.setItem('lang', lang);
+        console.log(`Language set to: ${lang}`); // For debugging
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000); // Delay of 3000ms (3 seconds)
+    }
+
+    // Attach event listeners to the dropdown items
+    document.getElementById('en').addEventListener('click', function () {
+        setLanguage('en');
+    });
+
+    document.getElementById('fr').addEventListener('click', function () {
+        setLanguage('fr');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
     const logout = document.getElementById("logout");
     const logoutSettings = document.getElementById("setSignout");
 
@@ -354,13 +397,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    const lang = LanguageManager.getLanguage();
     const ids = ['account-personal', 'account-security', 'account-notification', 'account-payment', 'account-preferences'];
     const links = {
-        'account-personal': "/nakiese/accounts/settings/persoanl-details",
-        'account-security': "/nakiese/accounts/settings/security",
-        'account-notification': "/nakiese/accounts/settings/email-notification",
-        'account-payment': "/nakiese/accounts/settings/payment-handle",
-        'account-preferences': "/nakiese/accounts/settings/preferences"
+        'account-personal': `/nakiese/${lang}/accounts/settings/persoanl-details`,
+        'account-security': `/nakiese/${lang}/accounts/settings/security`,
+        'account-notification': `/nakiese/${lang}/accounts/settings/email-notification`,
+        'account-payment': `/nakiese/${lang}/accounts/settings/payment-handle`,
+        'account-preferences': `/nakiese/${lang}/accounts/settings/preferences`
     };
 
     ids.forEach(function (id) {
@@ -371,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const link = links[id];
                 if (link) {
                     window.location.href = link; // Navigate to the specified URL
-                } 
+                }
             });
         }
     });
@@ -485,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             } else {
-             
+
                 butterup.toast({
                     title: 'Authentication Error',
                     message: "Please click " + " " + `<b><a href="/login">Login</a></b>` + " " + "  to continue",
@@ -797,12 +841,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'error',
             });
         }
-    } 
+    }
 
     // Attach logout listener (ensure this function is defined somewhere)
     if (typeof attachLogoutListener === 'function') {
         attachLogoutListener();
-    } 
+    }
 });
 
 
@@ -870,7 +914,7 @@ document.addEventListener("DOMContentLoaded", () => {
         submitReset.addEventListener('click', async function () {
             try {
                 if (!user && !user.token.access) {
-                   
+
                     return
                 }
                 const requestData = {
@@ -925,7 +969,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delacc.addEventListener('click', async function () {
             try {
                 if (!user && !user.token.access) {
-                  
+
                     return
                 }
 
@@ -1013,6 +1057,7 @@ function cityPopulator(cities, grid_id) {
 
 // Function to attach event listeners after injecting content
 function attachClickListeners() {
+    const lang = LanguageManager.getLanguage();
     // Select all the city containers and explore buttons
     const cityContainers = document.querySelectorAll('.city-container');
     const exploreButtons = document.querySelectorAll('.explore-btn');
@@ -1021,7 +1066,7 @@ function attachClickListeners() {
     cityContainers.forEach(container => {
         container.addEventListener('click', function () {
             const cityId = container.getAttribute('data-city-id');
-            window.location.href = `/nakiese/city/explore?city_id=${cityId}`;
+            window.location.href = `/nakiese/${lang}/city/explore?city_id=${cityId}`;
         });
     });
 
@@ -1030,7 +1075,7 @@ function attachClickListeners() {
         button.addEventListener('click', function (event) {
             event.stopPropagation();  // Prevent triggering the container click event
             const cityId = button.getAttribute('data-city-id');
-            window.location.href = `/nakiese/city/explore?city_id=${cityId}`;
+            window.location.href = `/nakiese/${lang}/city/explore?city_id=${cityId}`;
         });
     });
 }
@@ -1041,6 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const hotelGrid = document.getElementById("hotel__grid");
     let cityGridTable = document.getElementById('city_grid__hotel');
     let user = localStorage.getItem('exn-u-cookie');
+    const lang = LanguageManager.getLanguage();
     user = JSON.parse(user);
 
     if (hotelGrid) {
@@ -1076,7 +1122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             // Validate the targetId to ensure it's safe and valid
                             if (targetId && /^[a-zA-Z0-9_-]+$/.test(targetId)) {
-                                window.open(`/nakiese/hotel/bed-detail/${targetId}`, '_blank', 'noopener,noreferrer');
+                                window.open(`/nakiese/${lang}/hotel/bed-detail/${targetId}`, '_blank', 'noopener,noreferrer');
                             } else {
                                 console.warn('Invalid or missing room_id for entry:', ex);
                             }
@@ -1154,7 +1200,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             // Validate the targetId to ensure it's safe and valid
                             if (targetId && /^[a-zA-Z0-9_-]+$/.test(targetId)) {
-                                window.open(`/nakiese/hotel/bed-detail/${targetId}`, '_blank', 'noopener,noreferrer');
+                                window.open(`/nakiese/${lang}/hotel/bed-detail/${targetId}`, '_blank', 'noopener,noreferrer');
                             } else {
                                 console.warn('Invalid or missing room_id for entry:', ex);
                             }
@@ -1214,25 +1260,25 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <img src="${city.image}" alt="${city.name}" class="rounded-3" draggable="false" style="width: 90%;">
                                 </div>
                             `;
-                            
+
                             // Append the newly created city item to the carousel
                             carousel.insertAdjacentHTML('beforeend', cityElement);
                         });
-                        
+
                         // Add event listeners to handle redirection when clicking on the city container or the Explore button
-                        document.addEventListener('click', function(event) {
+                        document.addEventListener('click', function (event) {
                             const cityContainer = event.target.closest('.city-container');
                             const exploreButton = event.target.closest('.explore-btn');
-                        
+
                             if (exploreButton) {
                                 const cityId = exploreButton.getAttribute('data-city-id');
-                                window.location.href = `/nakiese/city/explore?city_id=${cityId}`;
+                                window.location.href = `/nakiese/${lang}/city/explore?city_id=${cityId}`;
                             } else if (cityContainer) {
                                 const cityId = cityContainer.getAttribute('data-city-id');
-                                window.location.href = `/nakiese/city/explore?city_id=${cityId}`;
+                                window.location.href = `/nakiese/${lang}/city/explore?city_id=${cityId}`;
                             }
                         });
-                        
+
 
                         // Define initCarousel function here since it's used in the reinitAfterDynamicContent
                         const initCarousel = () => {
@@ -1275,11 +1321,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         reinitAfterDynamicContent();  // Call after content is added
                     }
-                    if (result?.cities && cityGridTable){
-                        cityGridTable.innerHTML = ''; 
-                       
+                    if (result?.cities && cityGridTable) {
+                        cityGridTable.innerHTML = '';
+
                         cityPopulator(result.cities, cityGridTable);
-                        
+
                     }
                 } else {
                     butterup.toast({
@@ -1298,7 +1344,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         HotelDataPupolator();
-        
+
     }
 
     if (document.getElementById("nak__grid-2")) {
@@ -1330,7 +1376,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!response.ok) throw new Error('Failed to fetch hotel details');
 
                     const data = await response.json();
-                    
+
                     roomPrs.innerText = `${data.specific_bed.price}$`;
                     gTotal.innerText = `${data.specific_bed.price}$`;
                     subTotal.innerText = `${data.specific_bed.price}$`;
@@ -1358,7 +1404,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (data.specific_bed?.hotel?.images && Array.isArray(data.specific_bed.hotel.images)) {
                         const images = data.specific_bed.hotel.images;
                         container.innerHTML = generateImageGrid(images);
-                    } 
+                    }
 
                     // Append hotel address details
                     if (data.specific_bed?.hotel?.city && data.specific_bed.hotel.country && data.specific_bed.hotel.address) {
@@ -1588,13 +1634,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Event delegation for clicks on card titles
         // Event listener for room detail links (image or hotel name)
         document.addEventListener('click', function (e) {
+            const lang = LanguageManager.getLanguage();
+
             // Traverse up to find the closest <a> tag with id starting with "nak-"
             const anchor = e.target.closest('a[id^="nak-"]');
 
             if (anchor) {
                 const targetId = anchor.dataset.targetnak;
                 if (targetId) {
-                    window.location.href = `/nakiese/hotel/bed-detail/${targetId}`;
+                    window.location.href = `/nakiese/${lang}/hotel/bed-detail/${targetId}`;
                 }
             }
         });
@@ -1607,7 +1655,7 @@ function generateImageGrid(images) {
     let htmlContent = "";
 
     if (isLargeScreen) {
-        
+
         if (images.length === 1) {
             htmlContent = `
                 <div class="row">
@@ -1615,7 +1663,7 @@ function generateImageGrid(images) {
                         <img src="${images[0].image}" alt="image" style="height:450px;" class="w-100 rounded-4">
                     </div>
                 </div>`;
-        } else if (images.length === 2) { 
+        } else if (images.length === 2) {
             htmlContent = `
                 <div class="row">
                     ${images.map(img => `
@@ -1624,7 +1672,7 @@ function generateImageGrid(images) {
                         </div>
                     `).join('')}
                 </div>`;
-        } else if (images.length === 3) { 
+        } else if (images.length === 3) {
             htmlContent = `
                 <div class="row">
                     <div class="col-lg-6">
@@ -1640,7 +1688,7 @@ function generateImageGrid(images) {
                         </div>
                     </div>
                 </div>`;
-        } else if (images.length === 4) { 
+        } else if (images.length === 4) {
             htmlContent = `
                 <div class="row">
                     <div class="col-lg-6">
@@ -1661,7 +1709,7 @@ function generateImageGrid(images) {
                         </div>
                     </div>
                 </div>`;
-        } else if (images.length >= 5) { 
+        } else if (images.length >= 5) {
             htmlContent = `
                 <div class="row">
                     <div class="col-lg-6">
@@ -1716,7 +1764,7 @@ function generateImageGrid(images) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const tableGrid = document.getElementById("table__grid");
-
+    const lang = LanguageManager.getLanguage();
     let user = localStorage.getItem('exn-u-cookie');
     user = JSON.parse(user);
 
@@ -1733,7 +1781,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!response.ok) {
                     return;
                 }
-               let cityGridTable = document.getElementById('city_grid__table');
+                let cityGridTable = document.getElementById('city_grid__table');
                 const result = await response.json();
                 if (!result?.table_data) return;
 
@@ -1805,7 +1853,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         // Validate the targetId to ensure it's not malicious
                         if (targetId && /^[a-zA-Z0-9_-]+$/.test(targetId)) {
-                            const url = `/nakiese/resturant/table/${targetId}`;
+                            const url = `/nakiese/${lang}/resturant/table/${targetId}`;
 
                             // Open in a new tab with added security measures
                             const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
@@ -1831,10 +1879,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 tableGrid.appendChild(fragment);
                 cityGridTable.innerHTML = '';
                 cityPopulator(result.cities, cityGridTable);
-              
+
 
             } catch (error) {
-               
+
             }
         }
 
@@ -1909,24 +1957,24 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (data.specific_table?.restaurant?.images && Array.isArray(data.specific_table.restaurant.images)) {
                         const images = data.specific_table.restaurant.images;
                         container.innerHTML = generateImageGrid(images);
-                    } 
-                    
+                    }
+
                     if (data.specific_table.capacity) {
                         city_grid__table.innerText = data.specific_table.capacity;
                         table__capacity.innerText = data.specific_table.capacity;
                     }
-                    
-                    
+
+
                     // Append hotel address details
                     if (data.specific_table?.restaurant?.city && data.specific_table?.restaurant.country) {
                         a1.innerText = `${data.specific_table.restaurant.city.name}, ${data.specific_table.restaurant.country}`;
                         a2.innerText = data.specific_table.restaurant.address;
-                    } 
+                    }
                     // Append hotel Description
                     if (data.specific_table?.restaurant?.description) {
                         bedDescription.innerText = '';
                         bedDescription.innerText = data.specific_table.restaurant.description;
-                    } 
+                    }
                     // All Relation Menu
                     if (data?.menu) {
                         menuGrid.innerHTML = generateGridItem_a(data.menu)
@@ -2031,7 +2079,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (reviews.length > reviewsPerPage) {
                         reviewGrid2.appendChild(createLoadMoreButton());
                     }
-                    
+
                     if (data.specific_table?.review) {
                         let ratingSums = {};
                         let ratingCounts = {};
@@ -2097,9 +2145,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // Grid Items Creation
 
-                } 
+                }
             } catch (error) {
-               
+
             }
         }
 
@@ -2153,11 +2201,11 @@ function getInputValue(inputId) {
 function parseDateDMY(dateString) {
     const [day, month, year] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day); // month is 0-based in JavaScript Date
-    
+
     if (isNaN(date.getTime())) {
         throw new Error('Invalid date format. Please use a valid date in the format dd-mm-yyyy.');
     }
-    
+
     // Set to noon to avoid timezone issues and return formatted date
     date.setHours(12);
     return date.toISOString().split('T')[0];
@@ -2215,7 +2263,7 @@ function searchHotelRooms(section = '') {
 // Select both buttons by ID
 const searchButton = document.getElementById('searchButton');
 const searchButtonRes = document.getElementById('searchButton-res');
-const searchButtonhotel = document.getElementById('searchButton-hotel');
+
 
 // Define the click handler function
 const handleSearchClick = (event) => {
@@ -2232,5 +2280,3 @@ const handleSearchClick = (event) => {
 // Attach the event listener to both buttons
 searchButton.addEventListener('click', handleSearchClick);
 searchButtonRes.addEventListener('click', handleSearchClick);
-searchButtonhotel.addEventListener('click', handleSearchClick);
-

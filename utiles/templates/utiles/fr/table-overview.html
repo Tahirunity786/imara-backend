@@ -1,0 +1,379 @@
+{% extends "base/fr/base.html" %}
+{% load static %}
+{% block title %}Table Details{% endblock title %}
+{% block content %}
+
+<div class="container" id="nak-grid-3">
+    <a href="/" class="d-flex justify-content-start align-items-center nav-link mt-4"
+        style="display: inline-block; padding-left: 8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+        </svg>
+        <span class="ms-2" style="font-weight: bold; font-size: 1rem;">Retour</span>
+    </a>
+</div>
+<section class="container" style="margin-bottom: 80px; margin-top: 50px;">
+    <div id="image-container" class="row mb-3"></div>
+
+    <div class="row mb-3">
+        <div class="col-lg-8  p-2">
+            <div class="d-flex align-items-center border p-3">
+                <div class="mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                        class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                    </svg>
+                </div>
+                <div class="ms-3">
+                    <p class="mb-1" id="t__1"></p>
+                    <p class="mb-1" id="t__2"></p>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-4 p-2">
+            <div class="d-flex align-items-center justify-content-between border p-3">
+                <div class="text-center">
+                    <p class="mb-1" id="av_rating"></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        </span>
+                        <span class="me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        </span>
+                        <span class="me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        </span>
+                        <span class="me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        </span>
+                        <span class="me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        </span>
+
+                    </div>
+                </div>
+                <div class="text-center mt-1">
+                    <p class="mb-1">0</p>
+                    <p class="mb-0"> Avis clients</p>
+                </div>
+                <div class="text-center mt-1">
+                    <p class="mb-1"> 0</p>
+                    <p class="mb-0"> Visiteurs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="mb-5">
+        <div class="mb-3">
+            <h2>Notre menu</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-8" id="menu__grid">
+               
+            </div>
+            <div class="col-lg-4" id="price__grid">
+                <div class="border p-4 rounded-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="mb-2">
+                            <h6><span id="table__price"></span> / table</h6>
+                        </div>
+
+                        <div class="mb-2">
+                            <div class="d-flex align-items-center"  id="av_rating_b"></div>
+                        </div>
+                    </div>
+                    <div class="border rounded-4">
+                        <div class="p-3">
+                            <p class="mb-0" style="font-size: 0.8rem;">DATE</p>
+                            <div class="d-flex justify-content-start align-items-center">
+                                <label class="mb-0 ms-0 me-3" style="font-size: 0.8rem; cursor: pointer;" id="date__now"></label>
+                                <span class="mb-1" data-bs-toggle="tooltip" data-bs-title="You can select different date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                                      </svg>
+                                </span>
+                            </div>
+                            <input type="date" id="date__of" style="display: none;">
+                        </div>
+                        <hr>
+                        <div class="p-3">
+                            <p class="mb-0" style="font-size: 0.8rem;">NOMBRE DE PERSONNE</p>
+                            <p class="mb-0" style="font-size: 0.8rem;" id="table__for"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <button class=" w-100 mt-3 btn-rev-nak" id="add-to__reserve">Reserve</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button class=" w-100 mt-3 btn-rev-nak" style="font-size: 14px;" id="add-to__chk"><span class="me-2 mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                              </svg></span> <span>Add to Checkout</span></button>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
+                        <div class="mb-0">
+                            <h6 style="text-decoration: underline;">1 table for <span id="table__capacity"></span></h6>
+                        </div>
+
+                        <div class="mb-0">
+                            <p class="mb-0" id="sub__total"></p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
+                        <div class="mb-0">
+                            <h6 style="text-decoration: underline;">Reductions</h6>
+                        </div>
+
+                        <div class="mb-0">
+                            <p class="mb-0">-0.00</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+                        <div class="mb-0">
+                            <h6 style="text-decoration: underline;">Autres frais</h6>
+                        </div>
+
+                        <div class="mb-0">
+                            <p class="mb-0">0.00</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center mb-2 mt-2">
+                        <div class="mb-0">
+                            <h5>Total a Payer</h5>
+                        </div>
+
+                        <div class="mb-0">
+                            <h5 id="total__payable"></h5>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div >
+    <section class="container">
+        <h2 class="mb-4"> Avis des nos clients</h2>
+        <div class="row">
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex justify-content-between align-item-center">
+                    <div id="review__grid_inn_1"></div>
+                    <div id="review__grid_inn_2"></div>
+                </div>
+            </div>
+            <div class="col-lg-8" id="review__grid_2"></div>
+        </div>
+    </section>
+{% endblock content %}
+
+
+{% block script %}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to format date as YYYY-MM-DD
+    function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    // Set the current date in the #date__now label and input field
+    window.onload = function () {
+        const today = new Date();
+        const formattedToday = formatDate(today);
+
+        // Display current date in the label
+        document.getElementById('date__now').innerText = formattedToday;
+
+        // Set min attribute to current date (so only future dates can be selected)
+        document.getElementById('date__of').setAttribute('min', formattedToday);
+
+        // Set the default value of the date input to the current date
+        document.getElementById('date__of').value = formattedToday;
+    };
+
+    // Handle clicking on the #date__now label to toggle date input visibility
+    document.getElementById('date__now').addEventListener('click', function (event) {
+        const dateInput = document.getElementById('date__of');
+
+        // Toggle the date input visibility when clicking on the label
+        if (dateInput.style.display === 'block') {
+            dateInput.style.display = 'none';  // Hide if already visible
+        } else {
+            dateInput.style.display = 'block';  // Show the input
+            dateInput.focus();  // Focus to open the date picker
+        }
+
+        // Prevent click event from bubbling up to document
+        event.stopPropagation();
+    });
+
+    // Update the #date__now label when a new date is selected
+    document.getElementById('date__of').addEventListener('change', function () {
+        const selectedDate = this.value;
+        document.getElementById('date__now').innerText = selectedDate;
+        this.style.display = 'none';  // Hide the date input after selecting
+    });
+
+    // Hide date input if clicking outside the date input or label
+    document.addEventListener('click', function (event) {
+        const dateInput = document.getElementById('date__of');
+        const dateLabel = document.getElementById('date__now');
+
+        if (event.target !== dateInput && event.target !== dateLabel) {
+            dateInput.style.display = 'none';  // Hide if clicking outside
+        }
+    });
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    let addToCart = document.getElementById('add-to__chk');
+    let dateOf = document.getElementById('date__of');
+    let isFetchingPrice = false;
+
+    // add to cart function
+    addToCart.addEventListener('click', async (event) => {
+        if (isFetchingPrice) return;
+        isFetchingPrice = true;
+
+        try {
+            const tableID = event ? event.currentTarget.getAttribute('data-id') : null;
+            if (tableID) {
+                const response = await fetch(`/posts/table-price?ex_table_id=${tableID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch table details');
+
+                const data = await response.json();
+                const pricePerTable = data.price || 0;
+
+                // Save data
+                const savedData = {
+                    table_id: tableID,
+                    price: pricePerTable,
+                    date: dateOf.value,
+                    type: 'table',
+                };
+
+                // Encode the savedData to Base64
+                const encodedData = encodeBase64(JSON.stringify(savedData));
+
+                // Fetch existing cart data
+                let existingCart = localStorage.getItem('nk-pmt-data');
+                existingCart = existingCart ? decodeBase64(existingCart) : [];
+
+                // Check if the table already exists in the cart
+                const tableIndex = existingCart.findIndex(item => item.table_id === tableID);
+
+                if (tableIndex !== -1) {
+                    // Table exists, update its data
+                    existingCart[tableIndex].date = savedData.date;
+                    existingCart[tableIndex].price = savedData.price;
+
+                    // Show toast message that the cart has been updated
+                    butterup.toast({
+                        title: 'Cart Updated Successfully',
+                        message: 'The selected table in your cart has been updated.',
+                        type: 'info',
+                    });
+                } else {
+                    // Table doesn't exist, add it to the cart
+                    existingCart.push(savedData);
+
+                    // Show toast message that the item has been added to the cart
+                    butterup.toast({
+                        title: 'Added to Cart',
+                        message: 'The selected table has been added to your cart.',
+                        type: 'success',
+                    });
+                }
+
+                // Save the updated cart data back to localStorage
+                localStorage.setItem('nk-pmt-data', encodeBase64(JSON.stringify(existingCart)));
+                // Secure redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/nakiese/cart';
+                }, 2000); // 2000 milliseconds = 2 seconds
+            }
+        } catch (error) {
+            console.error('Price calculation error:', error);
+        } finally {
+            isFetchingPrice = false;
+        }
+    });
+
+    // Function to encode to Base64
+    function encodeBase64(data) {
+        return btoa(data); // Built-in function for Base64 encoding
+    }
+
+    // Function to decode from Base64
+    function decodeBase64(encodedData) {
+        try {
+            // Check if encodedData looks like a base64 string
+            if (!/^[A-Za-z0-9+/=]+$/.test(encodedData)) {
+                throw new Error("Data is not in valid base64 format.");
+            }
+            return JSON.parse(atob(encodedData)); // Decode and parse JSON
+        } catch (error) {
+            console.error("Error decoding base64 data:", error);
+            return []; // Return empty array on failure
+        }
+    }
+    let addTReserve = document.getElementById('add-to__reserve');
+    addTReserve.addEventListener('click', (event) => {
+        const tableId = event?.currentTarget.getAttribute('data-id');
+        if (tableId) {
+            setTimeout(() => {
+                window.location.href = `/nakiese/payment?key=${tableId}&type=table`;
+            }, 2000);
+        }
+    });
+});
+
+
+{% endblock script %}
