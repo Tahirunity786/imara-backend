@@ -1357,8 +1357,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const roomPrs = document.getElementById("room_prs");
                 const gTotal = document.getElementById("g__total");
                 const subTotal = document.getElementById("subtotal");
-                const increaseNight = document.getElementById("in_nig");
-                const decreaseeNight = document.getElementById("de_nig");
+                
+             
                 const gridItem = document.getElementById("grid__items2");
                 const addToCheckout = document.getElementById("add-to__chk");
                 const addToReserve = document.getElementById("add-to__reserve");
@@ -1380,8 +1380,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     roomPrs.innerText = `${data.specific_bed.price}$`;
                     gTotal.innerText = `${data.specific_bed.price}$`;
                     subTotal.innerText = `${data.specific_bed.price}$`;
-                    increaseNight.dataset.id = data.specific_bed.room_id;
-                    decreaseeNight.dataset.id = data.specific_bed.room_id;
                     addToCheckout.dataset.id = data.specific_bed.room_id;
                     addToReserve.dataset.id = data.specific_bed.room_id;
                     document.getElementById("av_rating").innerText = data.

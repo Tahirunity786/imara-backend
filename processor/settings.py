@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%^15=)^r#w0773y^sy2v7#21zvuhqsjs=5+wb@+e2o@6bzp0(n'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['64.227.119.191', 'www.nakiese.com', 'https://nakiese.com/', 'nakiese.com', 'http://127.0.0.1:8000/']
 
 AUTH_USER_MODEL = 'core_control.User'
 # Application definition
@@ -148,7 +151,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FRONTEND_URL = 'http://127.0.0.1:8000'
 
-
+STRIPE_API_KEY= os.getenv("STRIPE_API_KEY")
 # REST_FRAMEWORK = {
 #     'DEFAULT_THROTTLE_CLASSES': [
 #         'rest_framework.throttling.UserRateThrottle',

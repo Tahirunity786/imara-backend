@@ -304,13 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!response.ok) throw new Error('Failed to fetch table details');
 
-                const data = await response.json();
-                const pricePerTable = data.price || 0;
-
                 // Save data
                 const savedData = {
-                    table_id: tableID,
-                    price: pricePerTable,
+                    key: tableID,
                     date: dateOf.value,
                     type: 'table',
                 };

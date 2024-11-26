@@ -128,9 +128,12 @@ class DetailsBedSerializer(serializers.ModelSerializer):
     """
     hotel = MiniHotelSerializer(read_only=True)
     avg_rating = serializers.SerializerMethodField(read_only=True) 
+    dateFrom = serializers.CharField(read_only=True, required=False)
+    dateTill = serializers.CharField(read_only=True, required=False)
+
     class Meta:
         model = BedRoom
-        fields = ['room_id', 'image', 'hotel','price','avg_rating', 'room_type']
+        fields = ['room_id', 'image', 'hotel', 'price', 'avg_rating', 'room_type', 'dateFrom', 'dateTill']
 
     def get_image(self, obj):
         """Return the relative path to the image instead of the absolute URL."""
@@ -140,7 +143,23 @@ class DetailsBedSerializer(serializers.ModelSerializer):
     
     def get_avg_rating(self, obj):
         """Retrieve the average rating for the room."""
-        return obj.average_rating() 
+        return obj.average_rating()
+
+    def to_representation(self, instance):
+        """Override the to_representation method to add dateFrom and dateTill."""
+        representation = super().to_representation(instance)
+
+        # Get additional date fields if available
+        date_from = self.context.get('dateFrom', '')
+        date_till = self.context.get('dateTill', '')
+
+        # Add these dates to the serialized output
+        if date_from:
+            representation['dateFrom'] = date_from
+        if date_till:
+            representation['dateTill'] = date_till
+
+        return representation
 
 
 

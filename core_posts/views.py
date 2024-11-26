@@ -1,19 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import Response
-from django.db import transaction
 from django.core.cache import cache
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 from django.utils.dateparse import parse_date
 from django_filters import rest_framework as filters
-from core_posts.models import Amenities, BedRoom, Cities, FavouriteList, Hotel, Restaurant, Tables, MenuItem
-from core_posts.serializers import DetailBedSerializer, DetailCartTableSerializer, DetailsBedSerializer, FavCreate, MiniBedSerializer, MiniTableSerializer,SearchBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, SearchTableSerializer, SpecificCitySerializer, TableSerializer
+from core_posts.models import Amenities, BedRoom, Cities, FavouriteList, Hotel, Tables, MenuItem
+from core_posts.serializers import DetailBedSerializer, DetailCartTableSerializer, DetailsBedSerializer, FavCreate, MiniTableSerializer,SearchBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, SearchTableSerializer, SpecificCitySerializer, TableSerializer
 from core_posts.pagination import CustomPagination
-from django.db import models
 from django_filters import rest_framework as django_filters
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
@@ -21,7 +18,6 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.db.models import Prefetch
-from django.db.models import Q, F, ExpressionWrapper, IntegerField
 from core_posts.utiles import IsOwner
 import base64
 import json
@@ -517,7 +513,7 @@ class CartRoomAgentView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        uni_ids = request.data.get('ids', [])
+        uni_ids = request.data.get('keys', [])
         nights = request.data.get('nights', [])
 
 
@@ -543,7 +539,6 @@ class CartRoomAgentView(APIView):
             room_data.append({
                 'room_id': room.room_id,
                 'image': room.image.url if room.image else None,
-                # 'price_per_night': room.price,
                 'nights': night,
                 'hotel': room.hotel.name,
                 'total_price': total_price,
@@ -557,7 +552,9 @@ class CartTableAgentView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        uni_ids = request.data.get('ids', [])
+        
+        uni_ids = request.data.get('keys', [])
+
         dates = request.data.get('dates', [])
 
         if not uni_ids:
@@ -581,128 +578,147 @@ class CartTableAgentView(APIView):
 
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+import base64
+import json
+from django.core.exceptions import ObjectDoesNotExist
+
 class CarSerializeView(APIView):
     permission_classes = [AllowAny]
+
     def data_extract(self, items):
         """
-        Extracts room and table details from the provided items, calculates total prices
-        for each type, and returns structured data including item details and total prices.
-        
+        Extracts room and table details, calculates total prices, and returns structured data.
+
         Parameters:
-            items (list): List of dictionaries containing item details, where each item
-                          includes type, id, and additional attributes.
-        
+            items (list): List of dictionaries containing item details.
+
         Returns:
-            dict: Contains details and prices for rooms and tables, as well as their total prices.
-        
-        Raises:
-            ValueError: If the item structure is invalid, missing fields, or contains invalid types.
+            dict: Structured data with room and table details, total prices, and grand total.
         """
         room_details = []
         table_details = []
         total_price_room = 0
         total_price_table = 0
-    
-        try:
-            for item in items:
-                item_type = item.get('type')
-                if item_type == "bed":
-                    room = BedRoom.objects.filter(room_id=item.get('room_id', '')).first()
-                    if room:
-                        nights = item.get('nights', 0)
-                        room_total_price = room.price * nights
-                        total_price_room += room_total_price
-                        room_details.append({
-                            'total_price': room_total_price
-                        })
-                    else:
-                        raise ValueError(f"Room with id {item.get('room_id', '')} not found.")
-                
-                elif item_type == "table":
-                    table = Tables.objects.filter(table_id=item.get('table_id', '')).first()
-                    if table:
-                        total_price_table += table.price
-                        table_details.append({
-                       
-                            'capacity': table.capacity,  # Assuming `capacity` is an attribute of Tables
-                            'price': table.price
-                        })
-                    else:
-                        raise ValueError(f"Table with id {item.get('table_id', '')} not found.")
+
+        for item in items:
+            item_type = item.get('type')
+            item_key = item.get('key', '')
+
+            if item_type == "bed":
+                room = BedRoom.objects.filter(room_id=item_key).first()
+                if room:
+                    nights = item.get('nights', 1)
+                    room_total_price = room.price * nights
+                    total_price_room += room_total_price
+                    room_details.append({
+                        'room_id': item_key,
+                        'hotel': room.hotel.name,
+                        "dateFrom":item.get('dateFrom', ''),
+                        "dateTill":item.get('dateTill', ''),
+                        'nights': nights,
+                        'total_price': room_total_price,
+                    })
                 else:
-                    raise ValueError("Invalid item type in payload.")
-        
-        except (TypeError, ValueError) as e:
-            raise ValueError("Invalid item structure or missing fields.") from e
-        
-        # Total price across all items
-        total_price = total_price_room + total_price_table
-        
+                    raise ValueError(f"Room with ID '{item_key}' not found.")
+            
+            elif item_type == "table":
+                table = Tables.objects.filter(table_id=item_key).first()
+                if table:
+                    total_price_table += table.price
+                    table_details.append({
+                        'table_id': item_key,
+                        'restaurant': table.restaurant.name,  # Assuming `restaurant` is related to `Tables`
+                        'price': table.price,
+                        'capacity': table.capacity
+                    })
+                else:
+                    raise ValueError(f"Table with ID '{item_key}' not found.")
+            else:
+                raise ValueError("Invalid item type in payload.")
+
         return {
             'rooms': {
                 'details': room_details,
-                'total_price': total_price_room
+                'total_price': total_price_room,
             },
             'tables': {
                 'details': table_details,
-                'total_price': total_price_table
+                'total_price': total_price_table,
             },
-            'grand_total_price': total_price
+            'grand_total_price': total_price_room + total_price_table,
         }
-    def get_room(self, id):
-        room = BedRoom.objects.filter(room_id=id).first()
-        if room:
-            nights = 1
-            room_total_price = room.price * nights
-            total_price= room_total_price
-        else:
-            raise ValueError(f"Room with id {id} not found.")
-        
-        return {"total_price":total_price, 'type':'bed'}
-    
 
-    def get_table(self, id):
-        table = Tables.objects.filter(table_id=id).first()
-        if table:
-            table_details={
-                'type':'table',
-                'price': table.price
-            }
-        else:
-            raise ValueError(f"Table with id {id} not found.")
-        return table_details
+    def get_room(self, room_id):
+        """
+        Retrieve room details and calculate total price for a single room.
+        """
+        room = BedRoom.objects.filter(room_id=room_id).first()
+        if not room:
+            raise ValueError(f"Room with ID '{room_id}' not found.")
+        
+        nights = 1
+        room_total_price = room.price * nights
+        return {
+            'type': 'bed',
+            'room_id': room_id,
+            'hotel': room.hotel.name,  
+            "dateFrom":"",
+            "dateTill":"",
+            'nights': nights,
+            'total_price': room_total_price,
+        }
+
+    def get_table(self, table_id):
+        """
+        Retrieve table details for a single table.
+        """
+        table = Tables.objects.filter(table_id=table_id).first()
+        if not table:
+            raise ValueError(f"Table with ID '{table_id}' not found.")
+        
+        return {
+            'type': 'table',
+            'table_id': table_id,
+            'restaurant': table.restaurant.name,  # Assuming `restaurant` is related to `Tables`
+            'price': table.price,
+            'capacity': table.capacity,
+        }
 
     def get(self, request):
+        """
+        Handle GET requests to retrieve serialized data or specific room/table details.
+        """
         encoded_param = request.query_params.get('source')
         key = request.query_params.get('key')
-        
-        if encoded_param:
-            try:
-                # Decode the base64 encoded string
-                decoded_bytes = base64.b64decode(encoded_param)
-                decoded_str = decoded_bytes.decode('utf-8')
-                
-                # Parse JSON data
+        item_type = request.query_params.get('type')
+
+        try:
+            if encoded_param:
+                # Decode and parse the base64-encoded parameter
+                decoded_str = base64.b64decode(encoded_param).decode('utf-8')
                 param_for = json.loads(decoded_str)
-                
                 serialize_data = self.data_extract(param_for)
-                
                 return Response(serialize_data, status=status.HTTP_200_OK)
-            except (ValueError, json.JSONDecodeError) as e:
-                # Handle decoding or JSON parsing errors
-                print("Error decoding or parsing the source parameter:", e)
-                return Response({"error": "Invalid parameter format"}, status=status.HTTP_400_BAD_REQUEST)
-         # Handle `key` and `type` parameters
-        elif key:
-            type_of = request.query_params.get('type')
-            if type_of == "bed":
-                response_data = self.get_room(key)
-            elif type_of == "table":
-                response_data = self.get_table(key)
+            
+            elif key and item_type:
+                if item_type == "bed":
+                    response_data = self.get_room(key)
+                elif item_type == "table":
+                    response_data = self.get_table(key)
+                else:
+                    return Response({"error": "Invalid 'type' parameter."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                return Response(response_data, status=status.HTTP_200_OK)
+            
             else:
-                return Response({"error": "Invalid 'type' parameter"}, status=status.HTTP_400_BAD_REQUEST)
-            return Response(response_data, status=status.HTTP_200_OK)
-        return Response({"error": "Missing 'source' parameter"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Missing required parameters."}, status=status.HTTP_400_BAD_REQUEST)
+
+        except (ValueError, json.JSONDecodeError) as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentDetailCartSerializeView(APIView):
@@ -715,41 +731,73 @@ class PaymentDetailCartSerializeView(APIView):
         """
         rooms = []
         tables = []
-
+    
         for item in items:
             item_type = item.get('type')
-            item_id = item.get('room_id' if item_type == "bed" else 'table_id', '')
-
+            item_key = item.get('key', '')
+            date_from = item.get('dateFrom', '')
+            date_till = item.get('dateTill', '')
+    
             if item_type == "bed":
-                room = BedRoom.objects.filter(room_id=item_id).first()
+                room = BedRoom.objects.filter(room_id=item_key).first()
                 if room:
-                    rooms.append(DetailsBedSerializer(room).data)
+                    # Pass dateFrom and dateTill in the context
+                    room_data = DetailsBedSerializer(room, context={'dateFrom': date_from, 'dateTill': date_till}).data
+                    rooms.append(room_data)
                 else:
-                    print(f"Room with ID {item_id} not found.")
-
+                    print(f"Room with ID {item_key} not found.")
+    
             elif item_type == "table":
-                table = Tables.objects.filter(table_id=item_id).first()
+                table = Tables.objects.filter(table_id=item_key).first()
                 if table:
                     table_data = DetailCartTableSerializer(table).data
-                    table_data['date'] = item.get('date')  # Attach date if available
+                    if 'date' in item:
+                        table_data['date'] = item['date']
                     tables.append(table_data)
                 else:
-                    print(f"Table with ID {item_id} not found.")
+                    print(f"Table with ID {item_key} not found.")
+    
             else:
-                print("Invalid item type provided.")
-
+                print(f"Invalid item type: {item_type}")
+    
         return {
-            'rooms': rooms or "",
-            'tables': tables or ""
+            'rooms': rooms or [],
+            'tables': tables or []
         }
 
-    def get_room(self, room_id):
-        room = BedRoom.objects.filter(room_id=room_id).first()
-        return DetailsBedSerializer(room).data if room else {"error": "Room not found"}
+
+    def get_room(self, room_id, date_from, date_till):
+        """
+        Retrieve and serialize a single room by its ID.
+        """
+        room = get_object_or_404(BedRoom, room_id=room_id)
+        return DetailsBedSerializer(room, context={'dateFrom': date_from, 'dateTill': date_till}).data
 
     def get_table(self, table_id):
-        table = Tables.objects.filter(table_id=table_id).first()
-        return DetailCartTableSerializer(table).data if table else {"error": "Table not found"}
+        """
+        Retrieve and serialize a single table by its ID.
+        """
+        table = get_object_or_404(Tables, table_id=table_id)
+        return DetailCartTableSerializer(table).data
+
+    def decode_source_param(self, source_param):
+        """
+        Decode and parse the `source` parameter.
+
+        Args:
+            source_param (str): Base64 encoded JSON string.
+
+        Returns:
+            list: Parsed JSON data.
+
+        Raises:
+            ValueError: If decoding or JSON parsing fails.
+        """
+        try:
+            decoded_str = base64.b64decode(source_param).decode('utf-8')
+            return json.loads(decoded_str)
+        except (ValueError, json.JSONDecodeError) as e:
+            raise ValueError("Invalid 'source' parameter format") from e
 
     def get(self, request):
         source_param = request.query_params.get('source')
@@ -759,24 +807,29 @@ class PaymentDetailCartSerializeView(APIView):
         # Handle `source` parameter
         if source_param:
             try:
-                decoded_str = base64.b64decode(source_param).decode('utf-8')
-                param_for = json.loads(decoded_str)
-                serialized_data = self.data_extract(param_for)
-                return Response(serialized_data, status=status.HTTP_200_OK)
-            except (ValueError, json.JSONDecodeError) as e:
-                print("Error decoding or parsing 'source' parameter:", e)
-                return Response({"error": "Invalid 'source' parameter format"}, status=status.HTTP_400_BAD_REQUEST)
+                items = self.decode_source_param(source_param)
+                serialized_data = self.data_extract(items)
 
-        # Handle `key` and `type` parameters
+                return Response(serialized_data, status=status.HTTP_200_OK)
+            except ValueError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
         if key and type_of:
             if type_of == "bed":
-                response_data = self.get_room(key)
-                response_data['type']=type_of
+                dateFrom = request.query_params.get('dateFrom')
+                dateTill = request.query_params.get('dateTill')
+                response_data = self.get_room(key, dateFrom, dateTill)
             elif type_of == "table":
                 response_data = self.get_table(key)
-                response_data['type']=type_of
             else:
                 return Response({"error": "Invalid 'type' parameter"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            response_data['type'] = type_of
+            print(response_data)
             return Response(response_data, status=status.HTTP_200_OK)
 
-        return Response({"error": "Missing 'source' or 'key' parameters"}, status=status.HTTP_400_BAD_REQUEST)
+        # Missing required parameters
+        return Response(
+            {"error": "Missing 'source' or 'key' and 'type' parameters"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
