@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['64.227.119.191', 'www.nakiese.com', 'https://nakiese.com/', 'nakiese.com', 'http://127.0.0.1:8000/']
+ALLOWED_HOSTS = ['64.227.119.191', 'www.nakiese.com', 'https://nakiese.com/', 'nakiese.com', '127.0.0.1']
 
 AUTH_USER_MODEL = 'core_control.User'
 # Application definition

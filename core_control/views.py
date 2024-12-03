@@ -1,3 +1,5 @@
+from datetime import timedelta
+import uuid
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import Response
@@ -11,7 +13,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
+
+from core_control.models import AnonymousBooking
 from .serializers import PasswordResetSerializer
+from django.utils.timezone import now
 # Create your views here.
 
 User = get_user_model()
@@ -176,3 +181,38 @@ class AccountDel(APIView):
         user.delete()
 
         return Response({"detail":"Account successfully deleted."}, status=status.HTTP_200_OK)
+
+
+class AnnoynmousTrackIdGenerator(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        # Check if the cookie already exists
+        anonymous_booking_id = request.COOKIES.get('ann__nak')
+
+        if not anonymous_booking_id:
+            # Generate a unique identifier for tracking
+            anonymous_booking_id = str(uuid.uuid4())
+            AnonymousBooking.objects.create(
+                booking_id=anonymous_booking_id,
+                created_at=now(),
+            )
+
+        # Create the response
+        response = Response(
+            {"message": "Cookie set."},
+            status=status.HTTP_200_OK
+        )
+
+        # Set the cookie with the unique identifier
+        cookie_expiration_date = now() + timedelta(days=365)  # Set cookie for 1 year
+        response.set_cookie(
+            key='ann__nak',
+            value=anonymous_booking_id,
+            expires=cookie_expiration_date,
+            httponly=False,  # Allow access via JavaScript
+            secure=False,    # Set to True if using HTTPS
+            samesite='Lax',  # Adjust as per the front-end requirement
+        )
+
+        return response

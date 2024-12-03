@@ -9,6 +9,7 @@ class LanguageTemplateView(TemplateView):
         return context
 
     def get_template_names(self):
+        
         # Determine the language from the URL parameter or fallback to default
         lang = self.kwargs.get('lang', 'en')
         self.lang = lang  # Set the lang attribute for context
@@ -74,3 +75,5 @@ class CityExplore(LanguageTemplateView):
 
 class ConfirmationView(LanguageTemplateView):
     template_file = 'confirmation-page.html'
+class BookingOfUser(LanguageTemplateView):
+    template_file = 'bookings.html'

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  CarSerializeView, CartRoomAgentView, CartTableAgentView, CityExploreView, CityListView, FavouriteListCreateView, FavouriteListDetailView, FavouriteListRetrieveView, HotelDetails,BedRoomListView, PaymentDetailCartSerializeView, PriceProviderView, ShareableLinkView, SpecificHotelDetail, ResturantDetails, SpecificTableDetail, TablePriceProviderView, TablesListView
+from .views import  CarSerializeView, CartRoomAgentView, CartTableAgentView, CityExploreView, CityListView, FavouriteListCreateView, FavouriteListDetailView, FavouriteListRetrieveView, HotelDetails,BedRoomListView, PaymentDetailCartSerializeView, PriceProviderView, ShareableLinkView, ShowOrders, SpecificHotelDetail, ResturantDetails, SpecificTableDetail, TablePriceProviderView, TablesListView
 
 urlpatterns = [
     path("sp-h-post/<str:post_id>/",SpecificHotelDetail.as_view()),
@@ -34,5 +34,8 @@ urlpatterns = [
     # Here is cart serializer
     path('cart/serialize', CarSerializeView.as_view(), name='cart-serialize'),
     path('detail-cart/serialize', PaymentDetailCartSerializeView.as_view(), name='cart-serialize'),
+
+    # After payment show order
+    path('show-all-orders', ShowOrders.as_view(), name='show orders'),
 
 ]

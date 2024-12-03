@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from django.utils.dateparse import parse_date
 from django_filters import rest_framework as filters
 from core_posts.models import Amenities, BedRoom, Cities, FavouriteList, Hotel, Tables, MenuItem
-from core_posts.serializers import DetailBedSerializer, DetailCartTableSerializer, DetailsBedSerializer, FavCreate, MiniTableSerializer,SearchBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, SearchTableSerializer, SpecificCitySerializer, TableSerializer
+from core_posts.serializers import DetailBedSerializer, DetailCartTableSerializer, DetailsBedSerializer, FavCreate, MiniTableSerializer, OrderPlacementStorageSerializer,SearchBedSerializer, AllBedSerializer, CitySerializer, DetailTableSerializer, MenuSerializers, SearchTableSerializer, SpecificCitySerializer, TableSerializer
 from core_posts.pagination import CustomPagination
 from django_filters import rest_framework as django_filters
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -21,6 +21,9 @@ from django.db.models import Prefetch
 from core_posts.utiles import IsOwner
 import base64
 import json
+from rest_framework.generics import ListAPIView
+from core_control.models import AnonymousBooking
+from core_payments.models import OrderPlacementStorage
 
 class HotelDetails(APIView):
     permission_classes = [AllowAny]
@@ -576,16 +579,6 @@ class CartTableAgentView(APIView):
 
         return Response(serialized_data, status=status.HTTP_200_OK)
 
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework import status
-import base64
-import json
-from django.core.exceptions import ObjectDoesNotExist
-
 class CarSerializeView(APIView):
     permission_classes = [AllowAny]
 
@@ -825,7 +818,6 @@ class PaymentDetailCartSerializeView(APIView):
                 return Response({"error": "Invalid 'type' parameter"}, status=status.HTTP_400_BAD_REQUEST)
             
             response_data['type'] = type_of
-            print(response_data)
             return Response(response_data, status=status.HTTP_200_OK)
 
         # Missing required parameters
@@ -833,3 +825,33 @@ class PaymentDetailCartSerializeView(APIView):
             {"error": "Missing 'source' or 'key' and 'type' parameters"},
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+class ShowOrders(ListAPIView):
+    """API view to show all orders for a given anonymous track."""
+    permission_classes = [AllowAny]
+    serializer_class = OrderPlacementStorageSerializer
+
+    def get_queryset(self):
+        anonymous_id = self.request.COOKIES.get('ann__nak')
+        
+        if not anonymous_id:
+            return OrderPlacementStorage.objects.none()
+
+        try:
+            anonymous_booking = AnonymousBooking.objects.get(booking_id=anonymous_id)
+        except AnonymousBooking.DoesNotExist:
+            raise ValueError("Track ID does not exist.")
+        return OrderPlacementStorage.objects.filter(annoynmous_track=anonymous_booking)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset()
+            if not queryset.exists():
+                return Response({"error": "No orders found for the given Track ID."}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

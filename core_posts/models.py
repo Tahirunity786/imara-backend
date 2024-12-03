@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import Avg
 from django.core.exceptions import ValidationError
-
+from django.utils.timezone import now
 User = get_user_model()
 
 def generate_unique_id(prefix="nak"):
@@ -106,7 +106,7 @@ class BedRoom(models.Model):
     availability_from = models.DateField(null=True, default=None)
     availability_till = models.DateField(null=True, default=None)
     available_days = models.PositiveIntegerField(default=0, editable=False)  # New field for storing available days
-
+    is_booked = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Calculate the number of days between availability_from and availability_till
@@ -180,7 +180,8 @@ class Tables(models.Model):
     availability_from = models.DateField(null=True, default=None)
     availability_till = models.DateField(null=True, default=None)
     available_days = models.PositiveIntegerField(default=0, editable=False)  # New field for storing available days
-
+    is_booked = models.BooleanField(default=False)
+    
     def __str__(self):
         return f"Table {self.table_id} at {self.restaurant.name}"
 
@@ -306,4 +307,6 @@ class FavouriteList(models.Model):
         if not self.favourite_list_id:
             self.favourite_list_id = generate_unique_id()
         super().save(*args, **kwargs)
+
+
 

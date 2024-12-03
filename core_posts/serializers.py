@@ -2,6 +2,8 @@ from rest_framework import serializers
 from core_posts.models import Amenities, BedRoom,FavouriteList, Cities, Hotel, MenuItem, Tables, HotelImages, Review, ReviewType, Restaurant, ResturantImages
 from django.contrib.auth import get_user_model
 
+from core_payments.models import Order, OrderItem, OrderPlacementStorage
+
 User = get_user_model()
 
 class UserSearializer(serializers.ModelSerializer):
@@ -64,7 +66,7 @@ class AllHotelSerializer(serializers.ModelSerializer):
 class MiniHotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
-        fields = ['name']
+        fields = ['name', 'country', 'address']
         
 class HotelRelationSerializer(serializers.ModelSerializer):
     images = HotelImagesSerializer(many=True, read_only=True)
@@ -111,7 +113,7 @@ class MiniBedSerializer(serializers.ModelSerializer):
     hotel = MiniHotelSerializer(read_only=True)
     class Meta:
         model = BedRoom
-        fields = ['room_id', 'image', 'hotel',]
+        fields = ['room_id', 'image', 'hotel','price']
 
     def get_image(self, obj):
         """Return the relative path to the image instead of the absolute URL."""
@@ -187,10 +189,10 @@ class AllResturantSerializer(serializers.ModelSerializer):
 
 
 class MiniResturantSerializer(serializers.ModelSerializer):
-
+    city = SpecificCitySerializer(read_only=True)
     class Meta:
         model = Restaurant
-        fields = [ 'name'] 
+        fields = [ 'name','country','city','address'] 
 
 
 
@@ -368,3 +370,38 @@ class FavCreate(serializers.ModelSerializer):
         fields = ['favourite_list_id', 'user', 'name', 'fav_table', 'fav_bed', 'created_at']
 
 
+class OrderItemSerializer(serializers.ModelSerializer):
+    """Serializer for OrderItem, dynamically fetching related content."""
+
+    content_object = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrderItem
+        fields = ["id", "content_object"]
+
+    def get_content_object(self, obj):
+        """Return a serialized representation of the content object."""
+        # Dynamically check the content type and serialize accordingly
+        if isinstance(obj.content_object, BedRoom):
+            return MiniBedSerializer(obj.content_object).data
+        elif isinstance(obj.content_object, Tables):
+            return MiniTableSerializer(obj.content_object).data
+        return None  
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """Serializer for orders."""
+    items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['_id', 'check_in', 'check_out', 'nights', 'created_at', 'updated_at', 'items','type_booking']
+
+
+class OrderPlacementStorageSerializer(serializers.ModelSerializer):
+    """Serializer for order storage with related orders."""
+    orders = OrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = OrderPlacementStorage
+        fields = ['id', 'orders', 'created_at', 'updated_at']

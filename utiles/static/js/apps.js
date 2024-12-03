@@ -16,6 +16,7 @@ const LanguageManager = (function () {
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
+    
     // Handle the signup form
     const signupForm = document.getElementById('signupForm');
     const message = document.getElementById('msg');
@@ -360,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     function setLanguage(lang) {
         localStorage.setItem('lang', lang);
-        console.log(`Language set to: ${lang}`); // For debugging
+
         setTimeout(() => {
             window.location.reload();
         }, 2000); // Delay of 3000ms (3 seconds)
@@ -1357,8 +1358,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const roomPrs = document.getElementById("room_prs");
                 const gTotal = document.getElementById("g__total");
                 const subTotal = document.getElementById("subtotal");
-                
-             
+
+
                 const gridItem = document.getElementById("grid__items2");
                 const addToCheckout = document.getElementById("add-to__chk");
                 const addToReserve = document.getElementById("add-to__reserve");

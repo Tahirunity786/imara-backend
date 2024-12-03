@@ -1,20 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
 
     const tableSpread = document.getElementById('table__spreader');
     const localData = localStorage.getItem('nk-pmt-data');
 
     const LanguageManager = (function () {
         const DEFAULT_LANGUAGE = 'en';
-    
+
         function getLanguage() {
             return localStorage.getItem('lang') || DEFAULT_LANGUAGE;
         }
-    
+
         function setLanguage(lang) {
             localStorage.setItem('lang', lang);
         }
-    
+
         return {
             getLanguage,
             setLanguage
@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     </div>
                     <h3 class="p-x17">${data.hotel.name}</h3>
-                    <h3 class="p-x17">${data.price }$</h3>
+                    <h3 class="p-x17">${data.price}$</h3>
                     <h3 class="p-x17">Room</h3>
                 </div>
             </div>
@@ -455,7 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (params.has('source')) {
         bookingSpreader();
         DetailsCartSpreader();
-    } else if (params.has('key') && params.has('type')&&params.has('dateFrom')&&params.has('dateTill')&&params.has('nights')) {
+    } else if (params.has('key') && params.has('type') && params.has('dateFrom') && params.has('dateTill') && params.has('nights')) {
         const key = params.get('key');
         const type = params.get('type');
         const dateFrom = params.get('dateFrom');
@@ -488,15 +488,15 @@ async function setupStripeElements() {
         const dateFrom = params.get('dateFrom');
         const dateTill = params.get('dateTill');
         const totalNights = params.get('nights');
-    
+
         const response_data = {
-            key: key,
-            type: type,
-            dateFrom: dateFrom,
-            dateTill: dateTill,
+            key,
+            type,
+            dateFrom,
+            dateTill,
             nights: totalNights,
         };
-    
+
         nkPmtData = encodeBase64(response_data); // Encode the object to Base64
     } else if (params.has('source')) {
         nkPmtData = localStorage.getItem('nk-pmt-data') || ""; // Fallback to an empty string if null
@@ -509,28 +509,24 @@ async function setupStripeElements() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ data_token: nkPmtData })
+        body: JSON.stringify({ data_token: nkPmtData }),
     });
 
     const data = await response.json();
     if (!data.client_secret) {
-        console.log("Error");
+        console.log("Error: Missing client_secret");
         return;
     }
 
     const elements = stripe.elements({ clientSecret: data.client_secret });
 
-    // Configure and create Payment Element without country and email
-    const paymentElement = elements.create('payment', {
-        
-    });
-
+    // Configure and create Payment Element
+    const paymentElement = elements.create('payment');
     paymentElement.mount('#payment-element');
 
     // Form submit handler
     const form = document.getElementById('payment-form');
     let submitted = false;
-
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -538,16 +534,49 @@ async function setupStripeElements() {
         submitted = true;
         form.querySelector('button').disabled = true;
 
-        const { error: stripeError } = await stripe.confirmPayment({
+        const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/nakiese/${LanguageManager.getLanguage()}/confirmation`,
-            }
+                
+            },
+            redirect: "if_required", // Prevents auto-redirects unless required
         });
 
         if (stripeError) {
+            console.error("Stripe error:", stripeError.message);
             submitted = false;
             form.querySelector('button').disabled = false;
+            return;
+        }
+
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
+            console.log("Payment successful!");
+
+            try {
+                const backendResponse = await fetch('/payment/success', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data_token: nkPmtData }),
+                });
+
+                if (!backendResponse.ok) {
+                    throw new Error(`API call failed: ${backendResponse.statusText}`);
+                }
+
+                const result = await backendResponse.json();
+                console.log("Backend response:", result);
+
+                // Manually redirect after API call succeeds
+                window.location.href = `${window.location.origin}/nakiese/${LanguageManager.getLanguage()}/confirmation`;
+            } catch (apiError) {
+                console.error("API call error:", apiError);
+                alert("Payment successful, but failed to update the server. Please contact support.");
+            }
+        } else {
+            console.error("Payment failed. PaymentIntent status:", paymentIntent.status);
         }
     });
 }
